@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'my-app';
+  public isAuthenticated = false;
+
+  public logout(): void {
+    // todo
+  }
 }
