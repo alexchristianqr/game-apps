@@ -21,6 +21,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { MatGridListModule } from '@angular/material/grid-list';
 import { HomeComponent } from './home/home.component';
 import { GameComponent } from './game/game.component';
+import OktaAuth from "@okta/okta-auth-js";
 
 
 @NgModule({
@@ -28,7 +29,7 @@ import { GameComponent } from './game/game.component';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    GameComponent
+    GameComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +51,15 @@ import { GameComponent } from './game/game.component';
     MatOptionModule,
     MatGridListModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: OktaAuth,
+      useValue: new OktaAuth({
+        issuer: 'https://dev-23725084.okta.com/oauth2/default',
+        clientId: '0oa81mp7qllduvYHe5d7',
+      })
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
