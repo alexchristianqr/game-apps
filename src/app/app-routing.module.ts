@@ -13,12 +13,12 @@ const routes: Routes = [
   {
     path: 'game',
     component: GameComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: '',
     component: HomeComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   }
 ];
 
