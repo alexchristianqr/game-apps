@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 // @ts-ignore
 import Minimax from 'tic-tac-toe-minimax';
 const { GameStep } = Minimax;
@@ -8,12 +8,25 @@ const { GameStep } = Minimax;
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent {
+export class GameComponent implements OnInit{
   public gameState: Array<number | string> = [0,1, 2, 3, 4, 5, 6, 7, 8];
   public winner: string | undefined;
   public playing = false;
   public computerFirst = false;
   public difficulty: 'Easy'|'Normal'|'Hard' = 'Normal';
+  breakpoint: number = 1;
+  breakpoint2: number = 10;
+  breakpoint3: number = 6;
+
+  ngOnInit() {
+    this.breakpoint = (window.innerWidth <= 400) ? 2 : 1;
+    // this.breakpoint2 = (window.innerWidth > 400) ? 10 : 6;
+    // this.breakpoint3 = (window.innerWidth > 400) ? 6 : 1;
+  }
+
+  onResize(event: any) {
+    this.breakpoint = (event.target.innerWidth <= 400) ? 2 : 1;
+  }
 
   public toggleGame(toggle: boolean): void {
     if (toggle === this.playing) {

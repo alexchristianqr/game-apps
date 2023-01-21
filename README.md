@@ -1,6 +1,6 @@
 # Project: foryou
 
-Para ti es una aplicación web de entretenimiento y motivación inspirado en ella (My Love). Está lleno de mensajes super bonitos.
+Cada jugador consta de tres piezas. Por turnos, cada uno coloca sus piezas, cuando todas están en el tablero, empiezan a moverse una intersección por turno. El primero que logra hacer una fila con sus tres piezas, gana.
 
 ## Deployment release
 

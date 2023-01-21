@@ -8,17 +8,22 @@
       <h2>¡Tú 🧑 mueves primero!</h2>
     </div>
   </mat-card-content>
+
   <mat-card-content>
+    <mat-grid-list [cols]="breakpoint"  [rowHeight]="breakpoint2+':'+breakpoint3" (window:resize)="onResize($event)" style="width: auto">
+      <mat-grid-tile>
     <div class="parent">
       <div *ngFor="let field of gameState; let i = index" (click)="makeHumanMove(i)">
         <div [class]="'div'+i">
           <div class="playing"
                style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%;">
-            {{field === 'X' || field === 'O' ? field : ''}}
+            {{field === 'X' || field === 'O' ? field : '1'}}
           </div>
         </div>
       </div>
     </div>
+      </mat-grid-tile>
+    </mat-grid-list>
   </mat-card-content>
   <!--</mat-card>-->
   <!--<mat-card id="CardActions">-->

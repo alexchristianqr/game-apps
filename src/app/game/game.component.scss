@@ -2,6 +2,7 @@ $colorPrimary: #f1f1f1;
 $colorSecondary: #f8f8f8;
 
 .parent {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -73,8 +74,9 @@ $colorSecondary: #f8f8f8;
 }
 
 mat-card#CardTablero {
-  width: 500px;
-  margin: 2em auto;
+  //width: 100%;
+  //margin: 2em auto;
+  text-align: center;
   justify-content: center;
 }
 
