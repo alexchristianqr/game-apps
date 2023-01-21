@@ -8,7 +8,7 @@ import { AuthService } from './auth/auth.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy{
-  public title = 'Tic Tac Toe';
+  public title = 'TRES EN LINEA';
   public isAuthenticated = false;
   private _destroySub$ = new Subject<void>();
 

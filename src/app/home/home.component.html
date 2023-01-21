@@ -1,1 +1,31 @@
-<p>home works!</p>
+<mat-card>
+  <mat-card-content style="text-align: center; padding-top: 0.5rem; padding-bottom: 0.5rem">
+    <h1 style="padding: 2rem">My game applications</h1>
+    <mat-grid-list cols="3" rowHeight="1:1">
+      <mat-grid-tile>
+        <mat-card-content>
+          <button mat-icon-button color="primary" routerLink="/game">
+            <mat-icon>gamepad</mat-icon>
+          </button>
+          <div>3 in line</div>
+        </mat-card-content>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-card-content >
+          <button mat-icon-button color="primary">
+            <mat-icon>smart_toy</mat-icon>
+          </button>
+          <div>Smart Toy</div>
+        </mat-card-content>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-card-content >
+          <button mat-icon-button color="primary">
+            <mat-icon>sports_basketbal</mat-icon>
+          </button>
+          <div>Basketball</div>
+        </mat-card-content>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>

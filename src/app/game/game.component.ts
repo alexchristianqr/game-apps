@@ -36,7 +36,9 @@ export class GameComponent {
     }
 
     this.gameState[field] = 'X';
-    this.makeComputerMove();
+    setTimeout(() => {
+      this.makeComputerMove();
+    }, 250)
   }
 
   private makeComputerMove(): void {

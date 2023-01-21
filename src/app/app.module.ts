@@ -7,6 +7,8 @@ import { LoginComponent } from './login/login.component';
 
 import { FormsModule } from '@angular/forms';
 
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -38,6 +40,8 @@ import OktaAuth from "@okta/okta-auth-js";
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatSidenavModule,
+    MatDividerModule,
     FormsModule,
     MatToolbarModule,
     MatInputModule,

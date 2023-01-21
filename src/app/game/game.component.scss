@@ -1,42 +1,83 @@
+$colorPrimary: #f1f1f1;
+$colorSecondary: #f8f8f8;
+
 .parent {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  grid-column-gap: 0;
+  grid-row-gap: 0;
 }
 
-.div0 { grid-area: 1 / 1 / 2 / 2; width:  100%; height: 5rem; background-color: lightgray; text-align: center }
-.div1 { grid-area: 1 / 2 / 2 / 3; width:  100%; height: 5rem; background-color: lightblue }
-.div2 { grid-area: 1 / 3 / 2 / 4; width:  100%; height: 5rem; background-color: lightgray }
-.div3 { grid-area: 2 / 1 / 3 / 2; width:  100%; height: 5rem; background-color: lightblue }
-.div4 { grid-area: 2 / 2 / 3 / 3; width:  100%; height: 5rem; background-color: lightgray }
-.div5 { grid-area: 2 / 3 / 3 / 4; width:  100%; height: 5rem; background-color: lightblue }
-.div6 { grid-area: 3 / 1 / 4 / 2; width:  100%; height: 5rem; background-color: lightgray }
-.div7 { grid-area: 3 / 2 / 4 / 3; width:  100%; height: 5rem; background-color: lightblue }
-.div8 { grid-area: 3 / 3 / 4 / 4; width:  100%; height: 5rem; background-color: lightgray }
+.div0 {
+  grid-area: 1 / 1 / 2 / 2;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorPrimary
+}
 
+.div1 {
+  grid-area: 1 / 2 / 2 / 3;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorSecondary
+}
 
+.div2 {
+  grid-area: 1 / 3 / 2 / 4;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorPrimary
+}
 
-mat-card {
-  max-width: 400px;
+.div3 {
+  grid-area: 2 / 1 / 3 / 2;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorSecondary
+}
+
+.div4 {
+  grid-area: 2 / 2 / 3 / 3;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorPrimary
+}
+
+.div5 {
+  grid-area: 2 / 3 / 3 / 4;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorSecondary
+}
+
+.div6 {
+  grid-area: 3 / 1 / 4 / 2;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorPrimary
+}
+
+.div7 {
+  grid-area: 3 / 2 / 4 / 3;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorSecondary
+}
+
+.div8 {
+  grid-area: 3 / 3 / 4 / 4;
+  width: 100%;
+  height: 5rem;
+  background-color: $colorPrimary
+}
+
+mat-card#CardTablero {
+  width: 500px;
   margin: 2em auto;
-  text-align: center;
+  justify-content: center;
 }
 
-.game-field {
-  width: 48px;
-  height: 48px;
-  background-color: #f0f0f0;
-  line-height: 48px;
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.playing .game-field {
+.playing {
   cursor: pointer;
-}
-
-button, mat-slide-toggle {
-  margin-bottom: 2rem;
 }
