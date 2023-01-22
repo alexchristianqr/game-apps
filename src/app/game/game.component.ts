@@ -15,13 +15,11 @@ export class GameComponent implements OnInit{
   public computerFirst = false;
   public difficulty: 'Easy'|'Normal'|'Hard' = 'Normal';
   breakpoint: number = 1;
-  breakpoint2: number = 9;
+  breakpoint2: number = 8;
   breakpoint3: number = 6;
 
   ngOnInit() {
     this.breakpoint = (window.innerWidth <= 319) ? 3 : 1;
-    // this.breakpoint2 = (window.innerWidth > 400) ? 10 : 6;
-    // this.breakpoint3 = (window.innerWidth > 319) ? 6 : 1;
   }
 
   onResize(event: any) {
@@ -61,9 +59,9 @@ export class GameComponent implements OnInit{
     };
 
     const winnerMapping: {[index: string]: any} = {
-      huPlayer: 'Human Wins!',
-      aiPlayer: 'Computer Wins!',
-      draw: 'It\'s a Draw!'
+      huPlayer: '¡Ganaste tú 🧑!',
+      aiPlayer: '¡Ganó el robot 🤖!',
+      draw: '¡Es un empate!'
     };
 
     const result = GameStep(this.gameState, symbols, this.difficulty);
