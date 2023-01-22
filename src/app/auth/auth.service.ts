@@ -8,29 +8,29 @@ import { AuthnTransaction, OktaAuth } from '@okta/okta-auth-js';
 })
 export class AuthService implements OnDestroy{
 
-  private _authSub$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private authSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public get isAuthenticated$(): Observable<boolean> {
-    return this._authSub$.asObservable();
+    return this.authSub.asObservable();
   }
 
-  constructor(private _router: Router, private _authClient: OktaAuth) {
-    this._authClient.session.exists().then(exists => this._authSub$.next(exists));
+  constructor(private _router: Router, private authClient: OktaAuth) {
+    this.authClient.session.exists().then(exists => this.authSub.next(exists));
   }
 
   public ngOnDestroy(): void {
-    this._authSub$.next(false);
-    this._authSub$.complete();
+    this.authSub.next(false);
+    this.authSub.complete();
   }
 
   public login(username: string, password: string): Observable<void> {
-    return from(this._authClient.signInWithCredentials({username, password})).pipe(
+    return from(this.authClient.signInWithCredentials({username, password})).pipe(
       map((t: AuthnTransaction) => this.handleSignInResponse(t))
     );
   }
 
   public logout(redirect: string): Observable<void> {
-    return from(this._authClient.signOut()).pipe(
-      tap( _ => (this._authSub$.next(false), this._router.navigate([redirect]))),
+    return from(this.authClient.signOut()).pipe(
+      tap( _ => (this.authSub.next(false), this._router.navigate([redirect]))),
       catchError(err => {
         console.error(err);
         throw new Error('Unable to sign out');
@@ -43,7 +43,7 @@ export class AuthService implements OnDestroy{
       throw new Error(`We cannot handle the ${transaction.status} status`);
     }
 
-    this._authSub$.next(true)
-    this._authClient.session.setCookieAndRedirect(transaction.sessionToken);
+    this.authSub.next(true)
+    this.authClient.session.setCookieAndRedirect(transaction.sessionToken);
   }
 }
