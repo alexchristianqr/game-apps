@@ -1,6 +1,6 @@
-# Project: foryou
+# Project: game-apps
 
-Cada jugador consta de tres piezas. Por turnos, cada uno coloca sus piezas, cuando todas están en el tablero, empiezan a moverse una intersección por turno. El primero que logra hacer una fila con sus tres piezas, gana.
+Aplicación de juegos clasicos con Firebase v9 + Angular v15 + Angular Material.
 
 ## Deployment release
 
