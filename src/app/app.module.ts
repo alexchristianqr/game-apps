@@ -5,6 +5,8 @@ import { AngularSettingsModule } from './shared/angular-settings/angular-setting
 import { AngularMaterialUIModule } from './shared/angular-material-ui/angular-material-ui.module'
 import { CustomAppModule } from './modules/custom-app.module'
 import { AppComponent } from './app.component'
+import { AuthService } from './core/services/auth/auth.service'
+import { AngularFirebaseModule } from './shared/angular-firebase/angular-firebase.module'
 
 @NgModule({
   declarations: [AppComponent],
@@ -12,16 +14,19 @@ import { AppComponent } from './app.component'
     BrowserAnimationsModule,
     BrowserModule,
 
+    // Exports de modulos funcionales de Angular.io
+    CustomAppModule,
+
     // Exports de las configuraciones generales de Angular.io
     AngularSettingsModule,
 
     // Exports de Angular Material UI
     AngularMaterialUIModule,
 
-    // Exports de modulos funcionales de Angular.io
-    CustomAppModule,
+    // Exports firebase
+    AngularFirebaseModule,
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
