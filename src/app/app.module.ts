@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AngularSettingsModule } from './shared/angular-settings/angular-settings.module'
 import { AngularMaterialUIModule } from './shared/angular-material-ui/angular-material-ui.module'
-import { CustomAppModule } from './modules'
+import { CustomAppModule } from './modules/custom-app.module'
 import { AppComponent } from './app.component'
 
 @NgModule({

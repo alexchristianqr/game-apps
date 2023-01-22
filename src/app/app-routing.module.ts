@@ -1,28 +1,11 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { LoginComponent } from './modules/login/login.component'
-import { GameComponent } from './modules/game/game.component'
-import { HomeComponent } from './modules/home/home.component'
+import { CustomRoutingModule } from './modules/custom-routing.module'
 
-const routes: Routes = [
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'game',
-    component: GameComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: '',
-    component: HomeComponent,
-    // canActivate: [AuthGuard]
-  },
-]
+const routes: Routes = []
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: true }), CustomRoutingModule],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
