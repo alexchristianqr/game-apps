@@ -3,6 +3,11 @@ import {Component, OnInit} from '@angular/core';
 import Minimax from 'tic-tac-toe-minimax';
 const { GameStep } = Minimax;
 
+interface Level {
+  value: string;
+  text: string;
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -13,7 +18,8 @@ export class GameComponent implements OnInit{
   public winner: string | undefined;
   public playing = false;
   public computerFirst = false;
-  public difficulty: 'Easy'|'Normal'|'Hard' = 'Normal';
+  public dataLevels:Level[] = [{value:'easy', text: 'Fácil'},{value:'normal', text: 'Normal'},{value:'hard', text: 'Dificil'} ]
+  public difficulty: 'easy'|'normal'|'hard' = 'normal'
   breakpoint: number = 1;
   breakpoint2: number = 8;
   breakpoint3: number = 6;
