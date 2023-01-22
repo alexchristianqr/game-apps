@@ -1,6 +1,6 @@
 <mat-card id="CardTablero">
   <mat-card-content style="text-align: center; padding-top: 0.5rem; padding-bottom: 0.5rem">
-  <h1 style="padding: 2rem">Tres en linea</h1>
+    <h1 style="padding: 2rem">Tres en linea</h1>
   </mat-card-content>
 
   <mat-card-content style="text-align: center">
@@ -10,60 +10,54 @@
   </mat-card-content>
 
   <mat-card-content>
-    <mat-grid-list [cols]="breakpoint"  [rowHeight]="breakpoint2+':'+breakpoint3" (window:resize)="onResize($event)" style="width: auto">
+    <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2+':'+breakpoint3" (window:resize)="onResize($event)">
       <mat-grid-tile>
-    <div class="parent">
-      <div *ngFor="let field of gameState; let i = index" (click)="makeHumanMove(i)">
-        <div [class]="'div'+i">
-          <div class="playing"
-               style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%;">
-            {{field === 'X' || field === 'O' ? field : '1'}}
+        <div class="parent">
+          <div *ngFor="let field of gameState; let i = index" (click)="makeHumanMove(i)">
+            <div [class]="'div'+i">
+              <div class="playing"
+                   style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%;">
+                {{field === 'X' || field === 'O' ? field : ''}}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>
   <!--</mat-card>-->
   <!--<mat-card id="CardActions">-->
   <mat-card-content>
-    <mat-grid-list cols="1" rowHeight="8:2">
+<!--        <mat-grid-list cols="1" rowHeight="8:2" >-->
+    <mat-grid-list cols="1" rowHeight="8:1">
+      <mat-grid-tile>
+        <div *ngIf="!playing">
+          <h2>{{winner}}</h2>
+        </div>
+      </mat-grid-tile>
       <mat-grid-tile>
         <div style="text-align: center">
-          <!--          <div *ngIf="playing">-->
-          <!--            <h1>¡Tú 🧑 mueves primero!</h1>-->
-          <!--          </div>-->
-          <div *ngIf="!playing">
-            <h2>{{winner}}</h2>
-          </div>
-          <div style="text-align: center">
-            <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>
-            <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida
-            </button>
-          </div>
+          <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>
+          <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida
+          </button>
         </div>
       </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-grid-list cols="2" rowHeight="3:1">
+    <mat-grid-list cols="1" rowHeight="5:1">
       <mat-grid-tile>
         <mat-slide-toggle [(ngModel)]="computerFirst">Robot 🤖 mueve primero</mat-slide-toggle>
       </mat-grid-tile>
       <mat-grid-tile>
-        <div>
-          <mat-form-field>
-            <mat-label>Difficulty</mat-label>
-            <mat-select [(ngModel)]="difficulty">
-              <mat-option value="Easy">Easy</mat-option>
-              <mat-option value="Normal">Normal</mat-option>
-              <mat-option value="Hard">Hard</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <mat-form-field>
+          <mat-label>Difficulty</mat-label>
+          <mat-select [(ngModel)]="difficulty">
+            <mat-option value="Easy">Easy</mat-option>
+            <mat-option value="Normal">Normal</mat-option>
+            <mat-option value="Hard">Hard</mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-grid-tile>
-
     </mat-grid-list>
-
   </mat-card-content>
 </mat-card>
