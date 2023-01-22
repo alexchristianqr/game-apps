@@ -1,6 +1,6 @@
 # Project: game-apps
 
-Aplicación de juegos clasicos con Firebase v9 + Angular v15 + Angular Material.
+Aplicación de juegos clásicos con Firebase v9 + Angular v15 + Angular Material UI.
 
 ## Deployment release
 
