@@ -1,5 +1,5 @@
-<mat-card id="CardTablero">
-  <mat-card-content style="text-align: center; padding-top: 0.5rem; padding-bottom: 0.5rem">
+<mat-card>
+  <mat-card-content style="text-align: center;">
     <h1 style="padding: 2rem">Tres en linea</h1>
   </mat-card-content>
 
@@ -25,16 +25,19 @@
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>
-  <!--</mat-card>-->
-  <!--<mat-card id="CardActions">-->
-  <mat-card-content>
-<!--        <mat-grid-list cols="1" rowHeight="8:2" >-->
-    <mat-grid-list cols="1" rowHeight="8:1">
+
+  <mat-card-content *ngIf="!playing && winner">
+    <mat-grid-list cols="1" rowHeight="9:2" >
       <mat-grid-tile>
         <div *ngIf="!playing">
-          <h2>{{winner}}</h2>
+          <div style="font-weight: bold; font-size: 1.5rem">{{winner}}</div>
         </div>
       </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+
+    <mat-card-content>
+    <mat-grid-list cols="1" rowHeight="7:1">
       <mat-grid-tile>
         <div style="text-align: center">
           <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>
@@ -44,7 +47,7 @@
       </mat-grid-tile>
     </mat-grid-list>
 
-    <mat-grid-list cols="1" rowHeight="5:1">
+    <mat-grid-list cols="1" rowHeight="4:1">
       <mat-grid-tile>
         <mat-slide-toggle [(ngModel)]="computerFirst">Robot 🤖 mueve primero</mat-slide-toggle>
       </mat-grid-tile>
