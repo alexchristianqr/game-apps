@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-content style="text-align: center;">
+  <mat-card-content style="text-align: center">
     <h1 style="padding: 2rem">Tres en linea</h1>
   </mat-card-content>
 
@@ -11,14 +11,13 @@
   <!--  </mat-card-content>-->
 
   <mat-card-content>
-    <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2+':'+breakpoint3" (window:resize)="onResize($event)">
+    <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2 + ':' + breakpoint3" (window:resize)="onResize($event)">
       <mat-grid-tile>
         <div class="parent">
           <div *ngFor="let field of gameState; let i = index" (click)="makeHumanMove(i)">
-            <div [class]="'div'+i">
-              <div class="playing"
-                   style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%;">
-                {{field === 'X' || field === 'O' ? field : ''}}
+            <div [class]="'div' + i">
+              <div class="playing" style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%">
+                {{ field === 'X' || field === 'O' ? field : '' }}
               </div>
             </div>
           </div>
@@ -48,7 +47,7 @@
     <mat-grid-list cols="1" rowHeight="9:2">
       <mat-grid-tile>
         <div *ngIf="!playing">
-          <div style="font-weight: bold; font-size: 1.25rem">{{winner}}</div>
+          <div style="font-weight: bold; font-size: 1.25rem">{{ winner }}</div>
         </div>
       </mat-grid-tile>
     </mat-grid-list>
@@ -59,8 +58,7 @@
       <mat-grid-tile>
         <div style="text-align: center">
           <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>
-          <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida
-          </button>
+          <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida</button>
         </div>
       </mat-grid-tile>
     </mat-grid-list>
@@ -73,7 +71,7 @@
         <mat-form-field>
           <mat-label>Nivel</mat-label>
           <mat-select [(ngModel)]="difficulty">
-            <mat-option *ngFor="let item of dataLevels" [value]="item.value">{{item.text}}</mat-option>
+            <mat-option *ngFor="let item of dataLevels" [value]="item.value">{{ item.text }}</mat-option>
           </mat-select>
         </mat-form-field>
       </mat-grid-tile>

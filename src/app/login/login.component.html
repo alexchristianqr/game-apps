@@ -1,19 +1,17 @@
 <mat-card>
-  <mat-card-content style="text-align: center;">
-      <h1 style="padding: 2rem">Inicio de sesión</h1>
+  <mat-card-content style="text-align: center">
+    <h1 style="padding: 2rem">Inicio de sesión</h1>
   </mat-card-content>
 
   <mat-card-content>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
-      <mat-error *ngIf="!loginValid">
-        El usuario o contraseña no es válido
-      </mat-error>
+      <mat-error *ngIf="!loginValid"> El usuario o contraseña no es válido </mat-error>
       <mat-form-field>
-        <input matInput placeholder="Email" [(ngModel)]="username" name="username" required>
+        <input matInput placeholder="Email" [(ngModel)]="username" name="username" required />
         <mat-error>Porfavor ingrese un email válido</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
+        <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
         <mat-error>Porfavor ingrese una contraseña válida</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">Entrar</button>
