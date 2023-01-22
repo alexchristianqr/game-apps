@@ -18,8 +18,8 @@ export class GameComponent implements OnInit{
   public winner: string | undefined;
   public playing = false;
   public computerFirst = false;
-  public dataLevels:Level[] = [{value:'easy', text: 'Fácil'},{value:'normal', text: 'Normal'},{value:'hard', text: 'Dificil'} ]
-  public difficulty: 'easy'|'normal'|'hard' = 'normal'
+  public dataLevels:Level[] = [{value:'Easy', text: 'Fácil'},{value:'Normal', text: 'Normal'},{value:'Hard', text: 'Difícil'} ]
+  public difficulty: 'Easy'|'Normal'|'Hard' = 'Normal'
   breakpoint: number = 1;
   breakpoint2: number = 8;
   breakpoint3: number = 6;
