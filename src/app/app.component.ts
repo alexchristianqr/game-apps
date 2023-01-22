@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Subject, take, takeUntil } from 'rxjs'
-import { AuthService } from './auth/auth.service'
+// import { AuthService } from './core/services/auth/auth.service'
 
 @Component({
   selector: 'app-root',
@@ -12,10 +12,10 @@ export class AppComponent implements OnInit, OnDestroy {
   public isAuthenticated = false
   private _destroySub$ = new Subject<void>()
 
-  constructor(private authService: AuthService) {}
+  // constructor(private authService: AuthService) {}
 
   public ngOnInit(): void {
-    this.authService.isAuthenticated$.pipe(takeUntil(this._destroySub$)).subscribe((isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated))
+    // this.authService.isAuthenticated$.pipe(takeUntil(this._destroySub$)).subscribe((isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated))
   }
 
   public ngOnDestroy(): void {
@@ -23,6 +23,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public logout(): void {
-    this.authService.logout('/login').pipe(take(1))
+    // this.authService.logout('/login').pipe(take(1))
   }
 }
