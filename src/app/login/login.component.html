@@ -1,7 +1,10 @@
 <mat-card>
+  <mat-card-content style="text-align: center;">
+      <h1 style="padding: 2rem">Inicio de sesión</h1>
+  </mat-card-content>
+
   <mat-card-content>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
-      <h1 style="padding: 2rem">Inicio de sesión</h1>
       <mat-error *ngIf="!loginValid">
         El usuario o contraseña no es válido
       </mat-error>
