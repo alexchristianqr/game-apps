@@ -19,6 +19,6 @@ cd dist
 git init
 git add -A
 git commit -m "new deployment for release v$tagVersion"
-git push -f git@github.com:alexchristianqr/tres-en-linea.git main:gh-pages
+git push -f git@github.com:alexchristianqr/game-apps.git main:gh-pages
 
 cd -
