@@ -4,9 +4,7 @@
   </mat-card-content>
 
   <mat-card-content>
-    <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
-      <mat-error *ngIf="!loginValid">El usuario o contraseña no es válido</mat-error>
-
+    <form #loginForm="ngForm">
       <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
         <input matInput placeholder="Email" [(ngModel)]="username" name="username" required />
@@ -15,11 +13,15 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Contraseña</mat-label>
-        <input matInput type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
-        <mat-error>Ingrese una contraseña válida</mat-error>
+        <input matInput [type]="hidePwd ? 'password' : 'text'" [(ngModel)]="password" name="password" required>
+        <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
+          <mat-icon>{{hidePwd ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid">Entrar</button>
+      <mat-error *ngIf="loginValid === false" style="margin-bottom: 1rem">El usuario o la contraseña no es válido</mat-error>
+
+      <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid" (click)="onSubmit()">Entrar</button>
     </form>
   </mat-card-content>
 </mat-card>
