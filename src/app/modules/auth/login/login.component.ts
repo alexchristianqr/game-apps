@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { AuthService } from '../../core/services/auth/auth.service'
+import { AuthService } from '../auth.service'
 import { initializeApp } from 'firebase/app'
-import { environment } from '../../../environments/environment'
+import { environment } from '../../../../environments/environment'
 import { getAuth } from 'firebase/auth'
 
 @Component({
@@ -10,7 +10,7 @@ import { getAuth } from 'firebase/auth'
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  public loginValid: boolean|undefined = true
+  public loginValid: boolean | undefined = true
   public hidePwd = true
   public username = 'invitado@gmail.com'
   public password = 'Invitado2023.'
@@ -50,11 +50,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loginValid = false
         // window.alert(error.message)
       })
-      // .then(() => {
-      //   this.loginValid = true
-      // })
-      // .catch((r) => {
-      //   this.loginValid = false
-      // })
+    // .then(() => {
+    //   this.loginValid = true
+    // })
+    // .catch((r) => {
+    //   this.loginValid = false
+    // })
   }
 }

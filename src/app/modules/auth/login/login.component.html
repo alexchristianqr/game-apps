@@ -13,9 +13,9 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Contraseña</mat-label>
-        <input matInput [type]="hidePwd ? 'password' : 'text'" [(ngModel)]="password" name="password" required>
+        <input matInput [type]="hidePwd ? 'password' : 'text'" [(ngModel)]="password" name="password" required />
         <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
-          <mat-icon>{{hidePwd ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-icon>{{ hidePwd ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
 

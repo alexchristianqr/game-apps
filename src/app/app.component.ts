@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Subject, take, takeUntil } from 'rxjs'
-import { AuthService } from './core/services/auth/auth.service'
+import { AuthService } from './modules/auth/auth.service'
 // import { AuthService } from './core/services/auth/auth.service'
 
 @Component({

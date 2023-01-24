@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore'
 import { Router } from '@angular/router'
 import { User } from '../user/user.model'
-import {LoginComponent} from "../../../modules/login/login.component";
+import { LoginComponent } from './login/login.component'
 
 @Injectable({
   providedIn: 'root',
@@ -34,19 +34,18 @@ export class AuthService {
 
   // Sign in with email/password
   async signIn(email: string, password: string) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      // .then((result) => {
-      //   this.setUserData(result.user)
-      //   this.afAuth.authState.subscribe((user) => {
-      //     if (user) {
-      //       this.router.navigate(['home'])
-      //     }
-      //   })
-      // })
-      // .catch((error) => {
-      //   // window.alert(error.message)
-      // })
+    return this.afAuth.signInWithEmailAndPassword(email, password)
+    // .then((result) => {
+    //   this.setUserData(result.user)
+    //   this.afAuth.authState.subscribe((user) => {
+    //     if (user) {
+    //       this.router.navigate(['home'])
+    //     }
+    //   })
+    // })
+    // .catch((error) => {
+    //   // window.alert(error.message)
+    // })
   }
 
   // Sign up with email/password
@@ -137,5 +136,4 @@ export class AuthService {
       this.router.navigate(['login'])
     })
   }
-
 }

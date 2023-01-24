@@ -5,8 +5,13 @@ import { AngularSettingsModule } from './shared/angular-settings/angular-setting
 import { AngularMaterialUIModule } from './shared/angular-material-ui/angular-material-ui.module'
 import { CustomAppModule } from './modules/custom-app.module'
 import { AppComponent } from './app.component'
-import { AuthService } from './core/services/auth/auth.service'
+import { AuthService } from './modules/auth/auth.service'
 import { AngularFirebaseModule } from './shared/angular-firebase/angular-firebase.module'
+
+import { EffectsModule } from '@ngrx/effects'
+import { StoreModule } from '@ngrx/store'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { environment } from '../environments/environment'
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +30,13 @@ import { AngularFirebaseModule } from './shared/angular-firebase/angular-firebas
 
     // Exports firebase
     AngularFirebaseModule,
+
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 50,
+      logOnly: environment.production,
+    }),
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],

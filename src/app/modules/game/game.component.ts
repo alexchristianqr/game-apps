@@ -1,6 +1,6 @@
 // @ts-ignore
 import Minimax from 'tic-tac-toe-minimax'
-const { GameStep,ComputerMove } = Minimax
+const { GameStep, ComputerMove } = Minimax
 import { Component, OnInit } from '@angular/core'
 
 interface Level {
@@ -15,17 +15,17 @@ interface Level {
 })
 export class GameComponent implements OnInit {
   public gameBoard: Array<any> = [
-    {value:0, bgColor: 'div0'},
-    {value:1, bgColor: 'div1'},
-    {value:2, bgColor: 'div2'},
-    {value:3, bgColor: 'div3'},
-    {value:4, bgColor: 'div4'},
-    {value:5, bgColor: 'div5'},
-    {value:6, bgColor: 'div6'},
-    {value:7, bgColor: 'div7'},
-    {value:8, bgColor: 'div8'},
+    { value: 0, bgColor: 'div0' },
+    { value: 1, bgColor: 'div1' },
+    { value: 2, bgColor: 'div2' },
+    { value: 3, bgColor: 'div3' },
+    { value: 4, bgColor: 'div4' },
+    { value: 5, bgColor: 'div5' },
+    { value: 6, bgColor: 'div6' },
+    { value: 7, bgColor: 'div7' },
+    { value: 8, bgColor: 'div8' },
   ]
-  public gameState:Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  public gameState: Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8]
   public winner: string | undefined
   public playing = false
   public computerFirst = false
@@ -45,7 +45,6 @@ export class GameComponent implements OnInit {
       4 5 6
       7 8 9
     */
-
     // let matrix: Array<any> = [
     //   [1, 2, 3],
     //   [4, 4, 4],
@@ -72,16 +71,16 @@ export class GameComponent implements OnInit {
       return
     }
 
-  this.gameBoard = [
-      {value:0, bgColor: 'div0'},
-      {value:1, bgColor: 'div1'},
-      {value:2, bgColor: 'div2'},
-      {value:3, bgColor: 'div3'},
-      {value:4, bgColor: 'div4'},
-      {value:5, bgColor: 'div5'},
-      {value:6, bgColor: 'div6'},
-      {value:7, bgColor: 'div7'},
-      {value:8, bgColor: 'div8'},
+    this.gameBoard = [
+      { value: 0, bgColor: 'div0' },
+      { value: 1, bgColor: 'div1' },
+      { value: 2, bgColor: 'div2' },
+      { value: 3, bgColor: 'div3' },
+      { value: 4, bgColor: 'div4' },
+      { value: 5, bgColor: 'div5' },
+      { value: 6, bgColor: 'div6' },
+      { value: 7, bgColor: 'div7' },
+      { value: 8, bgColor: 'div8' },
     ]
     this.gameState = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     // this.gameState = [
@@ -152,7 +151,7 @@ export class GameComponent implements OnInit {
   private checkForWinner(board: Array<any>) {
     // console.log({ board })
 
-    let tmp:Array<any> = []
+    let tmp: Array<any> = []
 
     // Check rows
     for (let i = 0; i < 3; i++) {

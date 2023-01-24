@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { CustomRoutingModule } from './modules/custom-routing.module'
 
 const routes: Routes = [
   {
@@ -11,7 +10,7 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true }), CustomRoutingModule],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
