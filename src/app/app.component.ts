@@ -17,7 +17,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.isAuthenticated = this.authService.isLoggedIn
-    console.log('alex',this.isAuthenticated)
   }
 
   public ngOnDestroy(): void {
