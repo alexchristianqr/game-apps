@@ -131,9 +131,10 @@ export class AuthService {
 
   // Sign out
   async signOut() {
-    return this.afAuth.signOut().then(() => {
-      localStorage.removeItem('user')
-      this.router.navigate(['login'])
-    })
+    return this.afAuth.signOut()
+    //   .then(() => {
+    //   localStorage.removeItem('user')
+    //   this.router.navigate(['login'])
+    // })
   }
 }

@@ -1,13 +1,5 @@
 import { createSelector } from '@ngrx/store'
+import { AuthState } from './auth.state'
+import { AuthFeatureReducer } from './auth.reducer'
 
-export interface FeatureState {
-  counter: number
-}
-
-export interface AppState {
-  feature: FeatureState
-}
-
-export const selectFeature = (state: AppState) => state.feature
-
-export const selectFeatureCount = createSelector(selectFeature, (state: FeatureState) => state.counter)
+export const isLoggedIn = createSelector(AuthFeatureReducer.selectAuthState, (state: AuthState) => state.isLoggedIn)

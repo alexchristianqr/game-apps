@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { AppRoutingModule } from '../../app-routing.module'
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'

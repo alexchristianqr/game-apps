@@ -1,24 +1,17 @@
-import { CustomType } from '../auth.types'
 import { AuthActions } from './auth.actions'
 import { createFeature, createReducer, on } from '@ngrx/store'
+import { AuthState } from './auth.state'
 
-export interface State {
-  lists: CustomType
+export const initialState: AuthState = {
+  isLoggedIn: false,
 }
 
-export const initialState: State = {
-  lists: {
-    newType: [],
-  },
-}
-
-export const AuthFeature = createFeature({
+export const AuthFeatureReducer = createFeature({
   name: 'auth',
   reducer: createReducer(
     initialState,
-    on(AuthActions.doLogin, (state, action) => ({
-      ...state,
-      lists: { newType: [] },
+    on(AuthActions.setUserLoggedIn, (state, payload) => ({
+      isLoggedIn: payload.userAuthenticated,
     }))
   ),
 })

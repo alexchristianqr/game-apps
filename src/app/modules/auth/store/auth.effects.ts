@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core'
-import { Actions, OnInitEffects } from '@ngrx/effects'
-import { Action } from '@ngrx/store'
-import { AuthActions } from './auth.actions'
+import { Actions } from '@ngrx/effects'
+import { Store } from '@ngrx/store'
 
 @Injectable()
-export class AuthEffects implements OnInitEffects {
-  constructor(private actions$: Actions) {}
-
-  ngrxOnInitEffects(): Action {
-    return AuthActions.doLogin()
+export class AuthEffects {
+  constructor(private actions$: Actions, private store$: Store) {
+    console.log(this.actions$, this.store$)
   }
 }

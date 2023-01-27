@@ -17,7 +17,7 @@ import { routes } from './auth.route'
     AngularMaterialUIModule,
     AngularSettingsModule,
     RouterModule.forRoot(routes, { useHash: true }),
-    StoreModule.forFeature(authReducer.AuthFeature),
+    StoreModule.forFeature(authReducer.AuthFeatureReducer),
     EffectsModule.forFeature([AuthEffects]),
   ],
 })

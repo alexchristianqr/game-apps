@@ -3,6 +3,8 @@ import { AuthService } from '../auth.service'
 import { initializeApp } from 'firebase/app'
 import { environment } from '../../../../environments/environment'
 import { getAuth } from 'firebase/auth'
+import { Store } from '@ngrx/store'
+import { AuthActions } from '../store/auth.actions'
 
 @Component({
   selector: 'app-login',
@@ -18,14 +20,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   // private _destroySub$ = new Subject<void>()
   // private readonly returnUrl: string
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private store: Store<{}>) {}
 
   public ngOnInit(): void {
     // Initialize Firebase
-    const firebaseConfig: object = environment.firebase
-    const app = initializeApp(firebaseConfig)
-    const authUser = getAuth(app)
-    console.log({ authUser })
+    // const firebaseConfig: object = environment.firebase
+    // const app = initializeApp(firebaseConfig)
+    // const authUser = getAuth(app)
+    // console.log({ authUser })
     // Initialize Firebase Authentication and get a reference to the service
     // const auth = getAuth(app);
   }
@@ -45,16 +47,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         })
         this.loginValid = true
+        this.store.dispatch(AuthActions.setUserLoggedIn({ userAuthenticated: this.loginValid }))
       })
       .catch((error) => {
         this.loginValid = false
-        // window.alert(error.message)
+        this.store.dispatch(AuthActions.setUserLoggedIn({ userAuthenticated: this.loginValid }))
       })
-    // .then(() => {
-    //   this.loginValid = true
-    // })
-    // .catch((r) => {
-    //   this.loginValid = false
-    // })
   }
 }

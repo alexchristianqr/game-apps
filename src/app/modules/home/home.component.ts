@@ -9,6 +9,8 @@ import { environment } from '../../../environments/environment'
 export class HomeComponent implements OnInit {
   breakpoint: number = 3
 
+  constructor() {}
+
   ngOnInit() {
     let apiUrl: Object = environment.firebase
     console.log(JSON.stringify(apiUrl))
