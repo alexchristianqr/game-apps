@@ -1,8 +1,8 @@
-# Project: game-apps
+# Game apps
 
 Aplicación de juegos clásicos con Firebase v9 + Angular v15 + Angular Material UI.
 
-## Deployment release
+## Steps for deployment
 
 ```bash
 git tag --sort=-v:refname 

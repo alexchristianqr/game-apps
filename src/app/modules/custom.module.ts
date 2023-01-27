@@ -6,4 +6,4 @@ import { AuthModule } from './auth/auth.module'
 @NgModule({
   exports: [HomeModule, GameModule, AuthModule],
 })
-export class CustomAppModule {}
+export class CustomModule {}

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AngularSettingsModule } from './shared/angular-settings/angular-settings.module'
 import { AngularMaterialUIModule } from './shared/angular-material-ui/angular-material-ui.module'
-import { CustomAppModule } from './modules/custom-app.module'
+import { CustomModule } from './modules/custom.module'
 import { AppComponent } from './app.component'
 import { AuthService } from './modules/auth/auth.service'
 import { AngularFirebaseModule } from './shared/angular-firebase/angular-firebase.module'
@@ -20,7 +20,7 @@ import { environment } from '../environments/environment'
     BrowserModule,
 
     // Exports de modulos funcionales de Angular.io
-    CustomAppModule,
+    CustomModule,
 
     // Exports de las configuraciones generales de Angular.io
     AngularSettingsModule,

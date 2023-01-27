@@ -4,7 +4,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore'
 import { Router } from '@angular/router'
 import { User } from '../user/user.model'
-import { LoginComponent } from './login/login.component'
 
 @Injectable({
   providedIn: 'root',
