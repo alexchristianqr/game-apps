@@ -69,9 +69,10 @@ export class AuthService {
           this.router.navigate(['home']) // Redireccionar a la pagina de Home
         })
       })
-      .catch((error) => {
-        window.alert(error.message)
-      })
+      // .catch((error) => {
+      //   console.error(error)
+      //   // window.alert(error.message)
+      // })
   }
 
   /**
