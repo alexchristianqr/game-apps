@@ -19,7 +19,7 @@
         </button>
       </mat-form-field>
 
-      <mat-error *ngIf="loginValid === false" style="margin-bottom: 1rem">El usuario o la contraseña no es válido</mat-error>
+      <mat-error *ngIf="isAuthenticated === false" style="margin-bottom: 1rem">El usuario o la contraseña no es válido</mat-error>
 
       <button mat-raised-button color="primary" [disabled]="!loginForm.form.valid" (click)="onSubmit()">Entrar</button>
     </form>

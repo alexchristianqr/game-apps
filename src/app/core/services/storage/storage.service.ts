@@ -41,6 +41,8 @@ export class StorageService {
   }
 
   set(key: string, value: any): void {
+    console.log({key,value})
+
     let val = JSON.stringify(value)
     localStorage.setItem(key, val)
     let storeDataKey = this.storeDataSubjects.get(key)

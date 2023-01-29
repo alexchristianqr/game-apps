@@ -39,20 +39,6 @@ export class GameComponent implements OnInit {
   breakpoint2: number = 8
   breakpoint3: number = 6
 
-  constructor() {
-    /*
-      1 2 3
-      4 5 6
-      7 8 9
-    */
-    // let matrix: Array<any> = [
-    //   [1, 2, 3],
-    //   [4, 4, 4],
-    //   [7, 8, 9],
-    // ]
-    // console.log('ganador', this.checkForWinner(matrix))
-  }
-
   ngOnInit() {
     this.breakpoint = window.innerWidth <= 319 ? 3 : 1
   }
