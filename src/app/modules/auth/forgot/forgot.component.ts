@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService } from '../auth.service'
+import { MatSnackBar } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-forgot',
@@ -13,7 +14,7 @@ export class ForgotComponent {
   submitted: boolean | undefined
   loading: boolean = false
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService, private snackBar: MatSnackBar) {
     this.formGroup = formBuilder.group({
       email: formBuilder.control(null, [Validators.required, Validators.email]),
     })
@@ -31,11 +32,14 @@ export class ForgotComponent {
     // API
     return this.authService
       .forgotPassword(email)
-      .then((response) => {
+      .then(() => {
         this.submitted = undefined
         this.loading = false
+        this.snackBar.open('Enlace enviado con éxito, por favor revise su correo', '', {
+          duration: 3000,
+        })
       })
-      .catch((response) => {
+      .catch(() => {
         this.submitted = false
         this.loading = false
       })

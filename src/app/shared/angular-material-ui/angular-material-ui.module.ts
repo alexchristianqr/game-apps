@@ -12,6 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatSelectModule } from '@angular/material/select'
 import { MatOptionModule } from '@angular/material/core'
 import { MatGridListModule } from '@angular/material/grid-list'
+import { MatSnackBarModule } from '@angular/material/snack-bar'
 
 @NgModule({
   exports: [
@@ -28,6 +29,7 @@ import { MatGridListModule } from '@angular/material/grid-list'
     MatSelectModule,
     MatOptionModule,
     MatGridListModule,
+    MatSnackBarModule,
   ],
 })
 export class AngularMaterialUIModule {}
