@@ -3,16 +3,16 @@
     <h1>Inicio de sesión</h1>
   </mat-card-header>
   <mat-card-content>
-    <form>
+    <form [formGroup]="formGroup">
       <mat-grid-list cols="2" rowHeight="2:1">
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="username" name="username" required />
+          <input type="email" matInput formControlName="email" name="email" required />
           <mat-error>Ingrese un email válido</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Contraseña</mat-label>
-          <input matInput [type]="hidePwd ? 'password' : 'text'" [(ngModel)]="password" name="password" required />
+          <input matInput [type]="hidePwd ? 'password' : 'text'" formControlName="password" name="password" required />
           <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
             <mat-icon>{{ hidePwd ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
@@ -24,13 +24,13 @@
             </div>
           </div>
         </div>
-        <mat-error *ngIf="validForm === false">El usuario o la contraseña no es válido</mat-error>
+        <mat-error *ngIf="submitted === false">El usuario o la contraseña no es válido</mat-error>
       </mat-grid-list>
     </form>
   </mat-card-content>
   <mat-card-footer>
-    <button *ngIf="!loadingButton" mat-raised-button color="primary" (click)="signIn()">Entrar</button>
-    <button *ngIf="loadingButton" mat-raised-button color="primary" [disabled]="true">Entrando...</button>
+    <button *ngIf="!loading" mat-raised-button color="primary" (click)="onSubmit()">Entrar</button>
+    <button *ngIf="loading" mat-raised-button color="primary" disabled>Entrando...</button>
   </mat-card-footer>
   <mat-card-footer>
     <div>¿No tienes una cuenta? <a mat-button routerLink="/register">Registrate</a></div>

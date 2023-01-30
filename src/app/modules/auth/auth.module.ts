@@ -9,7 +9,7 @@ import * as authReducer from './store/auth.reducer'
 import { RouterModule } from '@angular/router'
 import { routes } from './auth.route'
 import { LoginComponent } from './login/login.component'
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './register/register.component'
 import { ForgotComponent } from './forgot/forgot.component'
 
 @NgModule({

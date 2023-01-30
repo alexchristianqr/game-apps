@@ -1,7 +1,6 @@
 import { Component } from '@angular/core'
 import { AuthService } from '../auth.service'
-import { Store } from '@ngrx/store'
-import { StorageService } from '../../../core/services/storage/storage.service'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-login',
@@ -9,20 +8,31 @@ import { StorageService } from '../../../core/services/storage/storage.service'
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  validForm: boolean | undefined = true
-  loadingButton: boolean | undefined = false
+  formGroup: FormGroup
+  submitted: boolean | undefined
+  loading: boolean = false
   hidePwd = true
-  username = 'invitado@gmail.com'
-  password = 'Invitado2023.'
 
-  constructor(private authService: AuthService, private store$: Store, private storageService: StorageService) {}
+  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+    this.formGroup = formBuilder.group({
+      email: formBuilder.control('invitado@gmail.com', [Validators.required, Validators.email]),
+      password: formBuilder.control('Invitado2023.', [Validators.required]),
+    })
+  }
 
-  protected async signIn() {
-    this.loadingButton = true
-    this.validForm = undefined
-    return this.authService.signIn(this.username, this.password).catch(() => {
-      this.validForm = false
-      this.loadingButton = false
+  async onSubmit() {
+    this.submitted = true
+
+    // stop here if form is invalid
+    if (this.formGroup.invalid) return
+
+    this.loading = true
+    const { email, password } = this.formGroup.value
+
+    // API
+    return this.authService.signIn(email, password).catch(() => {
+      this.submitted = false
+      this.loading = false
     })
   }
 }
