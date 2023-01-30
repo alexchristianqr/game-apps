@@ -1,15 +1,7 @@
 <mat-card>
-  <mat-card-content style="text-align: center">
-    <h1 style="padding: 2rem">Tres en linea</h1>
-  </mat-card-content>
-
-  <!--  <mat-card-content style="text-align: center">-->
-  <!--    <div *ngIf="playing" style="padding: 2rem">-->
-  <!--&lt;!&ndash;      <h2>¡Tú 🧑 empiezas primero!</h2>&ndash;&gt;-->
-  <!--      <div style="font-weight: 500; font-size: 1rem">¡Tú 🧑 empiezas primero!</div>-->
-  <!--    </div>-->
-  <!--  </mat-card-content>-->
-
+  <mat-card-header>
+    <h1>Tres en linea</h1>
+  </mat-card-header>
   <mat-card-content>
     <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2 + ':' + breakpoint3" (window:resize)="onResize($event)">
       <mat-grid-tile>
