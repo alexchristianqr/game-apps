@@ -115,7 +115,9 @@ export class AuthService {
    * @param passwordResetEmail
    */
   forgotPassword(passwordResetEmail: string) {
-    return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
+    return this.afAuth.sendPasswordResetEmail(passwordResetEmail, {
+      url: 'https://alexchristianqr.github.io/game-apps/#/login',
+    })
   }
 
   /**

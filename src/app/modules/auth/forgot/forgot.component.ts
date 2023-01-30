@@ -35,13 +35,16 @@ export class ForgotComponent {
       .then(() => {
         this.submitted = undefined
         this.loading = false
-        this.snackBar.open('Enlace enviado con éxito, por favor revise su correo', '', {
+        this.snackBar.open('Enlace enviado con éxito, porfavor revise su correo', '', {
           duration: 3000,
         })
       })
       .catch(() => {
         this.submitted = false
         this.loading = false
+        this.snackBar.open('El enlace no se ha enviado', '', {
+          duration: 3000,
+        })
       })
   }
 }
