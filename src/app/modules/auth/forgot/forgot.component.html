@@ -3,13 +3,16 @@
     <h1>¿Olvidaste tu contraseña?</h1>
   </mat-card-header>
   <mat-card-content>
-    <mat-grid-list cols="2" rowHeight="2:1">
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input type="email" matInput formControlName="email" name="email" required />
-        <mat-error>Ingrese un email válido</mat-error>
-      </mat-form-field>
-    </mat-grid-list>
+    <form [formGroup]="formGroup">
+      <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput formControlName="email" name="email" required />
+          <mat-error>Ingrese un email válido</mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="submitted === false">No se ha enviado el enlace</mat-error>
+      </mat-grid-list>
+    </form>
   </mat-card-content>
   <mat-card-footer>
     <button *ngIf="!loading" mat-raised-button color="primary" (click)="onSubmit()">Enviar enlace</button>
