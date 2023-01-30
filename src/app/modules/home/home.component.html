@@ -2,33 +2,16 @@
   <mat-card-header>
     <h1>Mis aplicaciones</h1>
   </mat-card-header>
-
   <mat-card-content>
-    <mat-grid-list [cols]="breakpoint" rowHeight="1:1" (window:resize)="onResize($event)">
-      <mat-grid-tile>
+    <div class="row">
+      <div class="col col-6" *ngFor="let app of apps">
         <mat-card-content>
-          <button mat-icon-button color="primary" routerLink="/game">
-            <mat-icon>gamepad</mat-icon>
+          <button mat-icon-button color="primary" [routerLink]="app.path" [disabled]="app.disabled">
+            <mat-icon>{{ app.icon }}</mat-icon>
           </button>
-          <div>3 en linea</div>
+          <div>{{ app.title }}</div>
         </mat-card-content>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-card-content>
-          <button mat-icon-button disabled color="primary">
-            <mat-icon>smart_toy</mat-icon>
-          </button>
-          <div>Smart Toy</div>
-        </mat-card-content>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-card-content>
-          <button mat-icon-button disabled color="primary">
-            <mat-icon>sports_basketbal</mat-icon>
-          </button>
-          <div>Basketball</div>
-        </mat-card-content>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>
