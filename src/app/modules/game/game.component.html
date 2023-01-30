@@ -1,6 +1,15 @@
 <mat-card>
   <mat-card-header>
-    <h1>Tres en linea</h1>
+    <div class="row">
+      <div class="col col-2 mx-auto">
+        <button mat-button routerLink="/home">
+          <mat-icon>arrow_back </mat-icon>
+        </button>
+      </div>
+      <div class="col col-10 mx-auto my-auto">
+        <h1>Tres en linea</h1>
+      </div>
+    </div>
   </mat-card-header>
   <mat-card-content>
     <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2 + ':' + breakpoint3" (window:resize)="onResize($event)">
