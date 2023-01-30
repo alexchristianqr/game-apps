@@ -58,21 +58,15 @@ export class AuthService {
    * @param password
    */
   async signIn(email: string, password: string) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        this.afAuth.authState.subscribe((user: any) => {
-          if (!user) return
-          this.isUserAuthenticated = true
-          this.setUserData(result.user) // Guardar en firebase
-          this.storageService.set('users', user) // Guardar en localstorage
-          this.router.navigate(['home']) // Redireccionar a la pagina de Home
-        })
+    return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
+      this.afAuth.authState.subscribe((user: any) => {
+        if (!user) return
+        this.isUserAuthenticated = true
+        this.setUserData(result.user) // Guardar en firebase
+        this.storageService.set('users', user) // Guardar en localstorage
+        this.router.navigate(['home']) // Redireccionar a la pagina de Home
       })
-      // .catch((error) => {
-      //   console.error(error)
-      //   // window.alert(error.message)
-      // })
+    })
   }
 
   /**
@@ -97,17 +91,13 @@ export class AuthService {
    * @param password
    */
   async signUp(email: string, password: string) {
-    return this.afAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        // Call the SendVerificaitonMail() function when new user sign
-        // up and returns promise
-        this.sendVerificationMail()
-        this.setUserData(result.user)
-      })
-      .catch((error) => {
-        window.alert(error.message)
-      })
+    return this.afAuth.createUserWithEmailAndPassword(email, password).then((result) => {
+      // Call the SendVerificaitonMail() function when new user sign
+      // up and returns promise
+      // this.sendVerificationMail()
+      console.log({ result })
+      this.setUserData(result.user)
+    })
   }
 
   /**

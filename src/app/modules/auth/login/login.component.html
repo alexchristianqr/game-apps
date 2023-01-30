@@ -1,28 +1,31 @@
 <mat-card>
-  <mat-card-content style="text-align: center">
-    <h1 style="padding: 2rem">Inicio de sesión</h1>
-  </mat-card-content>
-
+  <mat-card-header>
+    <h1>Inicio de sesión</h1>
+  </mat-card-header>
   <mat-card-content>
-    <form #loginForm="ngForm">
-      <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" [(ngModel)]="username" name="username" required />
-        <mat-error>Ingrese un email válido</mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Contraseña</mat-label>
-        <input matInput [type]="hidePwd ? 'password' : 'text'" [(ngModel)]="password" name="password" required />
-        <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
-          <mat-icon>{{ hidePwd ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
-
-      <mat-error *ngIf="validForm === false" style="margin-bottom: 1rem">El usuario o la contraseña no es válido</mat-error>
-
-      <button *ngIf="!loadingButton" mat-raised-button color="primary" (click)="signIn()">Entrar</button>
-      <button *ngIf="loadingButton" mat-raised-button color="primary" [disabled]="true">Entrando...</button>
+    <form>
+      <mat-grid-list cols="2" rowHeight="2:1">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" [(ngModel)]="username" name="username" required />
+          <mat-error>Ingrese un email válido</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hidePwd ? 'password' : 'text'" [(ngModel)]="password" name="password" required />
+          <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
+            <mat-icon>{{ hidePwd ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-error *ngIf="validForm === false">El usuario o la contraseña no es válido</mat-error>
+      </mat-grid-list>
     </form>
   </mat-card-content>
+  <mat-card-footer>
+    <button *ngIf="!loadingButton" mat-raised-button color="primary" (click)="signIn()">Entrar</button>
+    <button *ngIf="loadingButton" mat-raised-button color="primary" [disabled]="true">Entrando...</button>
+  </mat-card-footer>
+  <mat-card-footer>
+    <div>¿No tienes una cuenta? <a mat-button routerLink="/register">Registrate</a></div>
+  </mat-card-footer>
 </mat-card>
