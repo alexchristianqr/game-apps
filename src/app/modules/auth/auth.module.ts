@@ -9,10 +9,11 @@ import * as authReducer from './store/auth.reducer'
 import { RouterModule } from '@angular/router'
 import { routes } from './auth.route'
 import { LoginComponent } from './login/login.component'
-import { RegisterComponent } from './register/register.component'
+import { RegisterComponent } from './register/register.component';
+import { ForgotComponent } from './forgot/forgot.component'
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, ForgotComponent],
   imports: [
     CommonModule,
     AngularMaterialUIModule,

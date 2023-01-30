@@ -9,11 +9,11 @@ import { StorageService } from '../../../core/services/storage/storage.service'
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  public validForm: boolean | undefined = true
-  public loadingButton: boolean| undefined = false
-  public hidePwd = true
-  public username = 'invitado@gmail.com'
-  public password = 'Invitado2023.'
+  validForm: boolean | undefined = true
+  loadingButton: boolean | undefined = false
+  hidePwd = true
+  username = 'invitado@gmail.com'
+  password = 'Invitado2023.'
 
   constructor(private authService: AuthService, private store$: Store, private storageService: StorageService) {}
 

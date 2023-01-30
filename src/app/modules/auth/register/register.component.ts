@@ -32,11 +32,6 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  // convenience getter for easy access to form fields
-  get fg() {
-    return this.formGroup.controls
-  }
-
   async onSubmit() {
     this.submitted = true
 
