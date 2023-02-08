@@ -39,13 +39,13 @@ error_arg_directory() {
 # MOSTRAR MENSAJE DE ERROR GENERAL
 error_args_general() {
   echo "SOLUCION:"
-  echo "- Especifica un tag así: -t=$VALUE_TAG | --tag=$VALUE_TAG (obligatorio) NOTA: La estructura de un tag es [NivelMayor.NivelMenor.NivelBugfix]"
-  echo "- Rama principal así: -b=$VALUE_BRANCH | --branch=$VALUE_BRANCH (opcional)"
-  echo "- Comando para compilar el proyecto así: --exec=$VALUE_EXEC (opcional) NOTA: El parametro exec es el comando de compilación de tu proyecto"
-  echo "- Indica el directorio de compilación así: -o=$VALUE_DIRECTORY | --out-dir=$VALUE_DIRECTORY | --out-directory=$VALUE_DIRECTORY (opcional)"
-  echo "- Indica el nombre del repositorio así: --repository=$VALUE_REPOSITORY (opcional)"
-  echo "- Elimina tag local y remoto así: -dt=$VALUE_DELETED_TAG | --deleted-lasttag=$VALUE_DELETED_TAG (opcional)"
-  echo "- Indica si es proyecto GitHub Pages así: -gp=$VALUE_PUSH_GHPAGES | --github-pages=$VALUE_PUSH_GHPAGES (opcional)"
+  echo "-t=, --tag=                   Tag [NivelMayor.NivelMenor.NivelBugfix]"
+  echo "-dt=, --deleted-lasttag=      Eliminar último tag registrado"
+  echo "-b=, --branch=                Rama git"
+  echo "--exec=                       Comando de compilación"
+  echo "-o=, --out-dir=               Carpeta de compilación"
+  echo "--repository=                 Repositorio git"
+  echo "-gp=, --github-pages=         Utilizar github pages"
   exit 1
 }
 
