@@ -16,6 +16,7 @@
           <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
             <mat-icon>{{ hidePwd ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
+          <mat-error>Ingrese una contraseña válida</mat-error>
         </mat-form-field>
         <div class="row">
           <div class="col col-12">
@@ -33,6 +34,6 @@
     <button *ngIf="loading" mat-raised-button color="primary" disabled>Entrando...</button>
   </mat-card-footer>
   <mat-card-footer>
-    <div>¿No tienes una cuenta? <a mat-button routerLink="/register">Registrate</a></div>
+    <div>¿No tienes una cuenta? <a mat-button routerLink="/register">registrate</a></div>
   </mat-card-footer>
 </mat-card>
