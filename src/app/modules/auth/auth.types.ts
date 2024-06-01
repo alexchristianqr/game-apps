@@ -1,3 +1,3 @@
 export interface CustomType {
-  newType: string[]
+  newType: string[];
 }

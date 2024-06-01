@@ -18,7 +18,7 @@
           <div *ngFor="let field of gameState; let i = index" (click)="makeHumanMove(i)">
             <div [class]="'div' + i">
               <div class="playing" style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%">
-                {{ field === 'X' || field === 'O' ? field : '' }}
+                {{ field === "X" || field === "O" ? field : "" }}
               </div>
             </div>
           </div>

@@ -1,17 +1,17 @@
-import { NgModule } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { AngularSettingsModule } from './shared/angular-settings/angular-settings.module'
-import { AngularMaterialUIModule } from './shared/angular-material-ui/angular-material-ui.module'
-import { CustomModule } from './modules/custom.module'
-import { AppComponent } from './app.component'
-import { AuthService } from './modules/auth/auth.service'
-import { AngularFirebaseModule } from './shared/angular-firebase/angular-firebase.module'
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AngularSettingsModule } from "./shared/angular-settings/angular-settings.module";
+import { AngularMaterialUIModule } from "./shared/angular-material-ui/angular-material-ui.module";
+import { CustomModule } from "./modules/custom.module";
+import { AppComponent } from "./app.component";
+import { AuthService } from "./modules/auth/auth.service";
+import { AngularFirebaseModule } from "./shared/angular-firebase/angular-firebase.module";
 
-import { EffectsModule } from '@ngrx/effects'
-import { StoreModule } from '@ngrx/store'
-import { StoreDevtoolsModule } from '@ngrx/store-devtools'
-import { environment } from '../environments/environment'
+import { EffectsModule } from "@ngrx/effects";
+import { StoreModule } from "@ngrx/store";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { environment } from "../environments/environment";
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,10 +35,10 @@ import { environment } from '../environments/environment'
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 50,
-      logOnly: environment.production,
-    }),
+      logOnly: environment.production
+    })
   ],
   providers: [AuthService],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

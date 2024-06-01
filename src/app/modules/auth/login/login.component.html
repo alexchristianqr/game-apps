@@ -14,7 +14,7 @@
           <mat-label>Contraseña</mat-label>
           <input matInput [type]="hidePwd ? 'password' : 'text'" formControlName="password" name="password" required />
           <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
-            <mat-icon>{{ hidePwd ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <mat-icon>{{ hidePwd ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
           <mat-error>Ingrese una contraseña válida</mat-error>
         </mat-form-field>

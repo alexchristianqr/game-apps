@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core'
-import * as auth from 'firebase/auth'
-import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore'
-import { Router } from '@angular/router'
-import { User } from '../user/user.model'
-import { StorageService } from '../../core/services/storage/storage.service'
-import { AuthActions } from './store/auth.actions'
-import { Store } from '@ngrx/store'
+import { Injectable } from "@angular/core";
+import * as auth from "firebase/auth";
+import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { AngularFirestore, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
+import { Router } from "@angular/router";
+import { User } from "../user/user.model";
+import { StorageService } from "../../core/services/storage/storage.service";
+import { AuthActions } from "./store/auth.actions";
+import { Store } from "@ngrx/store";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root"
 })
 export class AuthService {
-  isUserAuthenticated: boolean = false
+  isUserAuthenticated: boolean = false;
 
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
@@ -24,13 +24,13 @@ export class AuthService {
     // Guardar data en localstorage
     this.afAuth.authState.subscribe(async (user) => {
       if (user) {
-        this.isUserAuthenticated = true
-        this.storageService.set('users', user)
-        await this.router.navigate(['home'])
+        this.isUserAuthenticated = true;
+        this.storageService.set("users", user);
+        await this.router.navigate(["home"]);
       } else {
-        this.storageService.set('users', false)
+        this.storageService.set("users", false);
       }
-    })
+    });
   }
 
   /**
@@ -38,18 +38,18 @@ export class AuthService {
    * @param user
    */
   async setUserData(user: any) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`)
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-    }
+      emailVerified: user.emailVerified
+    };
 
     return userRef.set(userData, {
-      merge: true,
-    })
+      merge: true
+    });
   }
 
   /**
@@ -60,13 +60,13 @@ export class AuthService {
   async signIn(email: string, password: string) {
     return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
       this.afAuth.authState.subscribe((user: any) => {
-        if (!user) return
-        this.isUserAuthenticated = true
-        this.setUserData(result.user) // Guardar en firebase
-        this.storageService.set('users', user) // Guardar en localstorage
-        this.router.navigate(['home']) // Redireccionar a la pagina de Home
-      })
-    })
+        if (!user) return;
+        this.isUserAuthenticated = true;
+        this.setUserData(result.user); // Guardar en firebase
+        this.storageService.set("users", user); // Guardar en localstorage
+        this.router.navigate(["home"]); // Redireccionar a la pagina de Home
+      });
+    });
   }
 
   /**
@@ -74,15 +74,15 @@ export class AuthService {
    */
   async signOut() {
     return this.afAuth.signOut().then(() => {
-      this.isUserAuthenticated = false
+      this.isUserAuthenticated = false;
       this.store.dispatch(
         AuthActions.setUserLoggedIn({
-          userAuthenticated: this.isUserAuthenticated,
+          userAuthenticated: this.isUserAuthenticated
         })
-      )
-      localStorage.removeItem('user')
-      this.router.navigate(['login'])
-    })
+      );
+      localStorage.removeItem("user");
+      this.router.navigate(["login"]);
+    });
   }
 
   /**
@@ -95,8 +95,8 @@ export class AuthService {
       // Call the SendVerificaitonMail() function when new user sign
       // up and returns promise
       // this.sendVerificationMail()
-      this.setUserData(result.user)
-    })
+      this.setUserData(result.user);
+    });
   }
 
   /**
@@ -106,8 +106,8 @@ export class AuthService {
     return this.afAuth.currentUser
       .then((u: any) => u.sendEmailVerification())
       .then(() => {
-        this.router.navigate(['verify-email-address'])
-      })
+        this.router.navigate(["verify-email-address"]);
+      });
   }
 
   /**
@@ -116,15 +116,15 @@ export class AuthService {
    */
   forgotPassword(passwordResetEmail: string) {
     return this.afAuth.sendPasswordResetEmail(passwordResetEmail, {
-      url: 'https://alexchristianqr.github.io/game-apps/#/login',
-    })
+      url: "https://alexchristianqr.github.io/game-apps/#/login"
+    });
   }
 
   /**
    * Retornar verdadero cuando el usuario ha iniciado sesión
    */
   get isLoggedIn(): boolean {
-    return this.isUserAuthenticated
+    return this.isUserAuthenticated;
     // const user = JSON.parse(localStorage.getItem('users')!)
     // // return user;
     // return user !== null
@@ -136,8 +136,8 @@ export class AuthService {
    */
   async googleAuth() {
     return this.authLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-      this.router.navigate(['home'])
-    })
+      this.router.navigate(["home"]);
+    });
   }
 
   /**
@@ -148,11 +148,11 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        this.router.navigate(['home'])
-        this.setUserData(result.user)
+        this.router.navigate(["home"]);
+        this.setUserData(result.user);
       })
       .catch((error) => {
-        window.alert(error)
-      })
+        window.alert(error);
+      });
   }
 }

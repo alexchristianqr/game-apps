@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService } from '../auth.service'
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "../auth.service";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.scss"]
 })
 export class RegisterComponent implements OnInit {
-  formGroup: FormGroup
-  loading = false
-  submitted: boolean | undefined
-  hidePwd = true
+  formGroup: FormGroup;
+  loading = false;
+  submitted: boolean | undefined;
+  hidePwd = true;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.formGroup = formBuilder.group({
       displayName: formBuilder.control(null, [Validators.required]),
       email: formBuilder.control(null, [Validators.required, Validators.email]),
-      password: formBuilder.control(null, [Validators.required, Validators.minLength(6)]),
-    })
+      password: formBuilder.control(null, [Validators.required, Validators.minLength(6)])
+    });
   }
 
   ngOnInit() {
@@ -28,23 +33,23 @@ export class RegisterComponent implements OnInit {
       email: null,
       password: null,
       emailVerified: null,
-      photoURL: null,
-    })
+      photoURL: null
+    });
   }
 
   async onSubmit() {
-    this.submitted = true
+    this.submitted = true;
 
     // stop here if form is invalid
-    if (this.formGroup.invalid) return
+    if (this.formGroup.invalid) return;
 
-    this.loading = true
-    const { email, password } = this.formGroup.value
+    this.loading = true;
+    const { email, password } = this.formGroup.value;
 
     // API
     return this.authService.signUp(email, password).catch((response) => {
-      this.submitted = false
-      this.loading = false
-    })
+      this.submitted = false;
+      this.loading = false;
+    });
   }
 }

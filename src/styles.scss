@@ -1,19 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 /* You can add global styles to this file, and also import other style files */
 // Imports functions, variables, and mixins that are needed by other Bootstrap files
-@import 'assets/variables';
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/bootstrap-reboot';
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap/scss/bootstrap-utilities';
+@import "assets/variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/bootstrap-reboot";
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap-utilities";
 
-@import 'assets/resets';
+@import "assets/resets";
 
 body {
   margin: 0 !important;
-  font-family: Roboto, 'Helvetica Neue', sans-serif !important;
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 
 mat-card {
