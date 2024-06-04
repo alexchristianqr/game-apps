@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="border-0">
   <mat-toolbar-row>
     <button role="button" mat-button routerLink="/">
       <mat-icon>grid_view</mat-icon>
@@ -6,19 +6,33 @@
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
-<mat-divider></mat-divider>
-<mat-toolbar color="primary">
-  <div>
-    <button mat-button routerLink="/home"><mat-icon>home</mat-icon>Home</button>
-    <button mat-button routerLink="/login" *ngIf="!isAuthenticated">
-      <mat-icon>power_settings_new</mat-icon>
-      Login
-    </button>
-    <button mat-button *ngIf="isAuthenticated" (click)="logout()">
-      <mat-icon>exit_to_app</mat-icon>
-      Logout
-    </button>
-  </div>
+
+<mat-divider class="bg-transparent"></mat-divider>
+
+<mat-toolbar color="accent" class="border-0">
+  <button mat-button routerLink="/home"><mat-icon>home</mat-icon>Home</button>
+  <button mat-button routerLink="/login" *ngIf="!isAuthenticated">
+    <mat-icon>power_settings_new</mat-icon>
+    Login
+  </button>
+
+  <span class="example-spacer"></span>
+  <button mat-button *ngIf="isAuthenticated" (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon>
+    Logout
+  </button>
+
+  <!--    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">-->
+  <!--      <mat-icon>menu</mat-icon>-->
+  <!--    </button>-->
+  <!--    <span>My App</span>-->
+  <!--    <span class="example-spacer"></span>-->
+  <!--    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">-->
+  <!--      <mat-icon>favorite</mat-icon>-->
+  <!--    </button>-->
+  <!--    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">-->
+  <!--      <mat-icon>share</mat-icon>-->
+  <!--    </button>-->
 </mat-toolbar>
 
 <router-outlet> </router-outlet>

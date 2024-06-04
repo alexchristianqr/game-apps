@@ -14,6 +14,7 @@ interface Level {
   styleUrls: ["./game.component.scss"]
 })
 export class GameComponent implements OnInit {
+  panelOpenState = false;
   public gameBoard: Array<any> = [
     { value: 0, bgColor: "div0" },
     { value: 1, bgColor: "div1" },

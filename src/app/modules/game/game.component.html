@@ -1,16 +1,94 @@
 <mat-card>
   <mat-card-header>
     <div class="row">
-      <div class="col col-2 mx-auto">
-        <button mat-button routerLink="/home">
+      <div class="col offset-10">
+        <button mat-mini-fab routerLink="/home" color="primary">
           <mat-icon>arrow_back </mat-icon>
         </button>
       </div>
-      <div class="col col-10 mx-auto my-auto">
-        <h1>Tres en linea</h1>
-      </div>
+<!--      <div class="col col-10 mx-auto my-auto">-->
+<!--        <h1>Tres en linea</h1>-->
+<!--      </div>-->
     </div>
   </mat-card-header>
+
+  <!--  <mat-grid-list cols="12">-->
+  <!--    <mat-grid-tile >-->
+  <!--      <div style="text-align: center">-->
+
+  <!--    <button mat-icon-button color="accent">-->
+  <!--      <mat-icon>settings</mat-icon>-->
+  <!--    </button>-->
+  <!--      </div>-->
+
+  <!--    </mat-grid-tile>-->
+  <!--  </mat-grid-list>-->
+
+    <div>{{panelOpenState}}</div>
+  <mat-card-content>
+
+
+    <mat-accordion>
+
+      <mat-expansion-panel (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false"  class="shadow-none">
+<!--      <mat-expansion-panel hideToggle class="shadow-none" >-->
+        <mat-expansion-panel-header class="my-2 py-2">
+<!--          <mat-panel-title>-->
+            <div class="w-100">
+              <div class="row">
+                <div class="col-md my-auto">
+                  <h2>Tres en linea</h2>
+                </div>
+                <div class="col-md">
+                  <button mat-fab color="accent" class="shadow-none" (click)="panelOpenState = !panelOpenState">
+                    <mat-icon>settings</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+<!--          </mat-panel-title>-->
+        </mat-expansion-panel-header>
+
+        <mat-card-content>
+          <!--          <mat-grid-list cols="1" rowHeight="4:1">-->
+          <!--            <mat-grid-tile>-->
+          <!--              <div style="text-align: center">-->
+          <!--                <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>-->
+          <!--                <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida</button>-->
+          <!--              </div>-->
+          <!--            </mat-grid-tile>-->
+          <!--          </mat-grid-list>-->
+
+          <mat-grid-list cols="1" rowHeight="4:1">
+            <mat-grid-tile>
+              <mat-slide-toggle color="primary" [(ngModel)]="computerFirst">🤖 El Robot empieza primero</mat-slide-toggle>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field>
+                <mat-label>Nivel</mat-label>
+                <mat-select [(ngModel)]="difficulty">
+                  <mat-option *ngFor="let item of dataLevels" [value]="item.value">{{ item.text }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-card-content>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-card-content>
+
+  <mat-card-content>
+    <mat-grid-list cols="1" rowHeight="4:1">
+      <mat-grid-tile>
+        <div style="text-align: center">
+          <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>
+          <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida</button>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+
   <mat-card-content>
     <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2 + ':' + breakpoint3" (window:resize)="onResize($event)">
       <mat-grid-tile>
@@ -50,31 +128,6 @@
         <div *ngIf="!playing">
           <div style="font-weight: bold; font-size: 1.25rem">{{ winner }}</div>
         </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
-
-  <mat-card-content>
-    <mat-grid-list cols="1" rowHeight="4:1">
-      <mat-grid-tile>
-        <div style="text-align: center">
-          <button mat-raised-button color="primary" *ngIf="!playing" (click)="toggleGame(true)">Empezar juego</button>
-          <button mat-raised-button color="warn" *ngIf="playing" (click)="toggleGame(false)">Reiniciar partida</button>
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-
-    <mat-grid-list cols="1" rowHeight="4:1">
-      <mat-grid-tile>
-        <mat-slide-toggle color="primary" [(ngModel)]="computerFirst">🤖 El Robot empieza primero</mat-slide-toggle>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-form-field>
-          <mat-label>Nivel</mat-label>
-          <mat-select [(ngModel)]="difficulty">
-            <mat-option *ngFor="let item of dataLevels" [value]="item.value">{{ item.text }}</mat-option>
-          </mat-select>
-        </mat-form-field>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>

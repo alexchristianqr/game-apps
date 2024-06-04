@@ -5,7 +5,7 @@
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
-@import "bootstrap/scss/bootstrap-reboot";
+//@import "bootstrap/scss/bootstrap-reboot";
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap/scss/bootstrap-utilities";
 
@@ -14,6 +14,7 @@
 body {
   margin: 0 !important;
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  background-color: rgba(253, 63, 128,0.1);
 }
 
 mat-card {
@@ -33,4 +34,8 @@ mat-card-header {
 
 mat-card-footer {
   margin: 1rem;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
 }
