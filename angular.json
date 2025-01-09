@@ -19,7 +19,7 @@
           "options": {
             "allowedCommonJsDependencies": ["tic-tac-toe-minimax"],
             "baseHref": "/game-apps/",
-            "outputPath": "www",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
