@@ -14,6 +14,8 @@ interface Board {
   bgColor: string;
 }
 
+type Difficulty = "Easy" | "Normal" | "Hard";
+
 @Component({
   selector: "app-game",
   templateUrl: "./game.component.html",
@@ -40,7 +42,7 @@ export class GameComponent implements OnInit, OnDestroy {
     { value: "Normal", text: "Normal" },
     { value: "Hard", text: "Difícil" }
   ];
-  public difficulty: "Easy" | "Normal" | "Hard" = "Normal";
+  public difficulty: Difficulty = "Normal";
   breakpoint: number = 1;
   breakpoint2: number = 8;
   breakpoint3: number = 6;
@@ -196,11 +198,13 @@ export class GameComponent implements OnInit, OnDestroy {
     const result = GameStep(this.gameState, symbols, this.difficulty);
     this.gameState = result.board;
 
-    if (result.winner) {
-      this.winner = winnerMapping[result.winner];
-      this.playing = false;
-      if (this.allowSoundEndGame) this.takeSoundEndGame();
-    }
+    if (!result.winner) return;
+
+    this.winner = winnerMapping[result.winner];
+    this.playing = false;
+
+    if (this.themeAudio) this.stopSoundThemeGame();
+    if (this.allowSoundEndGame) this.takeSoundEndGame();
   }
 
   /**
