@@ -49,7 +49,7 @@ jobs:
 
       - name: "Generate environment.production.ts"
         run: |
-          node generate-env.ts
+          node generate-env-prod.js
 
       - name: "Build the project"
         run: npm run build

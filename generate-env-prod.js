@@ -1,9 +1,10 @@
-const { writeFileSync } = require("fs");
-const dotenv = require("dotenv");
+import { writeFileSync } from "fs";
+import dotenv from "dotenv";
 
-// Cargar las variables de entorno
+// Cargar las variables de entorno desde el archivo .env
 dotenv.config();
 
+// Configuración de Firebase desde las variables de entorno
 const firebaseConfig = {
   apiKey: process.env["ANGULAR_FIREBASE_API_KEY"],
   authDomain: process.env["ANGULAR_FIREBASE_AUTH_DOMAIN"],
@@ -15,6 +16,7 @@ const firebaseConfig = {
   databaseURL: process.env["ANGULAR_FIREBASE_DATABASE_URL"]
 };
 
+// Generar el contenido para el archivo `environment.production.ts`
 const content = `
 export const environment = {
   production: true,
@@ -22,6 +24,8 @@ export const environment = {
 };
 `;
 
+// Escribir el contenido en el archivo `environment.production.ts`
 writeFileSync("src/environments/environment.production.ts", content);
 
+// Mostrar mensaje en consola
 console.log("Environment variables written to environment.production.ts");

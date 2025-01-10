@@ -19,7 +19,7 @@ export class HomeComponent {
     this.apps = [
       {
         id: 1,
-        title: "Tic tac toe",
+        title: "Tres en linea",
         disabled: false,
         icon: "gamepad",
         path: "/game"
