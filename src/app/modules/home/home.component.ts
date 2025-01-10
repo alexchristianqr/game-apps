@@ -41,7 +41,7 @@ export class HomeComponent {
       {
         id: 4,
         title: "Tetris",
-        disabled: true,
+        disabled: false,
         icon: "sports_cricket",
         path: "/game/tetris"
       }

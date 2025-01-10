@@ -1,0 +1,10 @@
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f6f6; /* Fondo opcional */
+}
+
+#tetris-board {
+  border: 2px solid #000;
+}

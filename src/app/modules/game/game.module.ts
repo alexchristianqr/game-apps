@@ -8,7 +8,7 @@ import { TresEnLineaComponent } from "./tres-en-linea/tres-en-linea.component";
 import { TetrisComponent } from "./tetris/tetris.component";
 
 @NgModule({
-  declarations: [TresEnLineaComponent, TetrisComponent],
+  declarations: [TetrisComponent, TresEnLineaComponent],
   imports: [CommonModule, AngularMaterialUIModule, AngularSettingsModule, RouterModule.forRoot(routes, { useHash: true })]
 })
 export class GameModule {}

@@ -22,8 +22,8 @@ type Difficulty = "Easy" | "Normal" | "Hard";
   styleUrls: ["./tres-en-linea.component.scss"]
 })
 export class TresEnLineaComponent implements OnInit, OnDestroy {
-  panelOpenState = false;
-  public gameBoard: Array<Board> = [
+  panelOpenState: boolean = false;
+  gameBoard: Array<Board> = [
     { value: 0, bgColor: "div0" },
     { value: 1, bgColor: "div1" },
     { value: 2, bgColor: "div2" },
@@ -34,25 +34,25 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
     { value: 7, bgColor: "div7" },
     { value: 8, bgColor: "div8" }
   ];
-  public gameState: Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  public winner: string | undefined;
-  public playing = false;
-  public dataLevels: Level[] = [
+  gameState: Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  winner: string | undefined;
+  playing: boolean = false;
+  readonly dataLevels: Level[] = [
     { value: "Easy", text: "Fácil" },
     { value: "Normal", text: "Normal" },
     { value: "Hard", text: "Difícil" }
   ];
-  public difficulty: Difficulty = "Normal";
+  difficulty: Difficulty = "Normal";
   breakpoint: number = 1;
   breakpoint2: number = 8;
   breakpoint3: number = 6;
 
   // Ajustes del juego
-  public computerFirst = true;
-  public allowSoundEndGame = true;
-  public volumeSoundEndGame = 100;
-  public allowSoundThemeGame = true;
-  public volumeSoundThemeGame = 25;
+  computerFirst: boolean = true;
+  allowSoundEndGame: boolean = true;
+  volumeSoundEndGame: number = 100;
+  allowSoundThemeGame: boolean = true;
+  volumeSoundThemeGame: number = 25;
 
   // Sonidos del juego
   private themeAudio: HTMLAudioElement | null = null;
@@ -66,12 +66,12 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
     this.stopSounds();
   }
 
-  public onResize(event: Event) {
+  onResize(event: Event) {
     const w = event.target as Window;
     this.breakpoint = w.innerWidth <= 319 ? 2 : 1;
   }
 
-  public formatLabel(value: number): string {
+  formatLabel(value: number): string {
     if (value >= 1000) {
       return Math.round(value / 1000) + "k";
     }
@@ -85,7 +85,7 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
    * @param cb
    */
 
-  public clickPlayGame(toggle: boolean = false, cb?: Function): void {
+  clickPlayGame(toggle: boolean = false, cb?: Function): void {
     this.panelOpenState = false;
     this.gameBoard = [
       { value: 0, bgColor: "div0" },
@@ -104,18 +104,18 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
     this.playing = toggle;
   }
 
-  public endGame(): void {
+  endGame(): void {
     this.clickPlayGame(false, () => {
       this.stopSounds();
     });
   }
 
-  public stopSounds(): void {
+  stopSounds(): void {
     this.stopSoundThemeGame();
     this.stopSoundEndGame();
   }
 
-  public restartGame(toggle: boolean): void {
+  restartGame(toggle: boolean): void {
     this.stopSoundThemeGame();
     this.clickPlayGame(true, () => {
       if (this.allowSoundThemeGame) this.takeSoundThemeGame();
@@ -123,21 +123,21 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
     });
   }
 
-  public startGame(toggle: boolean): void {
+  startGame(toggle: boolean): void {
     this.clickPlayGame(toggle, () => {
       if (this.allowSoundThemeGame) this.takeSoundThemeGame();
       if (toggle && this.computerFirst) this.makeComputerMove();
     });
   }
 
-  public takeSoundThemeGame(): void {
+  takeSoundThemeGame(): void {
     this.themeAudio = new Audio("assets/sounds/theme_game.mp3");
     this.themeAudio.volume = this.volumeSoundThemeGame / 100;
     this.themeAudio.loop = true;
     this.themeAudio.play().catch(console.error);
   }
 
-  public takeSoundEndGame(): void {
+  takeSoundEndGame(): void {
     this.endAudio = new Audio("assets/sounds/end_game.mp3");
     this.endAudio.volume = this.volumeSoundEndGame / 100;
     this.endAudio.play().catch(console.error);
@@ -168,7 +168,7 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
    * Turno del humano
    * @param field
    */
-  public makeHumanMove(field: number): void {
+  makeHumanMove(field: number): void {
     if (!this.playing || typeof this.gameState[field] !== "number") {
       return;
     }

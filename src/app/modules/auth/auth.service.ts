@@ -134,11 +134,11 @@ export class AuthService {
   /**
    * Iniciar sesión con Google
    */
-  async googleAuth() {
-    return this.authLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-      this.router.navigate(["home"]);
-    });
-  }
+  // async googleAuth() {
+  //   return this.authLogin(new auth.GoogleAuthProvider()).then((res: any) => {
+  //     this.router.navigate(["home"]);
+  //   });
+  // }
 
   /**
    * Login para ejecutar un proveedor de autenticación

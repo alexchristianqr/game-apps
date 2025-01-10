@@ -1,1 +1,47 @@
-<p>tetris works!</p>
+<mat-card>
+  <mat-card-header class="my-3">
+    <div class="row">
+      <div class="col-2 my-auto">
+        <button mat-icon-button routerLink="/home" color="primary" size="small">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+      <div class="col-10 my-auto">
+        <div class="h4 float-end">Tetris</div>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content *ngIf="!playing">
+    <mat-grid-list cols="1" rowHeight="12:3">
+      <mat-grid-tile>
+        <div style="text-align: center">
+          <button mat-raised-button color="primary" *ngIf="!playing" (click)="startGame()">Empezar</button>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+  <mat-card-content *ngIf="playing">
+    <mat-grid-list cols="2" rowHeight="12:6">
+      <mat-grid-tile>
+        <div style="text-align: center">
+          <button mat-raised-button color="accent" *ngIf="playing" (click)="restartGame()">Reiniciar</button>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-raised-button color="warn" *ngIf="playing" (click)="endGame()">Terminar</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+
+
+  <mat-card-content>
+    <div class="row">
+      <div class="col-12 mx-auto">
+        <div id="game-container">
+          <div id="tetris-board"></div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
