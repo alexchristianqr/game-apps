@@ -1,3 +1,4 @@
 *
 !.gitignore
 !environment.ts
+!environment.production.ts
