@@ -1,0 +1,41 @@
+name: Deployment
+
+on:
+  workflow_dispatch:  # Permite ejecutar el flujo de trabajo manualmente
+
+env:
+  ENV_BASE_URL: "https://example.com"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v2
+
+      - name: "Set up Node.js"
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: "Debug environment variables"
+        run: |
+          echo "ENV_BASE_URL=${{ env.ENV_BASE_URL }}"
+
+      - name: "Install dependencies"
+        run: npm install
+
+      - name: "Build the project"
+        run: npm run build
+
+      - name: "Deploy to GitHub Pages"
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token para autenticar el despliegue
+
+      - name: "Notify deployment success"
+        run: echo "Deployment to GitHub Pages successful!"
