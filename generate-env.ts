@@ -22,6 +22,6 @@ export const environment = {
 };
 `;
 
-writeFileSync("src/environments/environment.prod.ts", content);
+writeFileSync("src/environments/environment.production.ts", content);
 
-console.log("Environment variables written to environment.prod.ts");
+console.log("Environment variables written to environment.production.ts");
