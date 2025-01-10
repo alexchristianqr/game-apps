@@ -17,11 +17,11 @@ interface Board {
 type Difficulty = "Easy" | "Normal" | "Hard";
 
 @Component({
-  selector: "app-game",
-  templateUrl: "./game.component.html",
-  styleUrls: ["./game.component.scss"]
+  selector: "app-tres-en-linea",
+  templateUrl: "./tres-en-linea.component.html",
+  styleUrls: ["./tres-en-linea.component.scss"]
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class TresEnLineaComponent implements OnInit, OnDestroy {
   panelOpenState = false;
   public gameBoard: Array<Board> = [
     { value: 0, bgColor: "div0" },

@@ -22,28 +22,28 @@ export class HomeComponent {
         title: "Tres en linea",
         disabled: false,
         icon: "gamepad",
-        path: "/game"
+        path: "/game/tres-en-linea"
       },
       {
         id: 2,
         title: "Smart toy",
         disabled: true,
         icon: "smart_toy",
-        path: "/game"
+        path: "/game/smart-toy"
       },
       {
         id: 3,
         title: "Basketball",
         disabled: true,
         icon: "sports_volleyball",
-        path: "/game"
+        path: "/game/basketball"
       },
       {
         id: 4,
         title: "Tetris",
         disabled: true,
         icon: "sports_cricket",
-        path: "/game"
+        path: "/game/tetris"
       }
     ];
   }

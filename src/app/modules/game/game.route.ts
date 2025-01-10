@@ -1,11 +1,20 @@
 import { Routes } from "@angular/router";
-import { GameComponent } from "./game.component";
 import { AuthenticateGuard } from "../../core/guards/authenticate/authenticate.guard";
+import { TresEnLineaComponent } from "./tres-en-linea/tres-en-linea.component";
 
 export const routes: Routes = [
   {
     path: "game",
-    component: GameComponent,
-    canActivate: [AuthenticateGuard]
+    canActivate: [AuthenticateGuard],
+    children: [
+      {
+        path: "tres-en-linea",
+        component: TresEnLineaComponent
+      },
+      {
+        path: "tetris",
+        component: TresEnLineaComponent
+      }
+    ]
   }
 ];
