@@ -1,5 +1,5 @@
-import { writeFileSync } from "fs";
-import * as dotenv from "dotenv";
+const { writeFileSync } = require("fs");
+const dotenv = require("dotenv");
 
 // Cargar las variables de entorno
 dotenv.config();
