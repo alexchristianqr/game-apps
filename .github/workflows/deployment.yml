@@ -52,7 +52,7 @@ jobs:
           branch: gh-pages
           folder: dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token para autenticar el despliegue
+          GITHUB_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}  # Token para autenticar el despliegue
 
       - name: "Notify deployment success"
         run: echo "Deployment to GitHub Pages successful!"
