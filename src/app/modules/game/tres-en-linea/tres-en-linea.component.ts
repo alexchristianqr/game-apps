@@ -3,6 +3,7 @@ import Minimax from "tic-tac-toe-minimax";
 
 const { GameStep } = Minimax;
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { SoundService } from "../../../common/services/sound.service";
 
 interface Level {
   value: string;
@@ -19,7 +20,8 @@ type Difficulty = "Easy" | "Normal" | "Hard";
 @Component({
   selector: "app-tres-en-linea",
   templateUrl: "./tres-en-linea.component.html",
-  styleUrls: ["./tres-en-linea.component.scss"]
+  styleUrls: ["./tres-en-linea.component.scss"],
+  providers: [SoundService]
 })
 export class TresEnLineaComponent implements OnInit, OnDestroy {
   panelOpenState: boolean = false;
@@ -48,15 +50,17 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
   breakpoint3: number = 6;
 
   // Ajustes del juego
-  computerFirst: boolean = true;
-  allowSoundEndGame: boolean = true;
-  volumeSoundEndGame: number = 100;
-  allowSoundThemeGame: boolean = true;
-  volumeSoundThemeGame: number = 25;
+  // computerFirst: boolean = true;
+  // allowSoundEndGame: boolean = true;
+  // volumeSoundEndGame: number = 100;
+  // allowSoundThemeGame: boolean = true;
+  // volumeSoundThemeGame: number = 25;
 
   // Sonidos del juego
-  private themeAudio: HTMLAudioElement | null = null;
-  private endAudio: HTMLAudioElement | null = null;
+  // private themeAudio: HTMLAudioElement | null = null;
+  // private endAudio: HTMLAudioElement | null = null;
+
+  constructor(private soundService: SoundService) {}
 
   ngOnInit() {
     this.breakpoint = window.innerWidth <= 319 ? 3 : 1;
@@ -111,58 +115,58 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
   }
 
   stopSounds(): void {
-    this.stopSoundThemeGame();
-    this.stopSoundEndGame();
+    this.soundService.stopAudioTheme();
+    this.soundService.stopAudioEnd();
   }
 
   restartGame(toggle: boolean): void {
     this.stopSoundThemeGame();
     this.clickPlayGame(true, () => {
-      if (this.allowSoundThemeGame) this.takeSoundThemeGame();
+      if (this.soundService.allowSoundThemeGame) this.soundService.playAudioTheme();
       if (toggle && this.computerFirst) this.makeComputerMove();
     });
   }
 
   startGame(toggle: boolean): void {
     this.clickPlayGame(toggle, () => {
-      if (this.allowSoundThemeGame) this.takeSoundThemeGame();
+      if (this.soundService.allowSoundThemeGame) this.soundService.playAudioTheme();
       if (toggle && this.computerFirst) this.makeComputerMove();
     });
   }
 
-  takeSoundThemeGame(): void {
-    this.themeAudio = new Audio("assets/sounds/theme_game.mp3");
-    this.themeAudio.volume = this.volumeSoundThemeGame / 100;
-    this.themeAudio.loop = true;
-    this.themeAudio.play().catch(console.error);
-  }
-
-  takeSoundEndGame(): void {
-    this.endAudio = new Audio("assets/sounds/end_game.mp3");
-    this.endAudio.volume = this.volumeSoundEndGame / 100;
-    this.endAudio.play().catch(console.error);
-
-    this.stopSoundThemeGame();
-
-    setTimeout(() => {
-      this.stopSoundEndGame();
-    }, 2000);
-  }
-
-  // Detener los sonidos
-  stopSoundThemeGame(): void {
-    if (this.themeAudio) {
-      this.themeAudio.pause();
-      this.themeAudio = null;
-    }
-  }
-
-  stopSoundEndGame(): void {
-    if (this.endAudio) {
-      this.endAudio.pause();
-      this.endAudio = null;
-    }
-  }
+  // takeSoundThemeGame(): void {
+  //   this.themeAudio = new Audio("assets/sounds/theme_game.mp3");
+  //   this.themeAudio.volume = this.volumeSoundThemeGame / 100;
+  //   this.themeAudio.loop = true;
+  //   this.themeAudio.play().catch(console.error);
+  // }
+  //
+  // takeSoundEndGame(): void {
+  //   this.endAudio = new Audio("assets/sounds/end_game.mp3");
+  //   this.endAudio.volume = this.volumeSoundEndGame / 100;
+  //   this.endAudio.play().catch(console.error);
+  //
+  //   this.stopSoundThemeGame();
+  //
+  //   setTimeout(() => {
+  //     this.stopSoundEndGame();
+  //   }, 2000);
+  // }
+  //
+  // // Detener los sonidos
+  // stopSoundThemeGame(): void {
+  //   if (this.themeAudio) {
+  //     this.themeAudio.pause();
+  //     this.themeAudio = null;
+  //   }
+  // }
+  //
+  // stopSoundEndGame(): void {
+  //   if (this.endAudio) {
+  //     this.endAudio.pause();
+  //     this.endAudio = null;
+  //   }
+  // }
 
   /**
    * Turno del humano

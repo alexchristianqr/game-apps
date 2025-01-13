@@ -1,12 +1,51 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import Konva from "konva";
+import { SoundService } from "../../../common/services/sound.service";
+
+interface Level {
+  value: string;
+  text: string;
+}
+
+interface Board {
+  value: number;
+  bgColor: string;
+}
+
+type Difficulty = "Easy" | "Normal" | "Hard";
 
 @Component({
   selector: "app-tetris",
   templateUrl: "./tetris.component.html",
-  styleUrls: ["./tetris.component.scss"]
+  styleUrls: ["./tetris.component.scss"],
+  providers: [SoundService]
 })
 export class TetrisComponent implements OnInit, OnDestroy {
+  panelOpenState: boolean = false;
+  gameBoard: Array<Board> = [
+    { value: 0, bgColor: "div0" },
+    { value: 1, bgColor: "div1" },
+    { value: 2, bgColor: "div2" },
+    { value: 3, bgColor: "div3" },
+    { value: 4, bgColor: "div4" },
+    { value: 5, bgColor: "div5" },
+    { value: 6, bgColor: "div6" },
+    { value: 7, bgColor: "div7" },
+    { value: 8, bgColor: "div8" }
+  ];
+  gameState: Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  winner: string | undefined;
+  playing: boolean = false;
+  readonly dataLevels: Level[] = [
+    { value: "Easy", text: "Fácil" },
+    { value: "Normal", text: "Normal" },
+    { value: "Hard", text: "Difícil" }
+  ];
+  difficulty: Difficulty = "Normal";
+  breakpoint: number = 1;
+  breakpoint2: number = 8;
+  breakpoint3: number = 6;
+
   stage!: Konva.Stage;
   layer!: Konva.Layer;
   board: string[][] = [];
@@ -66,7 +105,7 @@ export class TetrisComponent implements OnInit, OnDestroy {
     } // Z
   ];
 
-  playing: boolean = false;
+  // playing: boolean = false;
 
   ngOnInit(): void {
     this.initBoard(); // Inicializar el tablero
