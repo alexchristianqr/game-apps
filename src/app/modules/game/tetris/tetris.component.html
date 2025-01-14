@@ -89,15 +89,15 @@
             <div class="row">
               <div class="col-12 my-1">
                 <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="allowSoundEndGame">Sonido al
+                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="soundService.endGameAudioSettings.enabled">Sonido al
                     terminar el juego
                   </mat-slide-toggle>
                 </div>
               </div>
               <div class="col-12 my-1 float-start">
                 <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100"
-                            [disabled]="!allowSoundEndGame">
-                  <input matSliderThumb [(ngModel)]="volumeSoundEndGame" />
+                            [disabled]="!soundService.endGameAudioSettings.enabled">
+                  <input matSliderThumb [(ngModel)]="soundService.endGameAudioSettings.volume" />
                 </mat-slider>
               </div>
             </div>
@@ -107,15 +107,16 @@
             <div class="row">
               <div class="col-12 my-1">
                 <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="allowSoundThemeGame">Sonido durante
+                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="soundService.endGameAudioSettings.enabled">Sonido durante
                     el juego
                   </mat-slide-toggle>
+
                 </div>
               </div>
               <div class="col-12 my-1 float-start">
                 <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100"
-                            [disabled]="!allowSoundThemeGame">
-                  <input matSliderThumb [(ngModel)]="volumeSoundThemeGame" />
+                            [disabled]="!soundService.backgroundAudioSettings.enabled">
+                  <input matSliderThumb [(ngModel)]="soundService.backgroundAudioSettings.volume" />
                 </mat-slider>
               </div>
             </div>

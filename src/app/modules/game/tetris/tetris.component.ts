@@ -105,7 +105,12 @@ export class TetrisComponent implements OnInit, OnDestroy {
     } // Z
   ];
 
+  // Ajustes del juego
+  computerFirst: boolean = true;
+
   // playing: boolean = false;
+
+  constructor(readonly soundService: SoundService) {}
 
   ngOnInit(): void {
     this.initBoard(); // Inicializar el tablero
@@ -150,6 +155,14 @@ export class TetrisComponent implements OnInit, OnDestroy {
   /**
    * Funciones específicas del juego
    */
+
+  formatLabel(value: number): string {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + "k";
+    }
+
+    return `${value}`;
+  }
 
   // Inicializar el tablero
   initBoard(): void {

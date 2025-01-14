@@ -1,45 +1,76 @@
 import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: "root" // Esto hace que el servicio esté disponible en toda la aplicación
+  providedIn: "root"
 })
 export class SoundService {
-  // Ajustes del juego
-  computerFirst: boolean = true;
-  public allowSoundEndGame: boolean = true;
-  public volumeSoundEndGame: number = 100;
-  public allowSoundThemeGame: boolean = true;
-  public volumeSoundThemeGame: number = 25;
+  // Archivos de audio
+  public backgroundAudio = new Audio("assets/sounds/theme_game.mp3");
+  public endGameAudio = new Audio("assets/sounds/end_game.mp3");
 
-  // Sonidos del juego
-  private themeAudio: HTMLAudioElement;
-  private endAudio: HTMLAudioElement;
+  // Configuración inicial de audio
+  public backgroundAudioSettings = {
+    enabled: true,
+    volume: 100 // El volumen inicial es 100 (máximo)
+  };
+
+  public endGameAudioSettings = {
+    enabled: true,
+    volume: 100 // El volumen inicial es 100 (máximo)
+  };
 
   constructor() {
-    this.themeAudio = new Audio("assets/sounds/theme.mp3");
-    this.endAudio = new Audio("assets/sounds/end.mp3");
+    this.configureAudio(this.backgroundAudio, true);
+    this.configureAudio(this.endGameAudio, false);
   }
 
-  public playAudioTheme(): void {
-    if (!this.allowSoundThemeGame) return;
-
-    this.themeAudio.volume = this.volumeSoundThemeGame / 100;
-    this.themeAudio.loop = true;
-    this.themeAudio.play();
+  // 🎛 Configurar los ajustes iniciales del audio
+  private configureAudio(audio: HTMLAudioElement, loop: boolean): void {
+    audio.volume = this.convertVolumeToRange(this.backgroundAudioSettings.volume);
+    audio.loop = loop;
   }
 
-  stopAudioTheme(): void {
-    this.themeAudio.pause();
+  // 🎵 Métodos para reproducir audio de fondo
+  public playBackgroundAudio(): void {
+    if (!this.backgroundAudioSettings.enabled) return;
+
+    this.backgroundAudio.play().catch((error) => {
+      console.error("Error al reproducir el audio de fondo:", error);
+    });
   }
 
-  playAudioEndgame(): void {
-    if (!this.allowSoundEndGame) return;
-
-    this.endAudio.volume = this.volumeSoundEndGame / 100;
-    this.endAudio.play();
+  public stopBackgroundAudio(): void {
+    this.backgroundAudio.pause();
+    this.backgroundAudio.currentTime = 0;
   }
 
-  stopAudioEnd(): void {
-    this.endAudio.pause();
+  // 🎯 Métodos para reproducir audio de fin de juego
+  public playEndGameAudio(): void {
+    if (!this.endGameAudioSettings.enabled) return;
+
+    this.endGameAudio.play().catch((error) => {
+      console.error("Error al reproducir el audio de fin de juego:", error);
+    });
+  }
+
+  public stopEndGameAudio(): void {
+    this.endGameAudio.pause();
+    this.endGameAudio.currentTime = 0;
+  }
+
+  // 🛠 Método para ajustar el volumen
+  public setBackgroundAudioVolume(volume: number): void {
+    this.backgroundAudioSettings.volume = volume;
+    this.backgroundAudio.volume = this.convertVolumeToRange(volume);
+  }
+
+  public setEndGameAudioVolume(volume: number): void {
+    this.endGameAudioSettings.volume = volume;
+    this.endGameAudio.volume = this.convertVolumeToRange(volume);
+  }
+
+  // 📏 Conversión de volumen (0 a 100) al rango (0 a 1)
+  private convertVolumeToRange(volume: number): number {
+    return volume / 100;
   }
 }

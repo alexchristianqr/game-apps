@@ -50,7 +50,7 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
   breakpoint3: number = 6;
 
   // Ajustes del juego
-  // computerFirst: boolean = true;
+  computerFirst: boolean = true;
   // allowSoundEndGame: boolean = true;
   // volumeSoundEndGame: number = 100;
   // allowSoundThemeGame: boolean = true;
@@ -60,7 +60,7 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
   // private themeAudio: HTMLAudioElement | null = null;
   // private endAudio: HTMLAudioElement | null = null;
 
-  constructor(private soundService: SoundService) {}
+  constructor(readonly soundService: SoundService) {}
 
   ngOnInit() {
     this.breakpoint = window.innerWidth <= 319 ? 3 : 1;
@@ -115,21 +115,21 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
   }
 
   stopSounds(): void {
-    this.soundService.stopAudioTheme();
-    this.soundService.stopAudioEnd();
+    this.soundService.stopBackgroundAudio();
+    this.soundService.stopEndGameAudio();
   }
 
-  restartGame(toggle: boolean): void {
-    this.stopSoundThemeGame();
+  async restartGame(toggle: boolean): Promise<void> {
+    this.soundService.stopBackgroundAudio();
     this.clickPlayGame(true, () => {
-      if (this.soundService.allowSoundThemeGame) this.soundService.playAudioTheme();
+      if (this.soundService.backgroundAudioSettings.enabled) this.soundService.playBackgroundAudio();
       if (toggle && this.computerFirst) this.makeComputerMove();
     });
   }
 
-  startGame(toggle: boolean): void {
+  async startGame(toggle: boolean): Promise<void> {
     this.clickPlayGame(toggle, () => {
-      if (this.soundService.allowSoundThemeGame) this.soundService.playAudioTheme();
+      if (this.soundService.backgroundAudioSettings.enabled) this.soundService.playBackgroundAudio();
       if (toggle && this.computerFirst) this.makeComputerMove();
     });
   }
@@ -178,8 +178,8 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
     }
 
     this.gameState[field] = "X";
-    setTimeout(() => {
-      this.makeComputerMove();
+    setTimeout(async () => {
+      await this.makeComputerMove();
     }, 250);
   }
 
@@ -187,7 +187,7 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
    * Turno de la computadora
    * @private
    */
-  private makeComputerMove(): void {
+  private async makeComputerMove(): Promise<void> {
     const symbols = {
       huPlayer: "X",
       aiPlayer: "O"
@@ -207,8 +207,8 @@ export class TresEnLineaComponent implements OnInit, OnDestroy {
     this.winner = winnerMapping[result.winner];
     this.playing = false;
 
-    if (this.themeAudio) this.stopSoundThemeGame();
-    if (this.allowSoundEndGame) this.takeSoundEndGame();
+    if (this.soundService.backgroundAudio) this.soundService.stopBackgroundAudio();
+    if (this.soundService.endGameAudioSettings.enabled) await this.soundService.playEndGameAudio();
   }
 
   /**
