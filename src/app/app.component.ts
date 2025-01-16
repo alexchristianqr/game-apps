@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subject } from "rxjs";
 import { AuthService } from "./modules/auth/auth.service";
+import { Store } from "@ngrx/store";
+import * as AuthSelectors from "./modules/auth/store/auth.selectors";
+import { AuthActions } from "./modules/auth/store/auth.actions";
+import { StorageService } from "./core/services/storage/storage.service";
 
 @Component({
   selector: "app-root",
