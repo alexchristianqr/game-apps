@@ -14,13 +14,8 @@ export class RegisterComponent implements OnInit {
   submitted: boolean | undefined;
   hidePwd = true;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService
-  ) {
-    this.formGroup = formBuilder.group({
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+    this.formGroup = this.formBuilder.group({
       displayName: formBuilder.control(null, [Validators.required]),
       email: formBuilder.control(null, [Validators.required, Validators.email]),
       password: formBuilder.control(null, [Validators.required, Validators.minLength(6)])
@@ -47,9 +42,16 @@ export class RegisterComponent implements OnInit {
     const { email, password } = this.formGroup.value;
 
     // API
-    return this.authService.signUp(email, password).catch((response) => {
-      this.submitted = false;
-      this.loading = false;
+    return this.authService.registerUser(email, password, {}).subscribe({
+      next: (data) => {
+        console.log("[authService.registerUser]", data);
+        this.submitted = false;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error(error);
+      }
     });
   }
 }

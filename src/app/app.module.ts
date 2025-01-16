@@ -5,7 +5,6 @@ import { AngularSettingsModule } from "./shared/angular-settings/angular-setting
 import { AngularMaterialUIModule } from "./shared/angular-material-ui/angular-material-ui.module";
 import { CustomModule } from "./modules/custom.module";
 import { AppComponent } from "./app.component";
-import { AuthService } from "./modules/auth/auth.service";
 import { AngularFirebaseModule } from "./shared/angular-firebase/angular-firebase.module";
 
 import { EffectsModule } from "@ngrx/effects";
@@ -38,7 +37,7 @@ import { environment } from "../environments/environment";
       logOnly: environment.production
     })
   ],
-  providers: [AuthService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

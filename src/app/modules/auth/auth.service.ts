@@ -1,12 +1,7 @@
 import { Injectable } from "@angular/core";
-import * as auth from "firebase/auth";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { AngularFirestore, AngularFirestoreDocument } from "@angular/fire/compat/firestore";
-import { Router } from "@angular/router";
-import { User } from "../user/user.model";
-import { StorageService } from "../../core/services/storage/storage.service";
-import { AuthActions } from "./store/auth.actions";
-import { Store } from "@ngrx/store";
+import { Auth, User, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, UserCredential } from "@angular/fire/auth";
+import { Firestore, doc, setDoc, getDoc, updateDoc, deleteDoc } from "@angular/fire/firestore";
+import { Observable, from } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -14,110 +9,59 @@ import { Store } from "@ngrx/store";
 export class AuthService {
   isUserAuthenticated: boolean = false;
 
-  constructor(
-    public afs: AngularFirestore, // Inject Firestore service
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
-    public router: Router,
-    private storageService: StorageService,
-    private store: Store
-  ) {
-    // Guardar data en localstorage
-    this.afAuth.authState.subscribe(async (user) => {
-      if (user) {
-        this.isUserAuthenticated = true;
-        this.storageService.set("users", user);
-        await this.router.navigate(["home"]);
-      } else {
-        this.storageService.set("users", false);
-      }
-    });
+  constructor(private auth: Auth, private firestore: Firestore) {}
+
+  // Register a new user and create their profile in Firestore
+  registerUser(email: string, password: string, userData: any): Observable<UserCredential> {
+    return from(
+      createUserWithEmailAndPassword(this.auth, email, password).then(async (credential) => {
+        const userRef = doc(this.firestore, `users/${credential.user.uid}`);
+        await setDoc(userRef, userData);
+        return credential;
+      })
+    );
   }
 
-  /**
-   * Actualizar data del usuario firebase
-   * @param user
-   */
-  async setUserData(user: any) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified
-    };
-
-    return userRef.set(userData, {
-      merge: true
-    });
+  // Login an existing user
+  loginUser(email: string, password: string): Observable<UserCredential> {
+    return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
-  /**
-   * Iniciar sesión
-   * @param email
-   * @param password
-   */
-  async signIn(email: string, password: string) {
-    return this.afAuth.signInWithEmailAndPassword(email, password).then((result) => {
-      this.afAuth.authState.subscribe((user: any) => {
-        if (!user) return;
-        this.isUserAuthenticated = true;
-        this.setUserData(result.user); // Guardar en firebase
-        this.storageService.set("users", user); // Guardar en localstorage
-        this.router.navigate(["home"]); // Redireccionar a la pagina de Home
-      });
-    });
+  // Logout the current user
+  logout(): Observable<void> {
+    return from(signOut(this.auth));
   }
 
-  /**
-   * Cerrar sesión
-   */
-  async signOut() {
-    return this.afAuth.signOut().then(() => {
-      this.isUserAuthenticated = false;
-      this.store.dispatch(
-        AuthActions.setUserLoggedIn({
-          userAuthenticated: this.isUserAuthenticated
-        })
-      );
-      localStorage.removeItem("user");
-      this.router.navigate(["login"]);
-    });
+  // Get the current user (real-time updates)
+  getCurrentUser(): User | null {
+    return this.auth.currentUser;
   }
 
-  /**
-   * Registrar usuario
-   * @param email
-   * @param password
-   */
-  async signUp(email: string, password: string) {
-    return this.afAuth.createUserWithEmailAndPassword(email, password).then((result) => {
-      // Call the SendVerificaitonMail() function when new user sign
-      // up and returns promise
-      // this.sendVerificationMail()
-      this.setUserData(result.user);
-    });
+  // Fetch user data from Firestore
+  getUserData(uid: string): Observable<any> {
+    const userRef = doc(this.firestore, `users/${uid}`);
+    return from(getDoc(userRef).then((doc) => doc.data()));
   }
 
-  /**
-   * Enviar email de verificación
-   */
-  async sendVerificationMail() {
-    return this.afAuth.currentUser
-      .then((u: any) => u.sendEmailVerification())
-      .then(() => {
-        this.router.navigate(["verify-email-address"]);
-      });
+  // Update user data in Firestore
+  updateUserData(uid: string, updatedData: any): Observable<void> {
+    const userRef = doc(this.firestore, `users/${uid}`);
+    return from(updateDoc(userRef, updatedData));
   }
 
-  /**
-   * Recuperar contraseña
-   * @param passwordResetEmail
-   */
-  forgotPassword(passwordResetEmail: string) {
-    return this.afAuth.sendPasswordResetEmail(passwordResetEmail, {
-      url: "https://alexchristianqr.github.io/game-apps/#/login"
-    });
+  // Delete user profile from Firestore
+  deleteUserData(uid: string): Observable<void> {
+    const userRef = doc(this.firestore, `users/${uid}`);
+    return from(deleteDoc(userRef));
+  }
+
+  // Send password reset email
+  forgotPassword(email: string): Observable<void> {
+    return from(
+      sendPasswordResetEmail(this.auth, email, {
+        url: "https://alexchristianqr.github.io/game-apps/#/login"
+      })
+    );
   }
 
   /**
@@ -129,30 +73,5 @@ export class AuthService {
     // // return user;
     // return user !== null
     // return user !== null && user.emailVerified !== false
-  }
-
-  /**
-   * Iniciar sesión con Google
-   */
-  // async googleAuth() {
-  //   return this.authLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-  //     this.router.navigate(["home"]);
-  //   });
-  // }
-
-  /**
-   * Login para ejecutar un proveedor de autenticación
-   * @param provider
-   */
-  async authLogin(provider: any) {
-    return this.afAuth
-      .signInWithPopup(provider)
-      .then((result) => {
-        this.router.navigate(["home"]);
-        this.setUserData(result.user);
-      })
-      .catch((error) => {
-        window.alert(error);
-      });
   }
 }

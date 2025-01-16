@@ -14,13 +14,7 @@ export class ForgotComponent {
   submitted: boolean | undefined;
   loading: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService, private snackBar: MatSnackBar) {
     this.formGroup = formBuilder.group({
       email: formBuilder.control(null, [Validators.required, Validators.email])
     });
@@ -36,21 +30,37 @@ export class ForgotComponent {
     const { email } = this.formGroup.value;
 
     // API
-    return this.authService
-      .forgotPassword(email)
-      .then(() => {
-        this.submitted = undefined;
+    return this.authService.forgotPassword(email).subscribe({
+      next: (data) => {
+        console.log("[authService.forgotPassword]", data);
+        this.submitted = false;
         this.loading = false;
         this.snackBar.open("Enlace enviado con éxito, porfavor revise su correo", "", {
           duration: 3000
         });
-      })
-      .catch(() => {
+      },
+      error: (error) => {
         this.submitted = false;
         this.loading = false;
+        console.error(error);
         this.snackBar.open("El enlace no se ha enviado", "", {
           duration: 3000
         });
-      });
+      }
+    });
+    // .then(() => {
+    // this.submitted = undefined;
+    // this.loading = false;
+    // this.snackBar.open("Enlace enviado con éxito, porfavor revise su correo", "", {
+    //   duration: 3000
+    // });
+    // })
+    // .catch(() => {
+    //   this.submitted = false;
+    //   this.loading = false;
+    //   this.snackBar.open("El enlace no se ha enviado", "", {
+    //     duration: 3000
+    //   });
+    // });
   }
 }
