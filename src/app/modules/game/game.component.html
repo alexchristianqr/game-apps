@@ -29,7 +29,7 @@
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button color="warn" *ngIf="playing" (click)="endGame(false)">Terminar</button>
+        <button mat-raised-button color="warn" *ngIf="playing" (click)="endGame()">Terminar</button>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>
@@ -82,7 +82,8 @@
 
   <mat-card-content>
     <mat-accordion>
-      <mat-expansion-panel [(expanded)]="panelOpenState" (opened)="panelOpenState = true" (closed)="panelOpenState = false" style="background-color: #fce9f0">
+      <mat-expansion-panel [(expanded)]="panelOpenState" (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false" style="background-color: #fce9f0">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <div>Ajustes del juego</div>
@@ -107,8 +108,8 @@
               <div class="col-12 my-2">
                 <mat-form-field appearance="outline" class="float-start w-100">
                   <mat-label>Nivel de Dificultad</mat-label>
-                  <mat-select [(ngModel)]="defaultLevel">
-                    <mat-option *ngFor="let item of levels" [value]="item.value">{{ item.text }}</mat-option>
+                  <mat-select [(ngModel)]="difficulty">
+                    <mat-option *ngFor="let item of dataLevels" [value]="item.value">{{ item.text }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -124,16 +125,15 @@
             <div class="row">
               <div class="col-12 my-1">
                 <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="defaultSettings.endgame.enabled"
-                                    (click)="onToggleChange('endgame', defaultSettings.endgame.enabled)">
-                    <span>Sonido durante Sonido al terminar el juego</span>
+                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="allowSoundEndGame">Sonido al
+                    terminar el juego
                   </mat-slide-toggle>
                 </div>
               </div>
               <div class="col-12 my-1 float-start">
                 <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100"
-                            [disabled]="!defaultSettings.endgame.enabled" (click)="onVolumeChange('endgame', defaultSettings.endgame.volume)">
-                  <input matSliderThumb [(ngModel)]="defaultSettings.endgame.volume" />
+                            [disabled]="!allowSoundEndGame">
+                  <input matSliderThumb [(ngModel)]="volumeSoundEndGame" />
                 </mat-slider>
               </div>
             </div>
@@ -143,16 +143,15 @@
             <div class="row">
               <div class="col-12 my-1">
                 <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="defaultSettings.background.enabled"
-                                    (click)="onToggleChange('background', defaultSettings.background.enabled)">
-                    <span>Sonido durante el juego</span>
+                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="allowSoundThemeGame">Sonido durante
+                    el juego
                   </mat-slide-toggle>
                 </div>
               </div>
               <div class="col-12 my-1 float-start">
                 <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100"
-                            [disabled]="!defaultSettings.background.enabled" (click)="onVolumeChange('background', defaultSettings.background.volume)">
-                  <input matSliderThumb [(ngModel)]="defaultSettings.background.volume" />
+                            [disabled]="!allowSoundThemeGame">
+                  <input matSliderThumb [(ngModel)]="volumeSoundThemeGame" />
                 </mat-slider>
               </div>
             </div>
