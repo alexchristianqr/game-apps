@@ -43,6 +43,7 @@ export class TetrisComponent implements OnInit, OnDestroy, PatternInterface {
   }
 
   ngOnDestroy() {
+    clearInterval(this.gameInterval); // Detener el intervalo
     this.stopAudios();
   }
 
