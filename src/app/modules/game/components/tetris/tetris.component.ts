@@ -1,161 +1,104 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import Konva from "konva";
-import { SoundService } from "../../../common/services/sound.service";
-
-interface Level {
-  value: string;
-  text: string;
-}
-
-interface Board {
-  value: number;
-  bgColor: string;
-}
+import { SoundService } from "../../../../common/services/sound.service";
+import { PatternInterface } from "../../../../common/interfaces/pattern.interface";
+import { dataLevels } from "../../../../common/constants";
+import { pieces, endgameAudio, backgroundAudio, settings } from "./constants";
 
 type Difficulty = "Easy" | "Normal" | "Hard";
 
 @Component({
   selector: "app-tetris",
   templateUrl: "./tetris.component.html",
-  styleUrls: ["./tetris.component.scss"],
-  providers: [SoundService]
+  styleUrls: ["./tetris.component.scss"]
 })
-export class TetrisComponent implements OnInit, OnDestroy {
-  panelOpenState: boolean = false;
-  gameBoard: Array<Board> = [
-    { value: 0, bgColor: "div0" },
-    { value: 1, bgColor: "div1" },
-    { value: 2, bgColor: "div2" },
-    { value: 3, bgColor: "div3" },
-    { value: 4, bgColor: "div4" },
-    { value: 5, bgColor: "div5" },
-    { value: 6, bgColor: "div6" },
-    { value: 7, bgColor: "div7" },
-    { value: 8, bgColor: "div8" }
-  ];
-  gameState: Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  winner: string | undefined;
-  playing: boolean = false;
-  readonly dataLevels: Level[] = [
-    { value: "Easy", text: "Fácil" },
-    { value: "Normal", text: "Normal" },
-    { value: "Hard", text: "Difícil" }
-  ];
-  difficulty: Difficulty = "Normal";
-  breakpoint: number = 1;
-  breakpoint2: number = 8;
-  breakpoint3: number = 6;
-
+export class TetrisComponent implements OnInit, OnDestroy, PatternInterface {
   stage!: Konva.Stage;
   layer!: Konva.Layer;
-  board: string[][] = [];
-  currentPiece: any;
-  gameInterval: any;
 
   readonly boardWidth = 12;
   readonly boardHeight = 20;
   readonly cellSize = 20;
+  readonly levels = dataLevels;
 
-  pieces = [
-    {
-      shape: [[1, 1, 1, 1]],
-      color: "cyan"
-    }, // I
-    {
-      shape: [
-        [1, 1],
-        [1, 1]
-      ],
-      color: "yellow"
-    }, // O
-    {
-      shape: [
-        [0, 1, 0],
-        [1, 1, 1]
-      ],
-      color: "purple"
-    }, // T
-    {
-      shape: [
-        [1, 0, 0],
-        [1, 1, 1]
-      ],
-      color: "green"
-    }, // L
-    {
-      shape: [
-        [0, 0, 1],
-        [1, 1, 1]
-      ],
-      color: "red"
-    }, // J
-    {
-      shape: [
-        [1, 1, 0],
-        [0, 1, 1]
-      ],
-      color: "blue"
-    }, // S
-    {
-      shape: [
-        [0, 1, 1],
-        [1, 1, 0]
-      ],
-      color: "orange"
-    } // Z
-  ];
+  panelOpenState: boolean = false;
+  winner: string | undefined;
+  playing: boolean = false;
+  defaultLevel: Difficulty = "Normal";
+  defaultSettings = settings;
 
-  // Ajustes del juego
-  computerFirst: boolean = true;
-
-  // playing: boolean = false;
+  board: string[][] = [];
+  currentPiece: any;
+  gameInterval: any;
 
   constructor(readonly soundService: SoundService) {}
 
   ngOnInit(): void {
     this.initBoard(); // Inicializar el tablero
     this.initKonva(); // Inicializar Konva
+
+    // Inicializa los audios
+    this.soundService.initAudio("background", `${backgroundAudio}`, this.defaultSettings.background.volume, true);
+    this.soundService.initAudio("endgame", `${endgameAudio}`, this.defaultSettings.endgame.volume);
+  }
+
+  ngOnDestroy() {
+    this.stopAudios();
+  }
+
+  defaultStart(toggle: boolean = false, cb?: Function): void {
     this.spawnPiece(); // Generar una nueva pieza
 
     this.gameInterval = setInterval(() => {
       // Si el juego ha terminado, detener el intervalo y mostrar un mensaje
       if (this.isGameOver()) {
         clearInterval(this.gameInterval); // Detener el intervalo
-        alert("Game Over!");
+        this.soundService.playAudio("endgame");
       } else {
         this.movePiece(0, 1); // Mover la pieza hacia abajo
       }
     }, 500);
+
+    if (cb) cb();
+
+    if (this.checkEnabled("background")) this.soundService.playAudio("background");
+
+    this.playing = toggle;
   }
 
-  ngOnDestroy(): void {
-    if (this.gameInterval) {
-      clearInterval(this.gameInterval);
-    }
+  async endGame(toggle: boolean): Promise<void> {
+    console.log("[TetrisComponent.endGame]");
+
+    this.playing = toggle;
+    this.stopAudios();
+
+    if (!this.gameInterval) return;
+    clearInterval(this.gameInterval);
+
+    this.initBoard(); // Inicializar el tablero
+    this.initKonva(); // Inicializar Konva
   }
 
-  /**
-   * Funciones del ciclo de vida del juego
-   */
-  // Iniciar el juego
-  startGame(): void {}
+  async restartGame(toggle: boolean): Promise<void> {
+    console.log("[TetrisComponent.restartGame]");
 
-  // Reiniciar el juego
-  restartGame(): void {}
+    clearInterval(this.gameInterval); // Detener el intervalo
 
-  // Pausar el juego
-  pauseGame(): void {}
+    this.defaultStart(toggle);
+  }
 
-  // Reanudar el juego
-  resumeGame(): void {}
+  async startGame(toggle: boolean): Promise<void> {
+    console.log("[TetrisComponent.startGame]");
 
-  // Finalizar el juego
-  endGame(): void {}
+    this.defaultStart(toggle);
+  }
 
-  /**
-   * Funciones específicas del juego
-   */
+  stopAudios(): void {
+    this.soundService.stopAudio("background");
+    this.soundService.stopAudio("endgame");
+  }
 
+  // Formatear la etiqueta del eje Y
   formatLabel(value: number): string {
     if (value >= 1000) {
       return Math.round(value / 1000) + "k";
@@ -209,7 +152,7 @@ export class TetrisComponent implements OnInit, OnDestroy {
 
   // Generar una nueva pieza
   spawnPiece(): void {
-    const randomPiece = this.pieces[Math.floor(Math.random() * this.pieces.length)];
+    const randomPiece = pieces[Math.floor(Math.random() * pieces.length)];
     this.currentPiece = {
       shape: randomPiece.shape,
       color: randomPiece.color,
@@ -360,5 +303,21 @@ export class TetrisComponent implements OnInit, OnDestroy {
     const isBoardFull = this.board[0].some((cell) => cell !== ""); // El juego termina si la primera fila del tablero está llena
     console.log({ isBoardFull });
     return isBoardFull;
+  }
+
+  onToggleChange(key: string, toggle: boolean): void {
+    if (toggle) {
+      if (this.checkEnabled(key)) this.soundService.playAudio(key);
+    } else {
+      this.soundService.stopAudio(key);
+    }
+  }
+
+  checkEnabled(key: string): boolean {
+    return settings[key].enabled;
+  }
+
+  onVolumeChange(key: string, volume: number): void {
+    this.soundService.setAudioVolume(key, volume);
   }
 }

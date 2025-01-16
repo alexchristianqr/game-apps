@@ -16,7 +16,7 @@
     <mat-grid-list cols="1" rowHeight="12:3">
       <mat-grid-tile>
         <div style="text-align: center">
-          <button mat-raised-button color="primary" *ngIf="!playing" (click)="startGame()">Empezar</button>
+          <button mat-raised-button color="primary" *ngIf="!playing" (click)="startGame(true)">Empezar</button>
         </div>
       </mat-grid-tile>
     </mat-grid-list>
@@ -25,18 +25,18 @@
     <mat-grid-list cols="2" rowHeight="12:6">
       <mat-grid-tile>
         <div style="text-align: center">
-          <button mat-raised-button color="accent" *ngIf="playing" (click)="restartGame()">Reiniciar</button>
+          <button mat-raised-button color="accent" *ngIf="playing" (click)="restartGame(true)">Reiniciar</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
-        <button mat-raised-button color="warn" *ngIf="playing" (click)="endGame()">Terminar</button>
+        <button mat-raised-button color="warn" *ngIf="playing" (click)="endGame(false)">Terminar</button>
       </mat-grid-tile>
     </mat-grid-list>
   </mat-card-content>
 
   <mat-card-content>
     <div class="row">
-      <div class="col-12 mx-auto">
+      <div class="col-12 mx-auto my-3">
         <div id="game-container">
           <div id="tetris-board"></div>
         </div>
@@ -63,17 +63,10 @@
           <div class="w-auto align-content-start my-3">
             <div class="row">
               <div class="col-12 my-2">
-                <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="computerFirst">El Robot empieza
-                    primero
-                  </mat-slide-toggle>
-                </div>
-              </div>
-              <div class="col-12 my-2">
                 <mat-form-field appearance="outline" class="float-start w-100">
-                  <mat-label>Nivel de Dificultad</mat-label>
-                  <mat-select [(ngModel)]="difficulty">
-                    <mat-option *ngFor="let item of dataLevels" [value]="item.value">{{ item.text }}</mat-option>
+                  <mat-label>Dificultad</mat-label>
+                  <mat-select [(ngModel)]="defaultLevel">
+                    <mat-option *ngFor="let item of levels" [value]="item.value">{{ item.text }}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -89,15 +82,16 @@
             <div class="row">
               <div class="col-12 my-1">
                 <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="soundService.endGameAudioSettings.enabled">Sonido al
-                    terminar el juego
+                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="defaultSettings.endgame.enabled"
+                                    (click)="onToggleChange('endgame', defaultSettings.endgame.enabled)">
+                    <span>Sonido al terminar el juego</span>
                   </mat-slide-toggle>
                 </div>
               </div>
               <div class="col-12 my-1 float-start">
                 <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100"
-                            [disabled]="!soundService.endGameAudioSettings.enabled">
-                  <input matSliderThumb [(ngModel)]="soundService.endGameAudioSettings.volume" />
+                            [disabled]="!defaultSettings.endgame.enabled" (click)="onVolumeChange('endgame', defaultSettings.endgame.volume)">
+                  <input matSliderThumb [(ngModel)]="defaultSettings.endgame.volume" />
                 </mat-slider>
               </div>
             </div>
@@ -107,16 +101,17 @@
             <div class="row">
               <div class="col-12 my-1">
                 <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="soundService.endGameAudioSettings.enabled">Sonido durante
-                    el juego
+                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="defaultSettings.background.enabled"
+                                    (click)="onToggleChange('background', defaultSettings.background.enabled)">
+                    <span>Sonido durante el juego</span>
                   </mat-slide-toggle>
 
                 </div>
               </div>
               <div class="col-12 my-1 float-start">
                 <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100"
-                            [disabled]="!soundService.backgroundAudioSettings.enabled">
-                  <input matSliderThumb [(ngModel)]="soundService.backgroundAudioSettings.volume" />
+                            [disabled]="!defaultSettings.background.enabled" (click)="onVolumeChange('background', defaultSettings.background.volume)">
+                  <input matSliderThumb [(ngModel)]="defaultSettings.background.volume" />
                 </mat-slider>
               </div>
             </div>

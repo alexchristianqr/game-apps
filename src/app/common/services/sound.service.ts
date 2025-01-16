@@ -4,73 +4,97 @@ import { Injectable } from "@angular/core";
   providedIn: "root"
 })
 export class SoundService {
-  // Archivos de audio
-  public backgroundAudio = new Audio("assets/sounds/theme_game.mp3");
-  public endGameAudio = new Audio("assets/sounds/end_game.mp3");
+  private audios: { [key: string]: HTMLAudioElement } = {};
 
-  // Configuración inicial de audio
-  public backgroundAudioSettings = {
-    enabled: true,
-    volume: 100 // El volumen inicial es 100 (máximo)
-  };
+  constructor() {}
 
-  public endGameAudioSettings = {
-    enabled: true,
-    volume: 100 // El volumen inicial es 100 (máximo)
-  };
-
-  constructor() {
-    this.configureAudio(this.backgroundAudio, true);
-    this.configureAudio(this.endGameAudio, false);
+  public getAudio(key: string) {
+    return this.audios[key];
   }
 
-  // 🎛 Configurar los ajustes iniciales del audio
-  private configureAudio(audio: HTMLAudioElement, loop: boolean): void {
-    audio.volume = this.convertVolumeToRange(this.backgroundAudioSettings.volume);
+  /**
+   * 🎶 Inicializa un nuevo audio.
+   * @param key Identificador del audio.
+   * @param audioPath Ruta del archivo de audio.
+   * @param volume Volumen inicial (0-100).
+   * @param loop Determina si el audio debe repetirse en bucle.
+   */
+  public initAudio(key: string, audioPath: string, volume: number = 100, loop: boolean = false): void {
+    if (this.audios[key]) {
+      console.warn(`El audio con clave "${key}" ya está inicializado.`);
+      return;
+    }
+
+    const audio = new Audio(audioPath);
+    audio.volume = this.convertVolumeToRange(volume);
     audio.loop = loop;
+
+    this.audios[key] = audio;
   }
 
-  // 🎵 Métodos para reproducir audio de fondo
-  public playBackgroundAudio(): void {
-    if (!this.backgroundAudioSettings.enabled) return;
+  /**
+   * ▶️ Reproduce el audio especificado.
+   * @param key Identificador del audio.
+   */
+  public playAudio(key: string): void {
+    const audio = this.audios[key];
+    if (!audio) {
+      console.error(`No se encontró el audio con clave "${key}".`);
+      return;
+    }
 
-    this.backgroundAudio.play().catch((error) => {
-      console.error("Error al reproducir el audio de fondo:", error);
+    audio.play().catch((error) => {
+      console.error(`Error al reproducir el audio "${key}":`, error);
     });
   }
 
-  public stopBackgroundAudio(): void {
-    this.backgroundAudio.pause();
-    this.backgroundAudio.currentTime = 0;
+  /**
+   * ⏹ Detiene el audio especificado.
+   * @param key Identificador del audio.
+   */
+  public stopAudio(key: string): void {
+    const audio = this.audios[key];
+    if (!audio) {
+      console.error(`No se encontró el audio con clave "${key}".`);
+      return;
+    }
+
+    audio.pause();
+    audio.currentTime = 0;
   }
 
-  // 🎯 Métodos para reproducir audio de fin de juego
-  public playEndGameAudio(): void {
-    if (!this.endGameAudioSettings.enabled) return;
+  /**
+   * 🔊 Ajusta el volumen del audio especificado.
+   * @param key Identificador del audio.
+   * @param volume Volumen (0-100).
+   */
+  public setAudioVolume(key: string, volume: number): void {
+    const audio = this.audios[key];
+    if (!audio) {
+      console.error(`No se encontró el audio con clave "${key}".`);
+      return;
+    }
 
-    this.endGameAudio.play().catch((error) => {
-      console.error("Error al reproducir el audio de fin de juego:", error);
-    });
+    audio.volume = this.convertVolumeToRange(volume);
   }
 
-  public stopEndGameAudio(): void {
-    this.endGameAudio.pause();
-    this.endGameAudio.currentTime = 0;
+  /**
+   * 🗑 Elimina un audio especificado.
+   * @param key Identificador del audio.
+   */
+  public removeAudio(key: string): void {
+    if (!this.audios[key]) {
+      console.warn(`El audio con clave "${key}" no existe.`);
+      return;
+    }
+
+    delete this.audios[key];
   }
 
-  // 🛠 Método para ajustar el volumen
-  public setBackgroundAudioVolume(volume: number): void {
-    this.backgroundAudioSettings.volume = volume;
-    this.backgroundAudio.volume = this.convertVolumeToRange(volume);
-  }
-
-  public setEndGameAudioVolume(volume: number): void {
-    this.endGameAudioSettings.volume = volume;
-    this.endGameAudio.volume = this.convertVolumeToRange(volume);
-  }
-
-  // 📏 Conversión de volumen (0 a 100) al rango (0 a 1)
+  /**
+   * 📏 Conversión de volumen (0 a 100) al rango (0 a 1).
+   */
   private convertVolumeToRange(volume: number): number {
-    return volume / 100;
+    return Math.max(0, Math.min(volume / 100, 1));
   }
 }

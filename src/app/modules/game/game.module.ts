@@ -4,8 +4,8 @@ import { AngularMaterialUIModule } from "../../shared/angular-material-ui/angula
 import { AngularSettingsModule } from "../../shared/angular-settings/angular-settings.module";
 import { RouterModule } from "@angular/router";
 import { routes } from "./game.route";
-import { TresEnLineaComponent } from "./tres-en-linea/tres-en-linea.component";
-import { TetrisComponent } from "./tetris/tetris.component";
+import { TresEnLineaComponent } from "./components/tres-en-linea/tres-en-linea.component";
+import { TetrisComponent } from "./components/tetris/tetris.component";
 
 @NgModule({
   declarations: [TetrisComponent, TresEnLineaComponent],
