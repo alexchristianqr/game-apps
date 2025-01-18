@@ -8,6 +8,7 @@ import { SoundService } from "../../../../common/services/sound.service";
 import { dataLevels } from "../../../../common/constants";
 import { Board, board, settings, backgroundAudio, endgameAudio } from "./constants";
 import { PatternInterface } from "../../../../common/interfaces/pattern.interface";
+import { Store } from "@ngrx/store";
 
 type Difficulty = "Easy" | "Normal" | "Hard";
 
@@ -33,7 +34,10 @@ export class TresEnLineaComponent implements OnInit, OnDestroy, PatternInterface
 
   computerFirst: boolean = true;
 
-  constructor(readonly soundService: SoundService) {}
+  constructor(
+    readonly soundService: SoundService,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.breakpoint = window.innerWidth <= 319 ? 3 : 1;

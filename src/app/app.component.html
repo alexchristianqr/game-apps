@@ -10,14 +10,15 @@
 <mat-divider class="bg-transparent"></mat-divider>
 
 <mat-toolbar color="accent" class="border-0" >
-  <button mat-button routerLink="/home" *ngIf="isAuthenticated"><mat-icon>home</mat-icon>Inicio</button>
+
+  <button mat-button routerLink="/home" *ngIf="isAuthenticated$ | async"><mat-icon>home</mat-icon>Inicio</button>
 <!--  <button mat-button routerLink="/login" *ngIf="!isAuthenticated">-->
 <!--    <mat-icon>power_settings_new</mat-icon>-->
 <!--    Login-->
 <!--  </button>-->
 
   <span class="example-spacer"></span>
-  <button mat-button *ngIf="isAuthenticated" (click)="logout()">
+  <button mat-button *ngIf="isAuthenticated$ | async"  (click)="onLogout()">
     <mat-icon>exit_to_app</mat-icon>
     Salir
   </button>

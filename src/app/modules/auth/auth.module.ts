@@ -5,12 +5,12 @@ import { AngularSettingsModule } from "../../shared/angular-settings/angular-set
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 import { AuthEffects } from "./store/auth.effects";
-import * as authReducer from "./store/auth.reducer";
 import { RouterModule } from "@angular/router";
 import { routes } from "./auth.route";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { ForgotComponent } from "./forgot/forgot.component";
+import { authReducer } from "./store/auth.reducer";
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent, ForgotComponent],
@@ -19,7 +19,8 @@ import { ForgotComponent } from "./forgot/forgot.component";
     AngularMaterialUIModule,
     AngularSettingsModule,
     RouterModule.forRoot(routes, { useHash: true }),
-    StoreModule.forFeature(authReducer.AuthFeatureReducer),
+
+    StoreModule.forFeature("auth", authReducer),
     EffectsModule.forFeature([AuthEffects])
   ]
 })

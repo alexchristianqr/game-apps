@@ -1,4 +1,5 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
 
 type App = {
   id: number;
@@ -13,9 +14,9 @@ type App = {
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   apps: Array<App> = [];
-  constructor() {
+  constructor(private store: Store) {
     this.apps = [
       {
         id: 1,
@@ -47,4 +48,6 @@ export class HomeComponent {
       }
     ];
   }
+
+  ngOnInit(): void {}
 }

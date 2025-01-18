@@ -6,6 +6,7 @@ import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 const firebaseConfig: object = environment.firebase;
 
 @NgModule({
-  imports: [AngularFireModule.initializeApp(firebaseConfig, "game-apps"), AngularFireAuthModule, AngularFirestoreModule]
+  imports: [AngularFireModule.initializeApp(firebaseConfig, "game-apps"), AngularFireAuthModule, AngularFirestoreModule],
+  exports: [AngularFireModule, AngularFireAuthModule, AngularFirestoreModule]
 })
 export class AngularFirebaseModule {}
