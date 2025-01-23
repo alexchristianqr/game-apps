@@ -17,6 +17,8 @@
 <!--    Login-->
 <!--  </button>-->
 
+  {{isAuthenticated$ | async}}
+
   <span class="example-spacer"></span>
   <button mat-button *ngIf="isAuthenticated$ | async"  (click)="onLogout()">
     <mat-icon>exit_to_app</mat-icon>

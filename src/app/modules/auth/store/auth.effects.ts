@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { AuthService } from "../auth.service";
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, map, of, switchMap, take, tap } from "rxjs";
 import { login, loginSuccess, loginFailure, logout, checkAuthState, logoutFailure, logoutSuccess } from "./auth.actions";
 import { onAuthStateChanged } from "@angular/fire/auth";
 import { Auth } from "@angular/fire/auth";
@@ -24,7 +24,12 @@ export class AuthEffects {
       ofType(login),
       switchMap(({ email, password }) =>
         this.authService.loginUser(email, password).pipe(
-          map((data) => loginSuccess({ user: data.user })),
+          map((data) => {
+            alert("login$");
+            console.log("login$", data.user);
+            this.router.navigate(["/home"]); // Redirige a 'home'
+            return loginSuccess({ user: data.user });
+          }),
           catchError((error) => of(loginFailure({ error: error.message })))
         )
       )
@@ -34,31 +39,20 @@ export class AuthEffects {
   logout$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(logout),
-        switchMap(
-          () =>
-            this.authService.logout().pipe(
-              map(() => {
-                this.router.navigate(["/login"]);
-                return logoutSuccess();
-              }),
-              catchError((error) => {
-                console.error("Error during logout", error);
-                return of(logoutFailure({ error: error.message })); // Manejar el error
-              })
-            )
-          // this.router.navigate(["/login"]);
-          // this.authService.logout().pipe(
-          //   map((data) => {
-          //     console.log("logout effect", data);
-          //     logoutSuccess();
-          //   }),
-          //   catchError((error) => of(logoutFailure(error)))
-          // );
-          // this.authService.logout().then(() => logoutSuccess()).catch((error) => logoutFailure(error))
-        )
+        ofType(logout)
+        // take(1),
+        // switchMap(() => {
+        //   alert("logout$");
+        //   this.router.navigate(["/login"]);
+        //   // logout()
+        //   return this.authService.logout().pipe(
+        //     tap(() => {
+        //       this.router.navigate(["/login"]);
+        //     })
+        //   );
+        // })
       ),
-    { dispatch: true }
+    { dispatch: false }
   );
 
   checkAuthState$ = createEffect(
@@ -66,15 +60,17 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(checkAuthState),
         map(() => {
-          // onAuthStateChanged(this.auth, (user) => {
-          //   console.log("onAuthStateChanged", user);
-          //   // if (user) {
-          //   //   this.store.dispatch(loginSuccess({ user }));
-          //   // } else {
-          //   //   // this.store.dispatch(loginFailure({ error: "User not authenticated" }));
-          //   //   this.store.dispatch(logout());
-          //   // }
-          // });
+          onAuthStateChanged(this.auth, (user) => {
+            console.log("onAuthStateChanged jeeeeee", user);
+            if (user) {
+              this.store.dispatch(loginSuccess({ user }));
+              this.router.navigate(["/home"]);
+            } else {
+              // this.store.dispatch(loginFailure({ error: "User not authenticated" }));
+              this.store.dispatch(logout());
+              this.router.navigate(["/login"]);
+            }
+          });
         })
       ),
     { dispatch: false }

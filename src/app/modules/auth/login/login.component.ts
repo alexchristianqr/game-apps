@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { login, loginSuccess } from "../store/auth.actions";
+import { checkAuthState, login, loginSuccess } from "../store/auth.actions";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { AuthState } from "../store/auth.state";
@@ -14,7 +14,7 @@ import { selectIsAuthenticated } from "../store/auth.selectors";
   styleUrls: ["./login.component.scss"],
   providers: [AuthService]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   formGroup: FormGroup;
   submitted: boolean | undefined;
   loading: boolean = false;
@@ -32,6 +32,11 @@ export class LoginComponent {
       email: formBuilder.control("invitado@gmail.com", [Validators.required, Validators.email]),
       password: formBuilder.control("Invitado2023.", [Validators.required])
     });
+  }
+
+  ngOnInit(): void {
+    console.log("[LoginComponent.ngOnInit]");
+    // this.store.dispatch(checkAuthState());
   }
 
   async onLoginSubmit() {
@@ -52,14 +57,15 @@ export class LoginComponent {
       })
     );
 
-    this.store
-      .select("auth")
-      // .pipe(
-      //   map((state) => state.user),
-      //   take(1)
-      // )
-      .subscribe((user) => {
-        if (user) this.router.navigate(["/home"]); // Redirige a 'home'
-      });
+    // this.store
+    //   .select("auth")
+    //   // .pipe(
+    //   //   map((state) => state.user),
+    //   //   take(1)
+    //   // )
+    //   .subscribe((user) => {
+    //     alert(333);
+    //     if (user) this.router.navigate(["/home"]); // Redirige a 'home'
+    //   });
   }
 }

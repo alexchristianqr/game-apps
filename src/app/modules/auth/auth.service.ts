@@ -1,8 +1,21 @@
 import { Injectable } from "@angular/core";
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, UserCredential, getAuth } from "@angular/fire/auth";
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  UserCredential,
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged
+} from "@angular/fire/auth";
 import { Firestore, doc, setDoc, getDoc, updateDoc, deleteDoc } from "@angular/fire/firestore";
 import { Observable, from, tap } from "rxjs";
 import { Router } from "@angular/router";
+import firebase from "firebase/compat";
+import Persistence = firebase.auth.Auth.Persistence;
 
 @Injectable({
   providedIn: "root"
@@ -10,15 +23,18 @@ import { Router } from "@angular/router";
 export class AuthService {
   isUserAuthenticated: boolean = false;
 
-  declare private readonly auth: Auth;
+  // auth: Auth;
+  // private browserLocalPersistence: Persistence;
 
   constructor(
-    private readonly firestore: Firestore,
+    public auth: Auth,
+    public firestore: Firestore,
     private router: Router
   ) {
     console.log("[AuthService.constructor]");
 
-    this.auth = getAuth();
+    // this.initializeUser().then();
+    // this.auth = getAuth();
 
     // Establecer la persistencia de sesión
     // setPersistence(this.auth, browserLocalPersistence)
@@ -33,7 +49,7 @@ export class AuthService {
     //   connectFirestoreEmulator(this.firestore, "localhost", 8081);
     // }
 
-    // // Escuchar cambios en el estado de autenticación
+    // Escuchar cambios en el estado de autenticación
     // onAuthStateChanged(this.auth, (user) => {
     //   // console.log("onAuthStateChanged: jejeje", user);
     //   if (!user) {
@@ -67,6 +83,19 @@ export class AuthService {
     // });
   }
 
+  async initializeUser() {
+    const user = await this.auth.currentUser;
+    if (user) {
+      console.log("Usuario autenticado:", user);
+    } else {
+      console.log("No hay usuario autenticado");
+    }
+  }
+
+  // async setAuthPersistence() {
+  //   await setPersistence(this.auth);
+  // }
+
   // Register a new user and create their profile in Firestore
   registerUser(email: string, password: string, userData: any): Observable<UserCredential> {
     console.log("[AuthService.registerUser]", { email, password, userData });
@@ -88,14 +117,27 @@ export class AuthService {
   }
 
   // Logout the current user
+  // logout(): Observable<void> {
+  //   console.log("[AuthService.logout]");
+  //
+  //   // return from(signOut(this.auth));
+  //   return from(signOut(this.auth)).pipe(
+  //     // En este punto, aseguramos que el logout se complete antes de redirigir.
+  //     tap(() => {
+  //       console.log("User logged out, redirecting to login...");
+  //       this.router.navigate(["/login"]);
+  //     })
+  //   );
+  // }
+
+  // Método de logout utilizando signOut de Firebase
   logout(): Observable<void> {
     console.log("[AuthService.logout]");
 
-    // return from(signOut(this.auth));
     return from(signOut(this.auth)).pipe(
-      // En este punto, aseguramos que el logout se complete antes de redirigir.
       tap(() => {
-        console.log("User logged out, redirecting to login...");
+        console.log("User logged out, but no redirection yet.");
+        // Redirigir a la página de login después de logout
         this.router.navigate(["/login"]);
       })
     );

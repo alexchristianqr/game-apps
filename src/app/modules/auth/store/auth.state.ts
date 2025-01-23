@@ -1,7 +1,5 @@
-import { User } from "@angular/fire/auth";
-
 export interface AuthState {
-  user: User | null; // Usuario autenticado
+  user: null; // Usuario autenticado
   isAuthenticated: boolean; // Si está autenticado
   loading: boolean; // Indicador de carga
   error: string | null; // Errores

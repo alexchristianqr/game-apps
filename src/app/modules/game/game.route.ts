@@ -10,11 +10,13 @@ export const routes: Routes = [
     children: [
       {
         path: "tres-en-linea",
-        component: TresEnLineaComponent
+        component: TresEnLineaComponent,
+        canActivate: [AuthenticateGuard]
       },
       {
         path: "tetris",
-        component: TetrisComponent
+        component: TetrisComponent,
+        canActivate: [AuthenticateGuard]
       }
     ]
   }

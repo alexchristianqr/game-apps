@@ -16,10 +16,10 @@ import { User } from "@angular/fire/auth";
 })
 export class AppComponent implements OnInit, OnDestroy {
   public title = "GAME APPS";
-  private destroySub = new Subject<void>();
+  // private destroySub = new Subject<void>();
   // isAuthenticated$: Observable<boolean>;
 
-  user$: Observable<User | null>;
+  // user$: Observable<User | null>;
   isAuthenticated$: Observable<boolean>;
 
   // currentUser$ = this.store.select(selectCurrentUser);
@@ -29,10 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store
   ) {
-    this.user$ = this.store.select(selectUser);
+    // this.user$ = this.store.select(selectUser);
     this.isAuthenticated$ = this.store.select(selectIsAuthenticated);
-
-    console.log(this.isAuthenticated$, "alexxxxxxxxxxxxxxxx");
+    // console.log(this.isAuthenticated$, "alexxxxxxxxxxxxxxxx");
     // console.log("isAuthenticated$", this.isAuthenticated$);
     // isAuthenticated$ = this.store.select(selectIsAuthenticated);
     // Usar selectores para leer el estado
@@ -54,11 +53,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log("[AppComponent.ngOnInit]");
     // this.store.dispatch(checkAuthState());
   }
 
   public ngOnDestroy(): void {
-    this.destroySub.next();
+    // this.destroySub.next();
+    // this.user$.pipe().subscribe().unsubscribe();
+    this.isAuthenticated$.pipe().subscribe().unsubscribe();
   }
 
   get isAuthenticated(): boolean {
@@ -66,19 +68,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public async onLogout() {
-    // if (this.isAuthenticated$) return;
+    console.log("[AppComponent.onLogout]");
     this.store.dispatch(logout());
-
-    // return this.authService.logout().subscribe({
-    //   next: (data) => {
-    //     console.log("[authService.logout]", data);
-    //
-    //     this.store.dispatch(logout());
-    //
-    //     localStorage.removeItem("user");
-    //     this.router.navigate(["login"]);
-    //   },
-    //   error: (error) => console.error("Error sending reset email:", error)
-    // });
   }
 }
