@@ -7,9 +7,10 @@ import { AuthActions } from "./modules/auth/store/auth.actions";
 import { StorageService } from "./core/services/storage/storage.service";
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+    selector: "app-root",
+    templateUrl: "./app.component.html",
+    styleUrls: ["./app.component.scss"],
+    standalone: false
 })
 export class AppComponent implements OnDestroy {
   public title = "GAME APPS";

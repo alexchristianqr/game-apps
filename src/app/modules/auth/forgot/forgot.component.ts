@@ -5,9 +5,10 @@ import { AuthService } from "../auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  selector: "app-forgot",
-  templateUrl: "./forgot.component.html",
-  styleUrls: ["./forgot.component.scss"]
+    selector: "app-forgot",
+    templateUrl: "./forgot.component.html",
+    styleUrls: ["./forgot.component.scss"],
+    standalone: false
 })
 export class ForgotComponent {
   formGroup: FormGroup;
