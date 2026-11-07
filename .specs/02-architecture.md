@@ -10,7 +10,7 @@
 | Backend   | Firebase 12 vía `@angular/fire` (Auth, Firestore) | Solo cliente. Sin backend propio.                             |
 | UI        | Tailwind CSS v4 + primitivas propias (`core/ui`)  | Tema neón en `styles.css`. Iconos `lucide-angular`. ADR-006.  |
 | Efectos   | `canvas-confetti`, fuentes Fontsource, CSS        | Confeti cargado al vuelo; Orbitron + Inter autoalojadas.      |
-| Juegos    | `tic-tac-toe-minimax`                             | IA del tres en línea.                                         |
+| Juegos    | `tic-tac-toe-minimax`; motor propio de Tetris     | IA del tres en línea; Tetris sin dependencias.                |
 | Build     | `@angular/build:application` (esbuild)            | `baseHref: /game-apps/`, salida en `dist/`. ADR-004.          |
 | Tests     | Vitest + jsdom (`@angular/build:unit-test`)       | Specs standalone junto al código (`*.spec.ts`).               |
 | Calidad   | ESLint (flat, angular-eslint) + Prettier + Husky  | ADR-005.                                                      |
@@ -28,8 +28,8 @@ src/
     ├── app.routes.ts          Rutas; las de juegos se derivan del registro
     ├── app.component.*        Marco: cabecera, fondo animado, salida del router, pie
     ├── core/
-    │   ├── services/          Servicios sin dependencia de features: audio, storage, celebration (confeti)
-    │   └── ui/                Primitivas visuales: botón, panel, interruptor, campo, avisos (toast)
+    │   ├── services/          Servicios sin dependencia de features: audio, sfx (efectos sintetizados), preferences (localStorage tipado), storage, celebration (confeti)
+    │   └── ui/                Primitivas visuales: botón, panel, interruptor, control segmentado, estadística, campo, avisos (toast)
     ├── user/                  Modelo User y UserService
     ├── auth/                  AuthService, pantallas login/register/forgot, store/ (NgRx)
     ├── pages/home/            Catálogo de juegos

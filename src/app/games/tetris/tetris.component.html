@@ -1,0 +1,314 @@
+<div class="mx-auto max-w-2xl">
+  <app-panel>
+    <div class="mb-4 flex items-center justify-between">
+      <a appButton variant="ghost" size="sm" routerLink="/home" aria-label="Volver al inicio">
+        <lucide-icon [img]="icons.ArrowLeft" [size]="18" />
+      </a>
+      <h1 class="text-gradient font-display text-xl font-black">Tetris</h1>
+      @if (phase() === "playing" || phase() === "paused") {
+        <button appButton variant="ghost" size="sm" type="button" [attr.aria-label]="phase() === 'paused' ? 'Continuar' : 'Pausar'" (click)="togglePause()">
+          <lucide-icon [img]="phase() === 'paused' ? icons.Play : icons.Pause" [size]="18" />
+        </button>
+      } @else {
+        <span class="w-10"></span>
+      }
+    </div>
+
+    <!-- Marcador -->
+    <div class="mb-4 grid grid-cols-4 gap-2">
+      <app-stat label="Puntos" [value]="score()" accent="cyan" />
+      <app-stat label="Nivel" [value]="level()" accent="lime" />
+      <app-stat label="Líneas" [value]="lines()" accent="pink" />
+      <app-stat label="Récord 🏆" [value]="best()" accent="amber" [active]="newRecord()" />
+    </div>
+
+    <div class="grid grid-cols-[4.25rem_minmax(0,1fr)_4.25rem] items-start justify-center gap-2 sm:grid-cols-[6.5rem_minmax(0,17rem)_6.5rem] sm:gap-4">
+      <!-- Guardada -->
+      <section aria-label="Pieza guardada" class="rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 transition" [class.opacity-50]="!canHold()">
+        <h2 class="mb-1 text-center text-[0.6rem] font-semibold tracking-widest text-white/60 uppercase sm:text-xs">Guardar</h2>
+        <div class="grid grid-cols-4 gap-px" aria-hidden="true">
+          @for (on of mini(holdId()); track $index) {
+            <div class="aspect-square rounded-[2px]" [class]="on && holdId() ? 'candy-block ' + pieceColor(holdId()!) : ''"></div>
+          }
+        </div>
+      </section>
+
+      <!-- Tablero -->
+      <div class="relative">
+        <div
+          #boardEl
+          class="relative grid aspect-[1/2] touch-none grid-cols-10 gap-px overflow-hidden rounded-xl bg-ink-950/80 p-1 shadow-glow-violet ring-2 ring-neon-violet/50 select-none"
+          [class.animate-shake]="shaking()"
+          role="img"
+          [attr.aria-label]="boardLabel()"
+          (pointerdown)="onPointerDown($event)"
+          (pointermove)="onPointerMove($event)"
+          (pointerup)="onPointerUp($event)"
+          (pointercancel)="onPointerCancel()"
+        >
+          @for (cell of cells(); track $index) {
+            <div class="aspect-square rounded-[0.2rem]" [class]="cellClass(cell)"></div>
+          }
+
+          <!-- Destello de líneas limpiadas -->
+          @if (flash(); as f) {
+            @for (row of f.rows; track row) {
+              <div
+                class="pointer-events-none absolute right-0 left-0 animate-line-flash bg-gradient-to-r from-candy-sky via-white to-candy-bubblegum opacity-80"
+                [style.top.%]="((row - 2) / 20) * 100"
+                style="height: 5%"
+              ></div>
+            }
+          }
+        </div>
+
+        <!-- Texto flotante: líneas, combo y nivel -->
+        @if (popup(); as p) {
+          @for (id of [p.id]; track id) {
+            <div class="pointer-events-none absolute inset-x-0 top-1/3 z-10 animate-float-up text-center" aria-hidden="true">
+              <div class="text-gradient font-display text-2xl font-black drop-shadow-[0_0_12px_rgb(255_255_255/0.5)] sm:text-3xl">{{ p.text }}</div>
+              @if (p.sub) {
+                <div class="mt-1 text-sm font-bold text-neon-amber">{{ p.sub }}</div>
+              }
+            </div>
+          }
+        }
+
+        <!-- Pantallas: inicio, pausa y fin -->
+        @if (phase() === "idle") {
+          <div class="absolute inset-0 z-20 grid place-items-center rounded-xl bg-ink-950/85 p-3 text-center backdrop-blur-sm">
+            <div>
+              <div class="mb-3 flex justify-center gap-1" aria-hidden="true">
+                @for (id of previewIds; track id; let i = $index) {
+                  <div class="size-4 animate-float rounded-md candy-block sm:size-5" [class]="pieceColor(id)" [style.animation-delay.s]="i * 0.35"></div>
+                }
+              </div>
+              <p class="font-display text-lg font-black text-white sm:text-xl">¡Encaja y limpia!</p>
+              <p class="mt-1 mb-4 text-xs text-white/70">Completa filas para sumar puntos</p>
+              <button appButton type="button" size="lg" (click)="startGame()">¡Jugar!</button>
+            </div>
+          </div>
+        }
+        @if (phase() === "paused") {
+          <div class="absolute inset-0 z-20 grid place-items-center rounded-xl bg-ink-950/85 p-3 text-center backdrop-blur-sm">
+            <div class="space-y-3">
+              <p class="animate-bounce-in font-display text-2xl font-black text-neon-amber">⏸ Pausa</p>
+              <div class="flex flex-col gap-2">
+                <button appButton type="button" (click)="togglePause()">Continuar</button>
+                <button appButton variant="success" size="sm" type="button" (click)="restartGame()">Reiniciar</button>
+                <button appButton variant="danger" size="sm" type="button" (click)="endGame()">Salir</button>
+              </div>
+            </div>
+          </div>
+        }
+        @if (phase() === "over") {
+          <div class="absolute inset-0 z-20 grid place-items-center rounded-xl bg-ink-950/85 p-3 text-center backdrop-blur-sm">
+            <div class="space-y-2">
+              <p class="animate-bounce-in text-4xl" aria-hidden="true">{{ newRecord() ? "🎉" : "🧱" }}</p>
+              <p class="font-display text-xl font-black">¡Fin del juego!</p>
+              @if (newRecord()) {
+                <p class="animate-glow-pulse font-bold text-neon-amber">¡Nuevo récord!</p>
+              }
+              <p class="text-sm text-white/80">{{ score() }} puntos · {{ lines() }} líneas</p>
+              <button appButton type="button" class="mt-2" (click)="startGame()">Jugar otra vez</button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Siguientes -->
+      <section aria-label="Siguientes piezas" class="rounded-2xl bg-white/5 p-2 ring-1 ring-white/10">
+        <h2 class="mb-1 text-center text-[0.6rem] font-semibold tracking-widest text-white/60 uppercase sm:text-xs">Siguiente</h2>
+        <div class="space-y-2" aria-hidden="true">
+          @for (id of nextIds(); track $index) {
+            <div class="grid grid-cols-4 gap-px">
+              @for (on of mini(id); track $index) {
+                <div class="aspect-square rounded-[2px]" [class]="on ? 'candy-block ' + pieceColor(id) : ''"></div>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+
+    <p class="sr-only" role="status" aria-live="polite">{{ announcement() }}</p>
+
+    <!-- Botones en pantalla -->
+    @if (touchButtons() && phase() === "playing") {
+      <div class="mx-auto mt-4 grid max-w-xs grid-cols-3 gap-3" role="group" aria-label="Controles en pantalla">
+        <button
+          type="button"
+          class="grid h-14 touch-none place-items-center rounded-2xl bg-candy-sky/20 text-candy-sky ring-1 ring-candy-sky/50 select-none active:scale-90 active:bg-candy-sky/40"
+          aria-label="Mover a la izquierda"
+          (pointerdown)="press('left')"
+          (pointerup)="release('left')"
+          (pointerleave)="release('left')"
+          (pointercancel)="release('left')"
+          (click)="tap($event, { type: 'left' })"
+        >
+          <lucide-icon [img]="icons.ArrowLeft" [size]="26" />
+        </button>
+        <button
+          type="button"
+          class="grid h-14 touch-none place-items-center rounded-2xl bg-candy-grape/25 text-candy-grape ring-1 ring-candy-grape/60 select-none active:scale-90 active:bg-candy-grape/45"
+          aria-label="Girar"
+          (click)="act({ type: 'cw' })"
+        >
+          <lucide-icon [img]="icons.RotateCw" [size]="26" />
+        </button>
+        <button
+          type="button"
+          class="grid h-14 touch-none place-items-center rounded-2xl bg-candy-sky/20 text-candy-sky ring-1 ring-candy-sky/50 select-none active:scale-90 active:bg-candy-sky/40"
+          aria-label="Mover a la derecha"
+          (pointerdown)="press('right')"
+          (pointerup)="release('right')"
+          (pointerleave)="release('right')"
+          (pointercancel)="release('right')"
+          (click)="tap($event, { type: 'right' })"
+        >
+          <lucide-icon [img]="icons.ArrowRight" [size]="26" />
+        </button>
+        <button
+          type="button"
+          class="grid h-14 touch-none place-items-center rounded-2xl bg-candy-green/20 text-candy-green ring-1 ring-candy-green/50 select-none active:scale-90 active:bg-candy-green/40"
+          aria-label="Bajar despacio"
+          (pointerdown)="press('down')"
+          (pointerup)="release('down')"
+          (pointerleave)="release('down')"
+          (pointercancel)="release('down')"
+          (click)="tap($event, { type: 'softDrop' })"
+        >
+          <lucide-icon [img]="icons.ArrowDown" [size]="26" />
+        </button>
+        <button
+          type="button"
+          class="grid h-14 touch-none place-items-center rounded-2xl bg-candy-red/20 text-candy-red ring-1 ring-candy-red/50 select-none active:scale-90 active:bg-candy-red/40"
+          aria-label="Caída rápida"
+          (click)="act({ type: 'hardDrop' })"
+        >
+          <lucide-icon [img]="icons.ChevronsDown" [size]="26" />
+        </button>
+        <button
+          type="button"
+          class="grid h-14 touch-none place-items-center rounded-2xl bg-candy-yellow/20 text-candy-yellow ring-1 ring-candy-yellow/50 select-none active:scale-90 active:bg-candy-yellow/40"
+          aria-label="Guardar pieza"
+          (click)="act({ type: 'hold' })"
+        >
+          <lucide-icon [img]="icons.Archive" [size]="26" />
+        </button>
+      </div>
+    }
+
+    <!-- Acciones -->
+    <div class="mt-4 flex flex-wrap justify-center gap-3">
+      @if (phase() === "playing" || phase() === "paused") {
+        <button appButton variant="success" type="button" (click)="restartGame()">Reiniciar</button>
+        <button appButton variant="danger" type="button" (click)="endGame()">Terminar</button>
+      }
+    </div>
+
+    <!-- Cómo se juega -->
+    <div class="mt-5 border-t border-white/10 pt-3">
+      <button
+        type="button"
+        class="flex w-full items-center justify-between rounded-lg py-2 text-left font-semibold"
+        [attr.aria-expanded]="helpOpen()"
+        aria-controls="ayuda"
+        (click)="helpOpen.set(!helpOpen())"
+      >
+        ¿Cómo se juega?
+        <lucide-icon [img]="icons.ChevronDown" [size]="20" class="transition" [class.rotate-180]="helpOpen()" />
+      </button>
+      @if (helpOpen()) {
+        <div id="ayuda" class="mt-2 animate-fade-up space-y-3 text-sm text-white/80">
+          <p>Encaja las piezas para completar filas: desaparecen y suman puntos. Cuatro a la vez es un <strong class="text-neon-amber">¡TETRIS!</strong> y, si lo repites, puntúa más.</p>
+          <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+            <dt class="font-semibold text-neon-cyan">← → / A D</dt>
+            <dd>Mover (mantén para repetir)</dd>
+            <dt class="font-semibold text-neon-cyan">↑ / X</dt>
+            <dd>Girar a la derecha</dd>
+            <dt class="font-semibold text-neon-cyan">Z</dt>
+            <dd>Girar a la izquierda</dd>
+            <dt class="font-semibold text-neon-cyan">↓ / S</dt>
+            <dd>Bajar despacio</dd>
+            <dt class="font-semibold text-neon-cyan">Espacio</dt>
+            <dd>Caída rápida</dd>
+            <dt class="font-semibold text-neon-cyan">C / Shift</dt>
+            <dd>Guardar pieza</dd>
+            <dt class="font-semibold text-neon-cyan">P / Esc</dt>
+            <dd>Pausa</dd>
+            <dt class="font-semibold text-neon-pink">Táctil</dt>
+            <dd>Toca para girar · desliza ← → para mover · ↓ baja · desliza rápido ↓ para caída rápida · ↑ guarda</dd>
+            <dt class="font-semibold text-neon-pink">Mando</dt>
+            <dd>Cruceta mover · A girar · B girar a la izquierda · X/↑ caída rápida · LB/RB guardar · Start pausa</dd>
+          </dl>
+        </div>
+      }
+    </div>
+
+    <!-- Ajustes -->
+    <div class="mt-2 border-t border-white/10 pt-3">
+      <button
+        type="button"
+        class="flex w-full items-center justify-between rounded-lg py-2 text-left font-semibold"
+        [attr.aria-expanded]="settingsOpen()"
+        aria-controls="ajustes"
+        (click)="settingsOpen.set(!settingsOpen())"
+      >
+        Ajustes del juego
+        <lucide-icon [img]="icons.ChevronDown" [size]="20" class="transition" [class.rotate-180]="settingsOpen()" />
+      </button>
+      @if (settingsOpen()) {
+        <div id="ajustes" class="mt-3 animate-fade-up space-y-5">
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-medium text-white/80">Nivel inicial: {{ startLevel() }}</span>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              step="1"
+              class="w-full accent-neon-lime"
+              aria-label="Nivel inicial"
+              [disabled]="phase() === 'playing' || phase() === 'paused'"
+              [ngModel]="startLevel()"
+              (ngModelChange)="setStartLevel($event)"
+            />
+          </label>
+
+          <app-toggle [ngModel]="showGhost()" (ngModelChange)="setGhost($event)">Mostrar la pieza fantasma</app-toggle>
+          <app-toggle [ngModel]="touchButtons()" (ngModelChange)="setTouchButtons($event)">Botones en pantalla</app-toggle>
+
+          <div class="space-y-2">
+            <app-toggle [(ngModel)]="music" (ngModelChange)="persist()">Música de fondo</app-toggle>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              class="w-full accent-neon-pink"
+              aria-label="Volumen de la música"
+              [disabled]="!music"
+              [(ngModel)]="musicVolume"
+              (ngModelChange)="persist()"
+            />
+          </div>
+
+          <div class="space-y-2">
+            <app-toggle [(ngModel)]="sfxOn" (ngModelChange)="persist()">Efectos de sonido</app-toggle>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              class="w-full accent-neon-cyan"
+              aria-label="Volumen de los efectos"
+              [disabled]="!sfxOn"
+              [(ngModel)]="sfxVolume"
+              (ngModelChange)="persist()"
+            />
+          </div>
+        </div>
+      }
+    </div>
+  </app-panel>
+</div>

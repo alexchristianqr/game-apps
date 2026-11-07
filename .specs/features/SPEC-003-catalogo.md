@@ -32,7 +32,7 @@ Rejilla responsive de 1, 2, 3 y 4 columnas. Cada tarjeta lleva un icono sobre de
 
 ## Criterios de aceptación
 
-- **CA-01** — Dado el registro actual, cuando abro Inicio, entonces veo 4 juegos y solo «Tres en línea» es un enlace.
+- **CA-01** — Dado el registro actual, cuando abro Inicio, entonces veo 4 juegos y solo «Tres en línea» y «Tetris» son enlaces.
 - **CA-02** — Dado un juego nuevo habilitado, cuando lo registro, entonces aparece en Inicio y `/games/<id>` funciona sin tocar `app.routes.ts` ni `home`.
 - **CA-03** — Dado `enabled: false`, cuando escribo `/games/<id>` a mano, entonces el comodín de rutas me lleva a `/home` (no existe ruta para un juego deshabilitado), nunca a una pantalla rota.
 

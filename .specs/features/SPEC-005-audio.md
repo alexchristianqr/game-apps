@@ -17,6 +17,8 @@ Un único sitio para reproducir sonidos, que garantiza que nunca queda uno sonan
 - **RF-03** — `playEffect(src, volume, maxMs = 2000)` detiene el efecto anterior, lo reproduce y lo corta solo a los `maxMs`.
 - **RF-04** — `stopLoop`, `stopEffect` y `stopAll` detienen y liberan el audio correspondiente; `stopEffect` cancela también el temporizador.
 - **RF-05** — Al destruirse el servicio se detiene todo.
+- **RF-07** — `SfxService` (`core/services/sfx/`) sintetiza efectos cortos con Web Audio (mover, girar, colocar, caída, guardar, limpiar líneas, subir de nivel, ganar, perder), sin archivos. Tiene
+  `volume` (0–100) y `muted`; el `AudioContext` se crea en el primer sonido (tras un gesto) y se cierra al destruir el servicio. Si el navegador no lo soporta, no suena nada y el juego continúa.
 - **RF-06** — Si el navegador rechaza reproducir (política de autoplay), el error se registra en consola y la partida continúa.
 
 ## Reglas de contenido
@@ -34,4 +36,4 @@ Mezclador global, silenciar toda la aplicación, precarga de audios.
 
 ## Deuda conocida
 
-No tiene tests propios.
+`AudioService` y `SfxService` no tienen tests propios.

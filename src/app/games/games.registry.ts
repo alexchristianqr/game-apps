@@ -26,7 +26,7 @@ export const GAMES: readonly GameDefinition[] = [
   {
     id: "tic-tac-toe",
     title: "Tres en línea",
-    description: "Reta al robot y elige su dificultad.",
+    description: "Reta al robot o juega con un amigo.",
     icon: Grid3x3,
     accent: "cyan",
     enabled: true,
@@ -34,5 +34,13 @@ export const GAMES: readonly GameDefinition[] = [
   },
   { id: "smart-toy", title: "Smart toy", description: "Un juguete inteligente que aprende de ti.", icon: Bot, accent: "pink", enabled: false },
   { id: "basketball", title: "Basketball", description: "Encesta contra el reloj.", icon: Dribbble, accent: "amber", enabled: false },
-  { id: "tetris", title: "Tetris", description: "Encaja piezas y limpia líneas.", icon: Blocks, accent: "violet", enabled: false }
+  {
+    id: "tetris",
+    title: "Tetris",
+    description: "Encaja piezas de colores y limpia líneas.",
+    icon: Blocks,
+    accent: "violet",
+    enabled: true,
+    loadComponent: () => import("./tetris/tetris.component").then((m) => m.TetrisComponent)
+  }
 ];

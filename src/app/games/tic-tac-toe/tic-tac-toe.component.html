@@ -1,59 +1,128 @@
 <div class="mx-auto max-w-md">
   <app-panel>
-    <div class="mb-6 flex items-center justify-between">
+    <div class="mb-5 flex items-center justify-between">
       <a appButton variant="ghost" size="sm" routerLink="/home" aria-label="Volver al inicio">
         <lucide-icon [img]="icons.ArrowLeft" [size]="18" />
       </a>
       <h1 class="text-gradient font-display text-xl font-black">Tres en línea</h1>
     </div>
 
-    <!-- Marcador y turno -->
-    <div class="mb-6 grid grid-cols-2 gap-3 text-center">
-      <div class="rounded-2xl bg-white/5 p-3 ring-1 ring-white/10 transition" [class.ring-neon-cyan]="playing() && !robotTurn()" [class.shadow-glow-cyan]="playing() && !robotTurn()">
-        <div class="font-display text-2xl font-black text-neon-cyan">X</div>
-        <div class="text-sm text-white/70">Tú</div>
-      </div>
-      <div class="rounded-2xl bg-white/5 p-3 ring-1 ring-white/10 transition" [class.ring-neon-pink]="playing() && robotTurn()" [class.shadow-glow-pink]="playing() && robotTurn()">
-        <div class="font-display text-2xl font-black text-neon-pink">O</div>
-        <div class="text-sm text-white/70">Robot</div>
-      </div>
-    </div>
+    <!-- Modo -->
+    <app-segmented label="Modo de juego" [options]="modeOptions" [disabled]="playing()" [ngModel]="mode()" (ngModelChange)="setMode($event)" />
 
-    <!-- Tablero -->
-    <div class="mx-auto grid aspect-square w-full max-w-xs grid-cols-3 gap-2" role="group" aria-label="Tablero">
-      @for (cell of board(); track $index; let i = $index) {
-        <button
-          type="button"
-          class="grid aspect-square place-items-center rounded-2xl font-display text-5xl font-black ring-1 transition enabled:hover:bg-white/10 enabled:active:scale-95 disabled:cursor-default"
-          [class]="cellClass(cell, i)"
-          [attr.aria-label]="cellLabel(i)"
-          [disabled]="!playing() || robotTurn()"
-          (click)="makeHumanMove(i)"
+    <!-- Jugadores y turno -->
+    <div class="mt-5 grid grid-cols-2 gap-3 text-center">
+      @for (mark of marks; track mark) {
+        <div
+          class="rounded-2xl p-3 ring-1 transition"
+          [class]="
+            playing() && turn() === mark
+              ? mark === 'X'
+                ? 'animate-glow-pulse bg-neon-cyan/10 shadow-glow-cyan ring-neon-cyan'
+                : 'animate-glow-pulse bg-neon-pink/10 shadow-glow-pink ring-neon-pink'
+              : 'bg-white/5 ring-white/10'
+          "
         >
-          @if (cellText(cell); as text) {
-            <span class="animate-pop drop-shadow-[0_0_10px_currentColor]">{{ text }}</span>
-          }
-        </button>
+          <div class="font-display text-3xl leading-none font-black" [class]="mark === 'X' ? 'text-neon-cyan' : 'text-neon-pink'" aria-hidden="true">{{ glyph(mark) }}</div>
+          <div class="mt-1 text-sm font-semibold text-white/80">{{ playerName(mark) }}</div>
+          <div class="h-4 text-xs text-white/60" aria-live="polite">
+            @if (mark === "O" && robotTurn()) {
+              Pensando<span class="inline-block animate-dots overflow-hidden align-bottom">...</span>
+            } @else if (playing() && turn() === mark) {
+              ¡Tu turno!
+            }
+          </div>
+        </div>
       }
     </div>
 
+    <!-- Tablero -->
+    <div class="relative mx-auto mt-5 w-full max-w-xs">
+      <div class="grid aspect-square grid-cols-3 gap-2.5" [class.animate-wiggle]="outcome() === 'draw'" role="group" aria-label="Tablero" (keydown)="onBoardKey($event)">
+        @for (cell of board(); track $index; let i = $index) {
+          <button
+            type="button"
+            class="group relative grid aspect-square place-items-center rounded-2xl text-5xl ring-1 transition enabled:hover:bg-white/10 enabled:active:scale-90 disabled:cursor-default"
+            [class]="cellClass(cell, i)"
+            [attr.aria-label]="cellLabel(i)"
+            [attr.tabindex]="i === focusIndex() ? 0 : -1"
+            [disabled]="!canPlay()"
+            (click)="focusIndex.set(i); makeHumanMove(i)"
+          >
+            @if (cellGlyph(cell); as text) {
+              <span class="animate-bounce-in font-display font-black drop-shadow-[0_0_10px_currentColor]">{{ text }}</span>
+            } @else if (canPlay()) {
+              <!-- Ficha fantasma de quien tiene el turno -->
+              <span
+                class="font-display font-black opacity-0 transition group-hover:opacity-30 group-focus-visible:opacity-30"
+                [class]="turn() === 'X' ? 'text-neon-cyan' : 'text-neon-pink'"
+                aria-hidden="true"
+                >{{ glyph(turn()) }}</span
+              >
+            }
+          </button>
+        }
+      </div>
+
+      <!-- Línea ganadora -->
+      @if (winSegment(); as seg) {
+        <svg class="pointer-events-none absolute inset-0 size-full" viewBox="0 0 3 3" aria-hidden="true">
+          <line
+            class="animate-draw"
+            [attr.x1]="seg.a.x"
+            [attr.y1]="seg.a.y"
+            [attr.x2]="seg.b.x"
+            [attr.y2]="seg.b.y"
+            pathLength="1"
+            stroke="#a3e635"
+            stroke-width="0.09"
+            stroke-linecap="round"
+            stroke-dasharray="1"
+            style="filter: drop-shadow(0 0 0.08px #a3e635)"
+          />
+        </svg>
+      }
+    </div>
+    <p class="mt-2 text-center text-xs text-white/50">Teclas 1–9 (como el teclado numérico) o flechas + Enter</p>
+
     <!-- Resultado -->
-    @if (message) {
-      <p class="mt-6 animate-pop text-center font-display text-xl font-bold" role="status">{{ message }}</p>
+    @if (message(); as text) {
+      <div class="mt-5 animate-bounce-in rounded-2xl bg-white/5 p-4 text-center ring-1 ring-white/10" role="status">
+        <div class="text-4xl" aria-hidden="true">{{ resultEmoji() }}</div>
+        <p class="mt-1 font-display text-xl font-bold">{{ text }}</p>
+      </div>
     }
 
     <!-- Acciones -->
-    <div class="mt-6 flex flex-wrap justify-center gap-3">
+    <div class="mt-5 flex flex-wrap justify-center gap-3">
       @if (!playing()) {
-        <button appButton type="button" (click)="startGame()">{{ message ? "Jugar otra vez" : "Empezar" }}</button>
+        <button appButton type="button" size="lg" (click)="startGame()">{{ message() ? "Jugar otra vez" : "¡Empezar!" }}</button>
       } @else {
         <button appButton variant="success" type="button" (click)="restartGame()">Reiniciar</button>
         <button appButton variant="danger" type="button" (click)="endGame()">Terminar</button>
       }
     </div>
 
+    <!-- Marcador -->
+    <section class="mt-6" aria-label="Marcador">
+      <div class="grid grid-cols-4 gap-2">
+        <app-stat [label]="mode() === 'robot' ? 'Ganadas' : 'J1'" [value]="score().wins" accent="cyan" />
+        <app-stat [label]="mode() === 'robot' ? 'Perdidas' : 'J2'" [value]="score().losses" accent="pink" />
+        <app-stat label="Empates" [value]="score().draws" accent="violet" />
+        <app-stat
+          [label]="mode() === 'robot' ? 'Racha 🔥' : 'Mejor'"
+          [value]="mode() === 'robot' ? score().streak : score().best"
+          accent="amber"
+          [active]="mode() === 'robot' && score().streak >= 3"
+        />
+      </div>
+      @if (mode() === "robot" && score().best > 0) {
+        <p class="mt-2 text-center text-xs text-white/60">Mejor racha: {{ score().best }}</p>
+      }
+    </section>
+
     <!-- Ajustes -->
-    <div class="mt-8 border-t border-white/10 pt-4">
+    <div class="mt-6 border-t border-white/10 pt-4">
       <button
         type="button"
         class="flex w-full items-center justify-between rounded-lg py-2 text-left font-semibold"
@@ -67,19 +136,22 @@
 
       @if (settingsOpen()) {
         <div id="ajustes" class="mt-3 animate-fade-up space-y-5">
-          <app-toggle [(ngModel)]="computerFirst">El robot empieza primero</app-toggle>
+          <div>
+            <span class="mb-1.5 block text-sm font-medium text-white/80">Fichas</span>
+            <app-segmented label="Tema de fichas" [options]="themeOptions" [ngModel]="themeId()" (ngModelChange)="setTheme($event)" />
+          </div>
 
-          <label class="block">
-            <span class="mb-1.5 block text-sm font-medium text-white/80">Nivel de dificultad</span>
-            <select class="app-input" [(ngModel)]="difficulty">
-              @for (item of dataLevels; track item.value) {
-                <option [value]="item.value">{{ item.text }}</option>
-              }
-            </select>
-          </label>
+          @if (mode() === "robot") {
+            <app-toggle [(ngModel)]="computerFirst" (ngModelChange)="persist()">El robot empieza primero</app-toggle>
+
+            <div>
+              <span class="mb-1.5 block text-sm font-medium text-white/80">Nivel de dificultad</span>
+              <app-segmented label="Nivel de dificultad" [options]="levelOptions" [(ngModel)]="difficulty" (ngModelChange)="persist()" />
+            </div>
+          }
 
           <div class="space-y-2">
-            <app-toggle [(ngModel)]="allowSoundEndGame">Sonido al terminar el juego</app-toggle>
+            <app-toggle [(ngModel)]="allowSoundEndGame" (ngModelChange)="persist()">Sonido al terminar el juego</app-toggle>
             <input
               type="range"
               min="0"
@@ -89,11 +161,12 @@
               aria-label="Volumen del sonido al terminar"
               [disabled]="!allowSoundEndGame"
               [(ngModel)]="volumeSoundEndGame"
+              (ngModelChange)="persist()"
             />
           </div>
 
           <div class="space-y-2">
-            <app-toggle [(ngModel)]="allowSoundThemeGame">Sonido durante el juego</app-toggle>
+            <app-toggle [(ngModel)]="allowSoundThemeGame" (ngModelChange)="persist()">Sonido durante el juego</app-toggle>
             <input
               type="range"
               min="0"
@@ -103,8 +176,14 @@
               aria-label="Volumen del sonido durante el juego"
               [disabled]="!allowSoundThemeGame"
               [(ngModel)]="volumeSoundThemeGame"
+              (ngModelChange)="persist()"
             />
           </div>
+
+          <button appButton variant="ghost" size="sm" type="button" (click)="resetScore()">
+            <lucide-icon [img]="icons.Trash2" [size]="16" />
+            {{ confirmReset() ? "¿Seguro? Pulsa otra vez para borrar" : "Borrar marcador" }}
+          </button>
         </div>
       }
     </div>

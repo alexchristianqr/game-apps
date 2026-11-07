@@ -13,11 +13,11 @@
 | Catálogo de juegos     | `/home`                          | [SPEC-003](features/SPEC-003-catalogo.md)      |
 | Tres en línea          | `/games/tic-tac-toe`             | [SPEC-004](features/SPEC-004-tres-en-linea.md) |
 | Audio de los juegos    | —                                | [SPEC-005](features/SPEC-005-audio.md)         |
+| Tetris                 | `/games/tetris`                  | [SPEC-006](features/SPEC-006-tetris.md)        |
 
 ## Juegos previstos
 
-`smart-toy`, `basketball` y `tetris` figuran en el registro con `enabled: false`: aparecen deshabilitados en Inicio y no tienen ruta. Al implementar uno se crea su `SPEC-NNN` y se activa en el
-registro.
+`smart-toy` y `basketball` figuran en el registro con `enabled: false`: aparecen deshabilitados en Inicio y no tienen ruta. Al implementar uno se crea su `SPEC-NNN` y se activa en el registro.
 
 ## Fuera de alcance
 
