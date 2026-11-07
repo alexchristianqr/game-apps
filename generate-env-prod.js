@@ -17,7 +17,7 @@ const firebaseConfig = {
   databaseURL: env["ANGULAR_FIREBASE_DATABASE_URL"]
 };
 
-// Sin estas no funciona ni Auth ni Firestore: un fallo de configuración no se publica (P9).
+// Sin estas no funciona ni Auth ni Firestore: un fallo de configuración no se publica (P10).
 // Las demás son opcionales (analítica, Realtime Database).
 const required = ["ANGULAR_FIREBASE_API_KEY", "ANGULAR_FIREBASE_AUTH_DOMAIN", "ANGULAR_FIREBASE_PROJECT_ID", "ANGULAR_FIREBASE_APP_ID"];
 const missing = required.filter((name) => !env[name]);

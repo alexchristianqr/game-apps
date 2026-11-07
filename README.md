@@ -2,7 +2,9 @@
 
 Aplicación de juegos clásicos con Angular 21 (LTS) + Firebase 12 (`@angular/fire`) + Angular Material + NgRx.
 
-Requiere Node `^20.19`, `^22.12` o `>=24`.
+Requiere Node `>=22` (ver `.nvmrc`) y npm `>=10`.
+
+Las reglas, la arquitectura y las especificaciones viven en [`.specs/`](.specs/); empieza por [`AGENTS.md`](AGENTS.md).
 
 ## Desarrollo local
 
@@ -15,7 +17,7 @@ npm start
 ## Build de producción
 
 ```bash
-node generate-env-prod.js   # genera src/environments/environment.production.ts desde .env
+node generate-env-prod.js   # genera src/environments/environment.{production,development}.ts desde .env
 npm run build               # salida en dist/
 ```
 
@@ -24,6 +26,14 @@ npm run build               # salida en dist/
 ```bash
 npm test   # Vitest
 ```
+
+## Calidad
+
+```bash
+npm run lint:check && npm run format:check && npm run type-check && npm test && npm run build
+```
+
+Se publica en GitHub Pages al fusionar un PR de `dev` a `main` (ver [`.specs/04-workflows.md`](.specs/04-workflows.md)).
 
 ## Agregar un juego
 
