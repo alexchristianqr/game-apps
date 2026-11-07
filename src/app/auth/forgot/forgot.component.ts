@@ -6,7 +6,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../auth.service";
@@ -19,11 +19,19 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ["./forgot.component.scss"]
 })
 export class ForgotComponent {
+  private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
+
   formGroup: FormGroup;
   submitted: boolean | undefined;
   loading: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService, private snackBar: MatSnackBar) {
+  constructor() {
+    const formBuilder = this.formBuilder;
+
     this.formGroup = formBuilder.group({
       email: formBuilder.control(null, [Validators.required, Validators.email])
     });

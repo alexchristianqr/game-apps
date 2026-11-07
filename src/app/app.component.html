@@ -11,15 +11,15 @@
 
 <mat-toolbar color="accent" class="border-0">
   @if (isAuthenticated()) {
-  <button mat-button routerLink="/home"><mat-icon>home</mat-icon>Inicio</button>
+    <button mat-button routerLink="/home"><mat-icon>home</mat-icon>Inicio</button>
   }
 
   <span class="example-spacer"></span>
   @if (isAuthenticated()) {
-  <button mat-button (click)="logout()">
-    <mat-icon>exit_to_app</mat-icon>
-    Salir
-  </button>
+    <button mat-button (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      Salir
+    </button>
   }
 </mat-toolbar>
 

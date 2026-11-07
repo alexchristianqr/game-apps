@@ -6,7 +6,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { AuthService } from "../auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
@@ -17,12 +17,17 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   styleUrls: ["./login.component.scss"]
 })
 export class LoginComponent {
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
+
   formGroup: FormGroup;
   submitted: boolean | undefined;
   loading: boolean = false;
   hidePwd = true;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+  constructor() {
+    const formBuilder = this.formBuilder;
+
     this.formGroup = formBuilder.group({
       email: formBuilder.control("invitado@gmail.com", [Validators.required, Validators.email]),
       password: formBuilder.control("Invitado2023.", [Validators.required])

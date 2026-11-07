@@ -24,16 +24,17 @@
           <mat-error>Ingrese una contraseña válida</mat-error>
         </mat-form-field>
         @if (submitted === false) {
-        <mat-error>El usuario no se ha registrado, vuelve a intentarlo</mat-error>
+          <mat-error>El usuario no se ha registrado, vuelve a intentarlo</mat-error>
         }
       </mat-grid-list>
     </form>
   </mat-card-content>
   <mat-card-footer>
     @if (!loading) {
-    <button mat-raised-button color="primary" (click)="onSubmit()">Registar</button>
-    } @if (loading) {
-    <button mat-raised-button color="primary" [disabled]="true">Registrando...</button>
+      <button mat-raised-button color="primary" (click)="onSubmit()">Registar</button>
+    }
+    @if (loading) {
+      <button mat-raised-button color="primary" [disabled]="true">Registrando...</button>
     }
   </mat-card-footer>
   <mat-card-footer>

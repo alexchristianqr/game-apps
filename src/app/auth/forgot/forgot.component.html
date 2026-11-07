@@ -11,16 +11,17 @@
           <mat-error>Ingrese un email válido</mat-error>
         </mat-form-field>
         @if (submitted === false) {
-        <mat-error>No se ha enviado el enlace</mat-error>
+          <mat-error>No se ha enviado el enlace</mat-error>
         }
       </mat-grid-list>
     </form>
   </mat-card-content>
   <mat-card-footer>
     @if (!loading) {
-    <button mat-raised-button color="primary" (click)="onSubmit()">Enviar enlace</button>
-    } @if (loading) {
-    <button mat-raised-button color="primary" [disabled]="true">Enviando...</button>
+      <button mat-raised-button color="primary" (click)="onSubmit()">Enviar enlace</button>
+    }
+    @if (loading) {
+      <button mat-raised-button color="primary" [disabled]="true">Enviando...</button>
     }
   </mat-card-footer>
   <mat-card-footer>

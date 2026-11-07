@@ -13,34 +13,35 @@
   </mat-card-header>
 
   @if (!playing) {
-  <mat-card-content>
-    <mat-grid-list cols="1" rowHeight="12:3">
-      <mat-grid-tile>
-        <div style="text-align: center">
-          @if (!playing) {
-          <button mat-raised-button color="primary" (click)="startGame(true)">Empezar</button>
-          }
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
-  } @if (playing) {
-  <mat-card-content>
-    <mat-grid-list cols="2" rowHeight="12:6">
-      <mat-grid-tile>
-        <div style="text-align: center">
+    <mat-card-content>
+      <mat-grid-list cols="1" rowHeight="12:3">
+        <mat-grid-tile>
+          <div style="text-align: center">
+            @if (!playing) {
+              <button mat-raised-button color="primary" (click)="startGame(true)">Empezar</button>
+            }
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+  }
+  @if (playing) {
+    <mat-card-content>
+      <mat-grid-list cols="2" rowHeight="12:6">
+        <mat-grid-tile>
+          <div style="text-align: center">
+            @if (playing) {
+              <button mat-raised-button color="accent" (click)="restartGame(true)">Reiniciar</button>
+            }
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
           @if (playing) {
-          <button mat-raised-button color="accent" (click)="restartGame(true)">Reiniciar</button>
+            <button mat-raised-button color="warn" (click)="endGame()">Terminar</button>
           }
-        </div>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        @if (playing) {
-        <button mat-raised-button color="warn" (click)="endGame()">Terminar</button>
-        }
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
   }
 
   <mat-card-content>
@@ -67,13 +68,20 @@
       <mat-grid-tile>
         <div class="parent">
           @for (field of gameState; track field; let i = $index) {
-          <div (click)="makeHumanMove(i)">
-            <div [class]="'div' + i">
-              <div class="playing" style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%">
-                {{ field === "X" || field === "O" ? field : "" }}
+            <div
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="'Casilla ' + (i + 1)"
+              (click)="makeHumanMove(i)"
+              (keydown.enter)="makeHumanMove(i)"
+              (keydown.space)="makeHumanMove(i); $event.preventDefault()"
+            >
+              <div [class]="'div' + i">
+                <div class="playing" style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%">
+                  {{ field === "X" || field === "O" ? field : "" }}
+                </div>
               </div>
             </div>
-          </div>
           }
         </div>
       </mat-grid-tile>
@@ -81,17 +89,17 @@
   </mat-card-content>
 
   @if (!playing && winner) {
-  <mat-card-content>
-    <mat-grid-list cols="1" rowHeight="9:2">
-      <mat-grid-tile>
-        @if (!playing) {
-        <div>
-          <div style="font-weight: bold; font-size: 1.25rem">{{ winner }}</div>
-        </div>
-        }
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
+    <mat-card-content>
+      <mat-grid-list cols="1" rowHeight="9:2">
+        <mat-grid-tile>
+          @if (!playing) {
+            <div>
+              <div style="font-weight: bold; font-size: 1.25rem">{{ winner }}</div>
+            </div>
+          }
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
   }
 
   <mat-card-content>
@@ -121,7 +129,7 @@
                   <mat-label>Nivel de Dificultad</mat-label>
                   <mat-select [(ngModel)]="difficulty">
                     @for (item of dataLevels; track item) {
-                    <mat-option [value]="item.value">{{ item.text }}</mat-option>
+                      <mat-option [value]="item.value">{{ item.text }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>

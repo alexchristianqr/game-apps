@@ -26,16 +26,17 @@
           </div>
         </div>
         @if (submitted === false) {
-        <mat-error>El usuario o la contraseña no es válido</mat-error>
+          <mat-error>El usuario o la contraseña no es válido</mat-error>
         }
       </mat-grid-list>
     </form>
   </mat-card-content>
   <mat-card-footer>
     @if (!loading) {
-    <button mat-raised-button color="primary" (click)="onSubmit()">Entrar</button>
-    } @if (loading) {
-    <button mat-raised-button color="primary" disabled>Entrando...</button>
+      <button mat-raised-button color="primary" (click)="onSubmit()">Entrar</button>
+    }
+    @if (loading) {
+      <button mat-raised-button color="primary" disabled>Entrando...</button>
     }
   </mat-card-footer>
   <mat-card-footer>
