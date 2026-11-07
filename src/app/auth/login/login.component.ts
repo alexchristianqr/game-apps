@@ -1,20 +1,17 @@
 import { RouterLink } from "@angular/router";
+import { Eye, EyeOff, LoaderCircle, LucideAngularModule } from "lucide-angular";
+import { ButtonDirective } from "../../core/ui/button/button.directive";
+import { FieldComponent } from "../../core/ui/field/field.component";
+import { PanelComponent } from "../../core/ui/panel/panel.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatCardModule } from "@angular/material/card";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { Component, inject } from "@angular/core";
 import { AuthService } from "../auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+  imports: [ReactiveFormsModule, RouterLink, LucideAngularModule, ButtonDirective, FieldComponent, PanelComponent],
   selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"]
+  templateUrl: "./login.component.html"
 })
 export class LoginComponent {
   private formBuilder = inject(FormBuilder);
@@ -24,6 +21,7 @@ export class LoginComponent {
   submitted: boolean | undefined;
   loading: boolean = false;
   hidePwd = true;
+  readonly icons = { Eye, EyeOff, LoaderCircle };
 
   constructor() {
     const formBuilder = this.formBuilder;

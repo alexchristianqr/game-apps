@@ -4,8 +4,8 @@ Lo innegociable. Si un cambio los viola, se discute antes de escribir código.
 
 - **P1 — Aplicación estática.** Sin backend propio ni SSR. Lo único remoto es Firebase (Auth y Firestore), que se usa directo desde el navegador.
 - **P2 — Un solo registro de juegos.** `games/games.registry.ts` es la única fuente de qué juegos existen. La ruta y la tarjeta de Inicio se derivan de él; ninguna se escribe a mano.
-- **P3 — Un juego, un chunk.** Cada juego es un componente standalone cargado de forma perezosa (`loadComponent`) y su ruta está protegida por `authGuard`.
-- **P4 — Capas con dirección única.** `core/services → user → auth → core/guards → games / pages → app`. Una capa nunca importa de otra que esté a su derecha. Un juego no conoce `auth/`, `user/` ni
+- **P3 — Un juego, un chunk, abierto.** Cada juego es un componente standalone cargado de forma perezosa (`loadComponent`) y su ruta es pública: jugar no exige sesión (ADR-007).
+- **P4 — Capas con dirección única.** `core/services · core/ui → user → auth → games / pages → app`. Una capa nunca importa de otra que esté a su derecha. Un juego no conoce `auth/`, `user/` ni
   `pages/`.
 - **P5 — TypeScript estricto.** Sin `any` ni `@ts-ignore` nuevos (la deuda existente está listada en `01-product.md`). Plantillas con `strictTemplates`.
 - **P6 — Estado global mínimo.** NgRx solo guarda lo que dos partes no relacionadas comparten (hoy, si hay sesión). El resto es estado local del componente (señales o propiedades).

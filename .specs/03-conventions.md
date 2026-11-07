@@ -6,7 +6,7 @@ ESLint, Prettier y `tsc` son la autoridad sobre el formato. Aquí, lo que no pue
 
 | Elemento             | Convención                                               | Ejemplo                           |
 | -------------------- | -------------------------------------------------------- | --------------------------------- |
-| Componente           | `<nombre>.component.{ts,html,scss}`, selector `app-*`    | `login.component.ts`, `app-login` |
+| Componente           | `<nombre>.component.{ts,html}`, selector `app-*`         | `login.component.ts`, `app-login` |
 | Servicio             | `<nombre>.service.ts`, `providedIn: 'root'`              | `audio.service.ts`                |
 | Guard / interceptor  | `<nombre>.guard.ts` (función `…Guard`)                   | `authenticate.guard.ts`           |
 | Acciones/estado NgRx | `<feature>.{actions,reducer,selectors,state,effects}.ts` | `auth.reducer.ts`                 |
@@ -56,3 +56,9 @@ En español, explican **por qué**, no qué hace la línea.
 - Mensajes en inglés con prefijo convencional (`feat:`, `fix:`, `chore:`, `ci:`, `docs:`, `test:`), una línea de resumen.
 - El hook `pre-commit` ejecuta lint-staged (ESLint + Prettier). No se usa `--no-verify`.
 - Un commit no mezcla cambio de comportamiento con reformateo masivo.
+
+## Estilos
+
+- Tailwind v4: clases completas en la plantilla (nunca interpoladas con `{{ }}` parciales como `bg-{{ color }}-500`); colores y animaciones del tema en `@theme` de `styles.css`.
+- Sin SCSS por componente: si un patrón se repite, se promueve a primitiva de `core/ui/` o a `@utility`/`@layer components` en `styles.css`.
+- Toda animación respeta `prefers-reduced-motion` (ya cubierto globalmente en `styles.css`).

@@ -7,5 +7,7 @@
   "bracketSpacing": true,
   "semi": true,
   "endOfLine": "auto",
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/styles.css"
 }

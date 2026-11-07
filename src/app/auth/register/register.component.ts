@@ -1,21 +1,18 @@
 import { RouterLink } from "@angular/router";
+import { Eye, EyeOff, LoaderCircle, LucideAngularModule } from "lucide-angular";
+import { ButtonDirective } from "../../core/ui/button/button.directive";
+import { FieldComponent } from "../../core/ui/field/field.component";
+import { PanelComponent } from "../../core/ui/panel/panel.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatCardModule } from "@angular/material/card";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
 import { Component, OnInit, inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+  imports: [ReactiveFormsModule, RouterLink, LucideAngularModule, ButtonDirective, FieldComponent, PanelComponent],
   selector: "app-register",
-  templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"]
+  templateUrl: "./register.component.html"
 })
 export class RegisterComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
@@ -27,6 +24,7 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted: boolean | undefined;
   hidePwd = true;
+  readonly icons = { Eye, EyeOff, LoaderCircle };
 
   constructor() {
     const formBuilder = this.formBuilder;

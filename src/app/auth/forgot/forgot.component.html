@@ -1,30 +1,26 @@
-<mat-card>
-  <mat-card-header>
-    <h1>¿Olvidaste tu contraseña?</h1>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="formGroup">
-      <mat-grid-list cols="2" rowHeight="2:1">
-        <mat-form-field appearance="fill">
-          <mat-label>Email</mat-label>
-          <input type="email" matInput formControlName="email" name="email" required />
-          <mat-error>Ingrese un email válido</mat-error>
-        </mat-form-field>
-        @if (submitted === false) {
-          <mat-error>No se ha enviado el enlace</mat-error>
+<div class="mx-auto max-w-md">
+  <app-panel>
+    <h1 class="mb-6 text-gradient text-center font-display text-2xl font-black">¿Olvidaste tu contraseña?</h1>
+
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="space-y-4">
+      <app-field label="Email" [error]="submitted && formGroup.controls['email'].invalid ? 'Ingrese un email válido' : null">
+        <input type="email" class="app-input" formControlName="email" name="email" autocomplete="email" required />
+      </app-field>
+
+      @if (submitted === false) {
+        <p class="text-sm text-rose-400" role="alert">No se ha enviado el enlace</p>
+      }
+
+      <button appButton class="w-full" type="submit" [disabled]="loading">
+        @if (loading) {
+          <lucide-icon [img]="icons.LoaderCircle" [size]="18" class="animate-spin" />
+          Enviando...
+        } @else {
+          Enviar enlace
         }
-      </mat-grid-list>
+      </button>
     </form>
-  </mat-card-content>
-  <mat-card-footer>
-    @if (!loading) {
-      <button mat-raised-button color="primary" (click)="onSubmit()">Enviar enlace</button>
-    }
-    @if (loading) {
-      <button mat-raised-button color="primary" [disabled]="true">Enviando...</button>
-    }
-  </mat-card-footer>
-  <mat-card-footer>
-    <div>Ya tengo una cuenta <a mat-button routerLink="/login">Iniciar sesión</a></div>
-  </mat-card-footer>
-</mat-card>
+
+    <p class="mt-6 text-center text-sm text-white/70">Ya tengo una cuenta <a routerLink="/login" class="text-neon-cyan hover:underline">Iniciar sesión</a></p>
+  </app-panel>
+</div>

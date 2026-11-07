@@ -1,0 +1,176 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/orbitron";
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Orbitron Variable", "Inter Variable", sans-serif;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+
+  --color-ink-950: #07051a;
+  --color-ink-900: #0b0820;
+  --color-ink-800: #14102f;
+  --color-ink-700: #1d1842;
+
+  --color-neon-cyan: #22d3ee;
+  --color-neon-pink: #f472b6;
+  --color-neon-violet: #a78bfa;
+  --color-neon-lime: #a3e635;
+  --color-neon-amber: #fbbf24;
+
+  --shadow-glow-cyan: 0 0 24px rgb(34 211 238 / 0.45);
+  --shadow-glow-pink: 0 0 24px rgb(244 114 182 / 0.45);
+  --shadow-glow-violet: 0 0 24px rgb(167 139 250 / 0.45);
+  --shadow-glow-lime: 0 0 24px rgb(163 230 53 / 0.45);
+  --shadow-glow-amber: 0 0 24px rgb(251 191 36 / 0.45);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pop: pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-glow-pulse: glow-pulse 1.6s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.5s ease-out both;
+  --animate-blob: blob 18s ease-in-out infinite alternate;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  @keyframes pop {
+    from {
+      transform: scale(0.3);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+  @keyframes fade-up {
+    from {
+      transform: translateY(16px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes blob {
+    from {
+      transform: translate(0, 0) scale(1);
+    }
+    to {
+      transform: translate(8vw, 6vh) scale(1.25);
+    }
+  }
+}
+
+@utility glass {
+  background: rgb(255 255 255 / 0.05);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(90deg, var(--color-neon-cyan), var(--color-neon-violet), var(--color-neon-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility bg-grid {
+  background-image: linear-gradient(rgb(167 139 250 / 0.08) 1px, transparent 1px), linear-gradient(90deg, rgb(167 139 250 / 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-ink-950);
+    color: #e8e6ff;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-neon-cyan);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+
+  button:not(:disabled),
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  /* Transición suave entre pantallas (View Transitions del router) */
+  ::view-transition-old(root) {
+    animation: 0.15s ease-in both fade-out;
+  }
+  ::view-transition-new(root) {
+    animation: 0.25s ease-out both fade-up;
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+}
+
+/* Quien lo pide no ve movimiento: P8 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@layer components {
+  .app-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    background: rgb(255 255 255 / 0.06);
+    padding: 0.7rem 0.9rem;
+    color: white;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .app-input::placeholder {
+    color: rgb(255 255 255 / 0.4);
+  }
+  .app-input:focus {
+    outline: none;
+    border-color: var(--color-neon-cyan);
+    box-shadow: 0 0 0 3px rgb(34 211 238 / 0.25);
+  }
+  .app-input option {
+    background: var(--color-ink-800);
+  }
+}

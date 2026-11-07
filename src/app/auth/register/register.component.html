@@ -1,43 +1,48 @@
-<mat-card>
-  <mat-card-header>
-    <h1>Crear usuario</h1>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="formGroup">
-      <mat-grid-list cols="2" rowHeight="2:1">
-        <mat-form-field appearance="fill">
-          <mat-label>Nombre completo</mat-label>
-          <input matInput formControlName="displayName" name="displayname" required />
-          <mat-error>Ingrese un nombre válido</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" name="email" required />
-          <mat-error>Ingrese un email válido</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Contraseña</mat-label>
-          <input matInput [type]="hidePwd ? 'password' : 'text'" formControlName="password" name="password" required />
-          <button mat-icon-button matSuffix (click)="hidePwd = !hidePwd" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePwd">
-            <mat-icon>{{ hidePwd ? "visibility_off" : "visibility" }}</mat-icon>
+<div class="mx-auto max-w-md">
+  <app-panel>
+    <h1 class="mb-6 text-gradient text-center font-display text-2xl font-black">Crear usuario</h1>
+
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="space-y-4">
+      <app-field label="Nombre completo" [error]="submitted && formGroup.controls['displayName'].invalid ? 'Ingrese un nombre válido' : null">
+        <input class="app-input" formControlName="displayName" name="displayname" autocomplete="name" required />
+      </app-field>
+
+      <app-field label="Email" [error]="submitted && formGroup.controls['email'].invalid ? 'Ingrese un email válido' : null">
+        <input type="email" class="app-input" formControlName="email" name="email" autocomplete="email" required />
+      </app-field>
+
+      <app-field label="Contraseña" [error]="submitted && formGroup.controls['password'].invalid ? 'Ingrese una contraseña de al menos 6 caracteres' : null">
+        <span class="relative block">
+          <input [type]="hidePwd ? 'password' : 'text'" class="app-input pr-12" formControlName="password" name="password" autocomplete="new-password" required />
+          <button
+            type="button"
+            class="absolute inset-y-0 right-0 grid w-11 place-items-center text-white/60 hover:text-white"
+            [attr.aria-label]="hidePwd ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            [attr.aria-pressed]="!hidePwd"
+            (click)="hidePwd = !hidePwd"
+          >
+            <lucide-icon [img]="hidePwd ? icons.EyeOff : icons.Eye" [size]="18" />
           </button>
-          <mat-error>Ingrese una contraseña válida</mat-error>
-        </mat-form-field>
-        @if (submitted === false) {
-          <mat-error>El usuario no se ha registrado, vuelve a intentarlo</mat-error>
+        </span>
+      </app-field>
+
+      @if (submitted === false) {
+        <p class="text-sm text-rose-400" role="alert">El usuario no se ha registrado, vuelve a intentarlo</p>
+      }
+
+      <button appButton class="w-full" type="submit" [disabled]="loading">
+        @if (loading) {
+          <lucide-icon [img]="icons.LoaderCircle" [size]="18" class="animate-spin" />
+          Registrando...
+        } @else {
+          Registrar
         }
-      </mat-grid-list>
+      </button>
     </form>
-  </mat-card-content>
-  <mat-card-footer>
-    @if (!loading) {
-      <button mat-raised-button color="primary" (click)="onSubmit()">Registar</button>
-    }
-    @if (loading) {
-      <button mat-raised-button color="primary" [disabled]="true">Registrando...</button>
-    }
-  </mat-card-footer>
-  <mat-card-footer>
-    <div>Ya tengo una cuenta <a mat-button routerLink="/login">Iniciar sesión</a></div>
-  </mat-card-footer>
-</mat-card>
+
+    <div class="mt-6 space-y-2 text-center text-sm text-white/70">
+      <p>Ya tengo una cuenta <a routerLink="/login" class="text-neon-cyan hover:underline">Iniciar sesión</a></p>
+      <p><a routerLink="/home" class="text-neon-pink hover:underline">Seguir jugando sin cuenta</a></p>
+    </div>
+  </app-panel>
+</div>

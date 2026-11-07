@@ -1,78 +1,54 @@
-// @ts-ignore
+// @ts-ignore -- la librería no trae tipos (deuda conocida en SPEC-004)
 import Minimax from "tic-tac-toe-minimax";
-
-const { GameStep } = Minimax;
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { FormsModule } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSelectModule } from "@angular/material/select";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatSliderModule } from "@angular/material/slider";
+import { ArrowLeft, ChevronDown, LucideAngularModule } from "lucide-angular";
 import { AudioService } from "../../core/services/audio/audio.service";
+import { CelebrationService } from "../../core/services/celebration/celebration.service";
+import { ButtonDirective } from "../../core/ui/button/button.directive";
+import { PanelComponent } from "../../core/ui/panel/panel.component";
+import { ToggleComponent } from "../../core/ui/toggle/toggle.component";
+import { Cell, emptyBoard, isFree, winningLine } from "./tic-tac-toe.logic";
 
-interface Level {
-  value: string;
-  text: string;
-}
-
-interface Board {
-  value: number;
-  bgColor: string;
-}
+const { GameStep } = Minimax;
 
 type Difficulty = "Easy" | "Normal" | "Hard";
+type Outcome = "huPlayer" | "aiPlayer" | "draw";
+
+interface GameStepResult {
+  board: Cell[];
+  winner?: Outcome | null;
+}
+
+const MESSAGES: Record<Outcome, string> = {
+  huPlayer: "¡Ganaste tú 🧑!",
+  aiPlayer: "¡Ganó el robot 🤖!",
+  draw: "¡Es un empate!"
+};
 
 @Component({
   selector: "app-tic-tac-toe",
-  imports: [
-    RouterLink,
-    FormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatSliderModule
-  ],
-  templateUrl: "./tic-tac-toe.component.html",
-  styleUrls: ["./tic-tac-toe.component.scss"]
+  imports: [RouterLink, FormsModule, LucideAngularModule, ButtonDirective, PanelComponent, ToggleComponent],
+  templateUrl: "./tic-tac-toe.component.html"
 })
-export class TicTacToeComponent implements OnInit, OnDestroy {
-  panelOpenState = false;
-  public gameBoard: Array<Board> = [
-    { value: 0, bgColor: "div0" },
-    { value: 1, bgColor: "div1" },
-    { value: 2, bgColor: "div2" },
-    { value: 3, bgColor: "div3" },
-    { value: 4, bgColor: "div4" },
-    { value: 5, bgColor: "div5" },
-    { value: 6, bgColor: "div6" },
-    { value: 7, bgColor: "div7" },
-    { value: 8, bgColor: "div8" }
-  ];
-  public gameState: Array<any> = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  public winner: string | undefined;
-  public playing = false;
-  public dataLevels: Level[] = [
+export class TicTacToeComponent implements OnDestroy {
+  public readonly icons = { ArrowLeft, ChevronDown };
+
+  public readonly board = signal<Cell[]>(emptyBoard());
+  public readonly playing = signal(false);
+  public readonly outcome = signal<Outcome | null>(null);
+  public readonly winLine = signal<number[]>([]);
+  /** Verdadero mientras el robot "piensa" (los 250 ms entre jugadas). */
+  public readonly robotTurn = signal(false);
+  public readonly settingsOpen = signal(false);
+
+  public readonly dataLevels: { value: Difficulty; text: string }[] = [
     { value: "Easy", text: "Fácil" },
     { value: "Normal", text: "Normal" },
     { value: "Hard", text: "Difícil" }
   ];
   public difficulty: Difficulty = "Normal";
-  breakpoint: number = 1;
-  breakpoint2: number = 8;
-  breakpoint3: number = 6;
 
   // Ajustes del juego
   public computerFirst = true;
@@ -82,76 +58,53 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   public volumeSoundThemeGame = 25;
 
   private readonly audio = inject(AudioService);
+  private readonly celebration = inject(CelebrationService);
+  private robotTimer: ReturnType<typeof setTimeout> | undefined;
 
-  ngOnInit() {
-    this.breakpoint = window.innerWidth <= 319 ? 3 : 1;
+  public get message(): string | null {
+    const outcome = this.outcome();
+    return outcome ? MESSAGES[outcome] : null;
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
+    clearTimeout(this.robotTimer);
     this.stopSounds();
   }
 
-  public onResize(event: Event) {
-    const w = event.target as Window;
-    this.breakpoint = w.innerWidth <= 319 ? 2 : 1;
+  public cellLabel(index: number): string {
+    const cell = this.board()[index];
+    return `Casilla ${index + 1}, ${isFree(cell) ? "vacía" : cell}`;
   }
 
-  public formatLabel(value: number): string {
-    if (value >= 1000) {
-      return Math.round(value / 1000) + "k";
-    }
-
-    return `${value}`;
+  /** Colores de la casilla: ganadora, X (cian), O (rosa) o vacía. */
+  public cellClass(cell: Cell, index: number): string {
+    if (this.winLine().includes(index)) return "bg-neon-lime/20 ring-neon-lime shadow-glow-lime text-white";
+    const color = cell === "X" ? "text-neon-cyan" : cell === "O" ? "text-neon-pink" : "";
+    return `bg-white/5 ring-white/10 ${color}`;
   }
 
-  /**
-   * Jugar
-   * @param toggle
-   * @param cb
-   */
+  public cellText(cell: Cell): string {
+    return isFree(cell) ? "" : cell;
+  }
 
-  public clickPlayGame(toggle: boolean = false, cb?: Function): void {
-    this.panelOpenState = false;
-    this.gameBoard = [
-      { value: 0, bgColor: "div0" },
-      { value: 1, bgColor: "div1" },
-      { value: 2, bgColor: "div2" },
-      { value: 3, bgColor: "div3" },
-      { value: 4, bgColor: "div4" },
-      { value: 5, bgColor: "div5" },
-      { value: 6, bgColor: "div6" },
-      { value: 7, bgColor: "div7" },
-      { value: 8, bgColor: "div8" }
-    ];
-    this.gameState = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    this.winner = undefined;
-    if (cb) cb();
-    this.playing = toggle;
+  public startGame(): void {
+    this.resetBoard(true);
+    if (this.allowSoundThemeGame) this.takeSoundThemeGame();
+    if (this.computerFirst) this.makeComputerMove();
+  }
+
+  public restartGame(): void {
+    this.audio.stopLoop();
+    this.startGame();
   }
 
   public endGame(): void {
-    this.clickPlayGame(false, () => {
-      this.stopSounds();
-    });
+    this.resetBoard(false);
+    this.stopSounds();
   }
 
   public stopSounds(): void {
     this.audio.stopAll();
-  }
-
-  public restartGame(toggle: boolean): void {
-    this.audio.stopLoop();
-    this.clickPlayGame(true, () => {
-      if (this.allowSoundThemeGame) this.takeSoundThemeGame();
-      if (toggle && this.computerFirst) this.makeComputerMove();
-    });
-  }
-
-  public startGame(toggle: boolean): void {
-    this.clickPlayGame(toggle, () => {
-      if (this.allowSoundThemeGame) this.takeSoundThemeGame();
-      if (toggle && this.computerFirst) this.makeComputerMove();
-    });
   }
 
   public takeSoundThemeGame(): void {
@@ -163,46 +116,39 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.audio.playEffect("assets/sounds/end_game.mp3", this.volumeSoundEndGame);
   }
 
-  /**
-   * Turno del humano
-   * @param field
-   */
-  public makeHumanMove(field: number): void {
-    if (!this.playing || typeof this.gameState[field] !== "number") {
-      return;
-    }
+  /** Turno del humano */
+  public makeHumanMove(index: number): void {
+    if (!this.playing() || this.robotTurn() || !isFree(this.board()[index])) return;
 
-    this.gameState[field] = "X";
-    setTimeout(() => {
-      this.makeComputerMove();
-    }, 250);
+    this.board.update((b) => b.map((cell, i) => (i === index ? "X" : cell)));
+    this.robotTurn.set(true);
+    this.robotTimer = setTimeout(() => this.makeComputerMove(), 250);
   }
 
-  /**
-   * Turno de la computadora
-   * @private
-   */
+  private resetBoard(playing: boolean): void {
+    clearTimeout(this.robotTimer);
+    this.settingsOpen.set(false);
+    this.board.set(emptyBoard());
+    this.outcome.set(null);
+    this.winLine.set([]);
+    this.robotTurn.set(false);
+    this.playing.set(playing);
+  }
+
+  /** Turno de la computadora */
   private makeComputerMove(): void {
-    const symbols = {
-      huPlayer: "X",
-      aiPlayer: "O"
-    };
-
-    const winnerMapping: { [index: string]: any } = {
-      huPlayer: "¡Ganaste tú 🧑!",
-      aiPlayer: "¡Ganó el robot 🤖!",
-      draw: "¡Es un empate!"
-    };
-
-    const result = GameStep(this.gameState, symbols, this.difficulty);
-    this.gameState = result.board;
+    const result: GameStepResult = GameStep(this.board(), { huPlayer: "X", aiPlayer: "O" }, this.difficulty);
+    this.board.set(result.board);
+    this.robotTurn.set(false);
 
     if (!result.winner) return;
 
-    this.winner = winnerMapping[result.winner];
-    this.playing = false;
+    this.outcome.set(result.winner);
+    this.winLine.set(winningLine(result.board) ?? []);
+    this.playing.set(false);
 
     this.audio.stopLoop();
     if (this.allowSoundEndGame) this.takeSoundEndGame();
+    if (result.winner === "huPlayer") void this.celebration.celebrate();
   }
 }

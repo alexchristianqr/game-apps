@@ -1,19 +1,43 @@
-<mat-card>
-  <mat-card-header>
-    <div class="h2 my-3">Mis aplicaciones</div>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="row">
-      @for (game of games; track game.id) {
-        <div class="col col-6">
-          <mat-card-content>
-            <button mat-icon-button color="primary" [routerLink]="['/games', game.id]" [disabled]="!game.enabled">
-              <mat-icon>{{ game.icon }}</mat-icon>
-            </button>
-            <div>{{ game.title }}</div>
-          </mat-card-content>
-        </div>
-      }
-    </div>
-  </mat-card-content>
-</mat-card>
+<section class="mb-12 text-center">
+  <p class="mb-4 inline-flex animate-fade-up items-center gap-2 rounded-full bg-white/5 px-4 py-1.5 text-sm text-neon-cyan ring-1 ring-white/10">
+    <lucide-icon [img]="sparkles" [size]="16" />
+    100 % gratis · sin descargas
+  </p>
+  <h1 class="animate-fade-up font-display text-4xl leading-tight font-black sm:text-6xl">
+    Juega <span class="text-gradient">ya</span>,<br />
+    directo en tu navegador
+  </h1>
+  <p class="mx-auto mt-4 max-w-xl animate-fade-up text-white/70 [animation-delay:100ms]">Clásicos de siempre con un aire arcade. Elige un juego y empieza, sin registrarte.</p>
+  @if (firstPlayable) {
+    <a appButton size="lg" class="mt-8 animate-fade-up [animation-delay:200ms]" [routerLink]="['/games', firstPlayable.id]">Jugar ahora</a>
+  }
+</section>
+
+<section aria-labelledby="catalogo">
+  <h2 id="catalogo" class="mb-6 font-display text-2xl font-bold">Juegos</h2>
+  <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    @for (game of games; track game.id; let i = $index) {
+      <li class="animate-fade-up" [style.animation-delay.ms]="i * 80">
+        @if (game.enabled) {
+          <a [routerLink]="['/games', game.id]" class="glass group block h-full rounded-3xl p-5 transition duration-300 hover:-translate-y-1.5 hover:rotate-[0.6deg] {{ accents[game.accent].glow }}">
+            <span class="mb-4 grid size-16 place-items-center rounded-2xl bg-gradient-to-br text-ink-950 shadow-lg transition group-hover:scale-110 {{ accents[game.accent].icon }}">
+              <lucide-icon [img]="game.icon" [size]="32" />
+            </span>
+            <span class="block font-display text-lg font-bold">{{ game.title }}</span>
+            <span class="mt-1 block text-sm text-white/60">{{ game.description }}</span>
+            <span class="mt-4 inline-block text-sm font-semibold text-neon-cyan">Jugar →</span>
+          </a>
+        } @else {
+          <div class="h-full rounded-3xl p-5 opacity-60 grayscale glass" aria-disabled="true">
+            <span class="mb-4 grid size-16 place-items-center rounded-2xl bg-white/10 text-white/60">
+              <lucide-icon [img]="game.icon" [size]="32" />
+            </span>
+            <span class="block font-display text-lg font-bold">{{ game.title }}</span>
+            <span class="mt-1 block text-sm text-white/60">{{ game.description }}</span>
+            <span class="mt-4 inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide uppercase">Próximamente</span>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+</section>

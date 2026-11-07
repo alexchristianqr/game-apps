@@ -1,178 +1,112 @@
-<mat-card>
-  <mat-card-header class="my-3">
-    <div class="row">
-      <div class="col-2 my-auto">
-        <button mat-icon-button routerLink="/home" color="primary" size="small">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
+<div class="mx-auto max-w-md">
+  <app-panel>
+    <div class="mb-6 flex items-center justify-between">
+      <a appButton variant="ghost" size="sm" routerLink="/home" aria-label="Volver al inicio">
+        <lucide-icon [img]="icons.ArrowLeft" [size]="18" />
+      </a>
+      <h1 class="text-gradient font-display text-xl font-black">Tres en línea</h1>
+    </div>
+
+    <!-- Marcador y turno -->
+    <div class="mb-6 grid grid-cols-2 gap-3 text-center">
+      <div class="rounded-2xl bg-white/5 p-3 ring-1 ring-white/10 transition" [class.ring-neon-cyan]="playing() && !robotTurn()" [class.shadow-glow-cyan]="playing() && !robotTurn()">
+        <div class="font-display text-2xl font-black text-neon-cyan">X</div>
+        <div class="text-sm text-white/70">Tú</div>
       </div>
-      <div class="col-10 my-auto">
-        <div class="h4 float-end">Tres en linea</div>
+      <div class="rounded-2xl bg-white/5 p-3 ring-1 ring-white/10 transition" [class.ring-neon-pink]="playing() && robotTurn()" [class.shadow-glow-pink]="playing() && robotTurn()">
+        <div class="font-display text-2xl font-black text-neon-pink">O</div>
+        <div class="text-sm text-white/70">Robot</div>
       </div>
     </div>
-  </mat-card-header>
 
-  @if (!playing) {
-    <mat-card-content>
-      <mat-grid-list cols="1" rowHeight="12:3">
-        <mat-grid-tile>
-          <div style="text-align: center">
-            @if (!playing) {
-              <button mat-raised-button color="primary" (click)="startGame(true)">Empezar</button>
-            }
-          </div>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </mat-card-content>
-  }
-  @if (playing) {
-    <mat-card-content>
-      <mat-grid-list cols="2" rowHeight="12:6">
-        <mat-grid-tile>
-          <div style="text-align: center">
-            @if (playing) {
-              <button mat-raised-button color="accent" (click)="restartGame(true)">Reiniciar</button>
-            }
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          @if (playing) {
-            <button mat-raised-button color="warn" (click)="endGame()">Terminar</button>
+    <!-- Tablero -->
+    <div class="mx-auto grid aspect-square w-full max-w-xs grid-cols-3 gap-2" role="group" aria-label="Tablero">
+      @for (cell of board(); track $index; let i = $index) {
+        <button
+          type="button"
+          class="grid aspect-square place-items-center rounded-2xl font-display text-5xl font-black ring-1 transition enabled:hover:bg-white/10 enabled:active:scale-95 disabled:cursor-default"
+          [class]="cellClass(cell, i)"
+          [attr.aria-label]="cellLabel(i)"
+          [disabled]="!playing() || robotTurn()"
+          (click)="makeHumanMove(i)"
+        >
+          @if (cellText(cell); as text) {
+            <span class="animate-pop drop-shadow-[0_0_10px_currentColor]">{{ text }}</span>
           }
-        </mat-grid-tile>
-      </mat-grid-list>
-    </mat-card-content>
-  }
+        </button>
+      }
+    </div>
 
-  <mat-card-content>
-    <mat-grid-list cols="2" rowHeight="12:2">
-      <mat-grid-tile>
-        <div style="text-align: center">
-          <div class="h6">Tú: X</div>
-        </div>
-        <!--          <span>X</span>-->
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <div style="text-align: center">
-          <div class="h6">Robot: O</div>
-          <!--          <b>Robot:</b>-->
-          <!--          <span>O</span>-->
-          <!--          <div>Turno: 00:00</div>-->
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
+    <!-- Resultado -->
+    @if (message) {
+      <p class="mt-6 animate-pop text-center font-display text-xl font-bold" role="status">{{ message }}</p>
+    }
 
-  <mat-card-content>
-    <mat-grid-list [cols]="breakpoint" [rowHeight]="breakpoint2 + ':' + breakpoint3" (window:resize)="onResize($event)">
-      <mat-grid-tile>
-        <div class="parent">
-          @for (field of gameState; track field; let i = $index) {
-            <div
-              role="button"
-              tabindex="0"
-              [attr.aria-label]="'Casilla ' + (i + 1)"
-              (click)="makeHumanMove(i)"
-              (keydown.enter)="makeHumanMove(i)"
-              (keydown.space)="makeHumanMove(i); $event.preventDefault()"
-            >
-              <div [class]="'div' + i">
-                <div class="playing" style="align-items: center; display: flex; height: 100%; justify-content: center; width: 100%">
-                  {{ field === "X" || field === "O" ? field : "" }}
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
+    <!-- Acciones -->
+    <div class="mt-6 flex flex-wrap justify-center gap-3">
+      @if (!playing()) {
+        <button appButton type="button" (click)="startGame()">{{ message ? "Jugar otra vez" : "Empezar" }}</button>
+      } @else {
+        <button appButton variant="success" type="button" (click)="restartGame()">Reiniciar</button>
+        <button appButton variant="danger" type="button" (click)="endGame()">Terminar</button>
+      }
+    </div>
 
-  @if (!playing && winner) {
-    <mat-card-content>
-      <mat-grid-list cols="1" rowHeight="9:2">
-        <mat-grid-tile>
-          @if (!playing) {
-            <div>
-              <div style="font-weight: bold; font-size: 1.25rem">{{ winner }}</div>
-            </div>
-          }
-        </mat-grid-tile>
-      </mat-grid-list>
-    </mat-card-content>
-  }
+    <!-- Ajustes -->
+    <div class="mt-8 border-t border-white/10 pt-4">
+      <button
+        type="button"
+        class="flex w-full items-center justify-between rounded-lg py-2 text-left font-semibold"
+        [attr.aria-expanded]="settingsOpen()"
+        aria-controls="ajustes"
+        (click)="settingsOpen.set(!settingsOpen())"
+      >
+        Ajustes del juego
+        <lucide-icon [img]="icons.ChevronDown" [size]="20" class="transition" [class.rotate-180]="settingsOpen()" />
+      </button>
 
-  <mat-card-content>
-    <mat-accordion>
-      <mat-expansion-panel [(expanded)]="panelOpenState" (opened)="panelOpenState = true" (closed)="panelOpenState = false" style="background-color: #fce9f0">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <div>Ajustes del juego</div>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-card-content class="mx-0 px-0">
-          <p class="align-content-start my-0">
-            <span class="float-start">General</span>
-          </p>
+      @if (settingsOpen()) {
+        <div id="ajustes" class="mt-3 animate-fade-up space-y-5">
+          <app-toggle [(ngModel)]="computerFirst">El robot empieza primero</app-toggle>
 
-          <mat-divider></mat-divider>
+          <label class="block">
+            <span class="mb-1.5 block text-sm font-medium text-white/80">Nivel de dificultad</span>
+            <select class="app-input" [(ngModel)]="difficulty">
+              @for (item of dataLevels; track item.value) {
+                <option [value]="item.value">{{ item.text }}</option>
+              }
+            </select>
+          </label>
 
-          <div class="w-auto align-content-start my-3">
-            <div class="row">
-              <div class="col-12 my-2">
-                <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="computerFirst">El Robot empieza primero </mat-slide-toggle>
-                </div>
-              </div>
-              <div class="col-12 my-2">
-                <mat-form-field appearance="outline" class="float-start w-100">
-                  <mat-label>Nivel de Dificultad</mat-label>
-                  <mat-select [(ngModel)]="difficulty">
-                    @for (item of dataLevels; track item) {
-                      <mat-option [value]="item.value">{{ item.text }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
+          <div class="space-y-2">
+            <app-toggle [(ngModel)]="allowSoundEndGame">Sonido al terminar el juego</app-toggle>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              class="w-full accent-neon-cyan"
+              aria-label="Volumen del sonido al terminar"
+              [disabled]="!allowSoundEndGame"
+              [(ngModel)]="volumeSoundEndGame"
+            />
           </div>
-          <p class="align-content-start my-0">
-            <span class="float-start">Control de sonido</span>
-          </p>
 
-          <mat-divider></mat-divider>
-
-          <div class="w-auto align-content-start my-3">
-            <div class="row">
-              <div class="col-12 my-1">
-                <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="allowSoundEndGame">Sonido al terminar el juego </mat-slide-toggle>
-                </div>
-              </div>
-              <div class="col-12 my-1 float-start">
-                <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100" [disabled]="!allowSoundEndGame">
-                  <input matSliderThumb [(ngModel)]="volumeSoundEndGame" />
-                </mat-slider>
-              </div>
-            </div>
+          <div class="space-y-2">
+            <app-toggle [(ngModel)]="allowSoundThemeGame">Sonido durante el juego</app-toggle>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              class="w-full accent-neon-pink"
+              aria-label="Volumen del sonido durante el juego"
+              [disabled]="!allowSoundThemeGame"
+              [(ngModel)]="volumeSoundThemeGame"
+            />
           </div>
-          <!-- -->
-          <div class="w-auto align-content-start my-3">
-            <div class="row">
-              <div class="col-12 my-1">
-                <div class="w-100">
-                  <mat-slide-toggle class="float-start" color="primary" [(ngModel)]="allowSoundThemeGame">Sonido durante el juego </mat-slide-toggle>
-                </div>
-              </div>
-              <div class="col-12 my-1 float-start">
-                <mat-slider min="0" max="100" step="5" showTickMarks discrete [displayWith]="formatLabel" class="w-100" [disabled]="!allowSoundThemeGame">
-                  <input matSliderThumb [(ngModel)]="volumeSoundThemeGame" />
-                </mat-slider>
-              </div>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </mat-card-content>
-</mat-card>
+        </div>
+      }
+    </div>
+  </app-panel>
+</div>

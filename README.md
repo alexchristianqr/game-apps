@@ -1,6 +1,6 @@
 # Game apps
 
-Aplicación de juegos clásicos con Angular 21 (LTS) + Firebase 12 (`@angular/fire`) + Angular Material + NgRx.
+Aplicación de juegos clásicos con Angular 21 (LTS) + Tailwind CSS v4 + Firebase 12 (`@angular/fire`) + NgRx. Portal abierto: se juega sin registrarse.
 
 Requiere Node `>=22` (ver `.nvmrc`) y npm `>=10`.
 
@@ -38,7 +38,6 @@ Se publica en GitHub Pages al fusionar un PR de `dev` a `main` (ver [`.specs/04-
 ## Agregar un juego
 
 1. Crear `src/app/games/<id>/<id>.component.ts` (componente standalone).
-2. Registrarlo en `src/app/games/games.registry.ts` con `id`, `title`, `icon`, `enabled: true` y `loadComponent`.
+2. Registrarlo en `src/app/games/games.registry.ts` con `id`, `title`, `description`, `icon` (Lucide), `accent`, `enabled: true` y `loadComponent`.
 
-La ruta `/games/<id>` (protegida por `authGuard` y con carga perezosa) y la tarjeta en Inicio se generan solas desde el registro. Para reproducir sonidos usar `AudioService`
-(`src/app/core/services/audio`).
+La ruta `/games/<id>` (pública y con carga perezosa) y la tarjeta en Inicio se generan solas desde el registro. Para reproducir sonidos usar `AudioService` (`src/app/core/services/audio`).

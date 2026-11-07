@@ -66,7 +66,7 @@ export class AuthService {
   async signOut() {
     await fbSignOut(this.auth);
     this.storageService.remove("users");
-    await this.router.navigate(["login"]);
+    await this.router.navigate(["home"]);
   }
 
   /** Registrar usuario */

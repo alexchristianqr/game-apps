@@ -9,3 +9,5 @@ Plantilla: [`../templates/adr.md`](../templates/adr.md). Una decisión aceptada 
 | [ADR-003](ADR-003-hash-routing-y-gh-pages.md)         | Enrutado por hash y despliegue en GitHub Pages    |
 | [ADR-004](ADR-004-esbuild-y-vitest.md)                | Builder esbuild y Vitest                          |
 | [ADR-005](ADR-005-flujo-como-portfolio.md)            | Mismo flujo de calidad y despliegue que portfolio |
+| [ADR-006](ADR-006-tailwind-sin-material.md)           | Tailwind con primitivas propias, sin Material     |
+| [ADR-007](ADR-007-acceso-abierto.md)                  | Acceso abierto: jugar sin iniciar sesión          |

@@ -1,6 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from "@angular/core";
-import { provideRouter, withHashLocation } from "@angular/router";
-import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import { provideRouter, withHashLocation, withViewTransitions } from "@angular/router";
 import { provideFirebaseApp, initializeApp, FirebaseOptions } from "@angular/fire/app";
 import { provideAuth, getAuth } from "@angular/fire/auth";
 import { provideFirestore, getFirestore } from "@angular/fire/firestore";
@@ -16,8 +15,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withHashLocation()),
-    provideAnimationsAsync(),
+    provideRouter(routes, withHashLocation(), withViewTransitions()),
     provideFirebaseApp(() => initializeApp(environment.firebase as unknown as FirebaseOptions)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

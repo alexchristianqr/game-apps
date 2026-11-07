@@ -1,29 +1,27 @@
 import { RouterLink } from "@angular/router";
+import { LoaderCircle, LucideAngularModule } from "lucide-angular";
+import { ButtonDirective } from "../../core/ui/button/button.directive";
+import { FieldComponent } from "../../core/ui/field/field.component";
+import { PanelComponent } from "../../core/ui/panel/panel.component";
+import { ToastService } from "../../core/ui/toast/toast.service";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatCardModule } from "@angular/material/card";
-import { MatGridListModule } from "@angular/material/grid-list";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../auth.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule],
+  imports: [ReactiveFormsModule, RouterLink, LucideAngularModule, ButtonDirective, FieldComponent, PanelComponent],
   selector: "app-forgot",
-  templateUrl: "./forgot.component.html",
-  styleUrls: ["./forgot.component.scss"]
+  templateUrl: "./forgot.component.html"
 })
 export class ForgotComponent {
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthService);
-  private snackBar = inject(MatSnackBar);
+  private toast = inject(ToastService);
+  readonly icons = { LoaderCircle };
 
   formGroup: FormGroup;
   submitted: boolean | undefined;
@@ -52,16 +50,12 @@ export class ForgotComponent {
       .then(() => {
         this.submitted = undefined;
         this.loading = false;
-        this.snackBar.open("Enlace enviado con éxito, porfavor revise su correo", "", {
-          duration: 3000
-        });
+        this.toast.show("Enlace enviado con éxito, porfavor revise su correo");
       })
       .catch(() => {
         this.submitted = false;
         this.loading = false;
-        this.snackBar.open("El enlace no se ha enviado", "", {
-          duration: 3000
-        });
+        this.toast.show("El enlace no se ha enviado", "error");
       });
   }
 }

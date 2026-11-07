@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "css"
         }
       },
       "root": "",
@@ -26,16 +26,11 @@
             "index": "src/index.html",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["@angular/material/prebuilt-themes/indigo-pink.css", "src/styles.scss"],
+            "styles": ["src/styles.css"],
             "scripts": [],
-            "browser": "src/main.ts",
-            "stylePreprocessorOptions": {
-              "sass": {
-                "silenceDeprecations": ["import", "global-builtin", "color-functions", "if-function"]
-              }
-            }
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
