@@ -1,0 +1,103 @@
+<div class="mx-auto max-w-md">
+  <app-panel>
+    <div class="mb-5 flex items-center justify-between">
+      <a appButton variant="ghost" size="sm" routerLink="/home" aria-label="Volver al inicio">
+        <lucide-icon [img]="icons.ArrowLeft" [size]="18" />
+      </a>
+      <h1 class="text-gradient font-display text-xl font-black">Smart toy</h1>
+    </div>
+
+    <!-- Robot y lo que dice -->
+    <div class="text-center">
+      <div
+        class="mx-auto grid size-24 place-items-center rounded-3xl bg-neon-pink/10 text-neon-pink shadow-glow-pink ring-1 ring-neon-pink/60"
+        [class.animate-bounce-in]="phase() === 'won' || phase() === 'learned'"
+        [class.animate-wiggle]="phase() === 'teach'"
+        aria-hidden="true"
+      >
+        <lucide-icon [img]="icons.Bot" [size]="56" />
+      </div>
+      <p class="mt-4 min-h-14 font-display text-lg font-bold" aria-live="polite" role="status">{{ speech() }}</p>
+    </div>
+
+    <!-- Respuestas -->
+    @if (phase() === "asking") {
+      <div class="mt-4 flex justify-center gap-3">
+        <button appButton variant="success" size="lg" type="button" (click)="answer('yes')">Sí</button>
+        <button appButton variant="danger" size="lg" type="button" (click)="answer('no')">No</button>
+      </div>
+      <p class="mt-2 text-center text-xs text-white/50">Atajos: S = sí, N = no</p>
+    }
+
+    @if (phase() === "idle") {
+      <div class="mt-4 flex justify-center">
+        <button appButton type="button" size="lg" (click)="start()">¡Listo!</button>
+      </div>
+    }
+
+    <!-- Enseñar -->
+    @if (phase() === "teach") {
+      <form class="mt-4 animate-fade-up space-y-4" (ngSubmit)="learn()" novalidate>
+        <p class="text-sm text-white/70">
+          Yo pensé en <strong>{{ guessed() }}</strong
+          >. ¿En qué animal pensabas?
+        </p>
+        <app-field label="Tu animal" [error]="animalError()">
+          <input class="app-input" name="animal" autocomplete="off" maxlength="40" [(ngModel)]="animalInput" (ngModelChange)="syncForm()" />
+        </app-field>
+        <app-field [label]="'Una pregunta que distinga a ' + (animalInput.trim() || 'tu animal') + ' de ' + guessed()" [error]="questionError()">
+          <input class="app-input" name="question" autocomplete="off" maxlength="80" placeholder="¿Tiene plumas?" [(ngModel)]="questionInput" (ngModelChange)="syncForm()" />
+        </app-field>
+        <fieldset>
+          <legend class="mb-1.5 text-sm font-medium text-white/80">Para tu animal, la respuesta es…</legend>
+          <div class="flex gap-4 text-sm">
+            <label class="flex items-center gap-2"><input type="radio" name="answerForNew" value="yes" [(ngModel)]="answerForNew" /> Sí</label>
+            <label class="flex items-center gap-2"><input type="radio" name="answerForNew" value="no" [(ngModel)]="answerForNew" /> No</label>
+          </div>
+        </fieldset>
+        <div class="flex justify-center gap-3">
+          <button appButton type="submit" size="lg">Enseñar</button>
+        </div>
+      </form>
+    }
+
+    @if (phase() === "won" || phase() === "learned") {
+      <div class="mt-4 flex justify-center">
+        <button appButton type="button" size="lg" (click)="start()">Jugar otra vez</button>
+      </div>
+    }
+
+    <!-- Marcador -->
+    <section class="mt-6" aria-label="Marcador">
+      <div class="grid grid-cols-3 gap-2">
+        <app-stat label="Adivinó" [value]="score().robot" accent="lime" />
+        <app-stat label="Aprendió" [value]="score().player" accent="pink" />
+        <app-stat label="Animales" [value]="animals()" accent="cyan" />
+      </div>
+    </section>
+
+    <!-- Ajustes -->
+    <div class="mt-6 border-t border-white/10 pt-4">
+      <button
+        type="button"
+        class="flex w-full items-center justify-between rounded-lg py-2 text-left font-semibold"
+        [attr.aria-expanded]="settingsOpen()"
+        aria-controls="ajustes"
+        (click)="settingsOpen.set(!settingsOpen())"
+      >
+        Ajustes del juego
+        <lucide-icon [img]="icons.ChevronDown" [size]="20" class="transition" [class.rotate-180]="settingsOpen()" />
+      </button>
+
+      @if (settingsOpen()) {
+        <div id="ajustes" class="mt-3 animate-fade-up space-y-5">
+          <app-toggle [(ngModel)]="sfxOn" (ngModelChange)="toggleSfx()">Efectos de sonido</app-toggle>
+          <button appButton variant="ghost" size="sm" type="button" (click)="forget()">
+            <lucide-icon [img]="icons.Trash2" [size]="16" />
+            {{ confirmForget() ? "¿Seguro? Pulsa otra vez para olvidar todo" : "Olvidar lo aprendido" }}
+          </button>
+        </div>
+      }
+    </div>
+  </app-panel>
+</div>

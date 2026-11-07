@@ -17,7 +17,7 @@
 
 ## Juegos previstos
 
-`smart-toy` y `basketball` figuran en el registro con `enabled: false`: aparecen deshabilitados en Inicio y no tienen ruta. Al implementar uno se crea su `SPEC-NNN` y se activa en el registro.
+`basketball` figura en el registro con `enabled: false`: aparece deshabilitado en Inicio y no tiene ruta. Al implementarlo se crea su `SPEC-NNN` y se activa en el registro.
 
 ## Fuera de alcance
 

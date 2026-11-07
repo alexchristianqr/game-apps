@@ -2,19 +2,19 @@
 
 ## Stack
 
-| Capa      | Tecnología                                        | Notas                                                         |
-| --------- | ------------------------------------------------- | ------------------------------------------------------------- |
-| Framework | Angular 21 (standalone, sin NgModules)            | `zone.js`, `provideZoneChangeDetection({ eventCoalescing })`. |
-| Router    | `provideRouter(routes, withHashLocation())`       | URLs con `#/…`: GitHub Pages no reescribe rutas. ADR-003.     |
-| Estado    | NgRx Store + Effects + Devtools                   | Un feature (`auth`) con `createFeature`. ADR-002.             |
-| Backend   | Firebase 12 vía `@angular/fire` (Auth, Firestore) | Solo cliente. Sin backend propio.                             |
-| UI        | Tailwind CSS v4 + primitivas propias (`core/ui`)  | Tema neón en `styles.css`. Iconos `lucide-angular`. ADR-006.  |
-| Efectos   | `canvas-confetti`, fuentes Fontsource, CSS        | Confeti cargado al vuelo; Orbitron + Inter autoalojadas.      |
-| Juegos    | `tic-tac-toe-minimax`; motor propio de Tetris     | IA del tres en línea; Tetris sin dependencias.                |
-| Build     | `@angular/build:application` (esbuild)            | `baseHref: /game-apps/`, salida en `dist/`. ADR-004.          |
-| Tests     | Vitest + jsdom (`@angular/build:unit-test`)       | Specs standalone junto al código (`*.spec.ts`).               |
-| Calidad   | ESLint (flat, angular-eslint) + Prettier + Husky  | ADR-005.                                                      |
-| Runtime   | Node ≥ 22                                         | `.nvmrc`.                                                     |
+| Capa      | Tecnología                                                   | Notas                                                         |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| Framework | Angular 21 (standalone, sin NgModules)                       | `zone.js`, `provideZoneChangeDetection({ eventCoalescing })`. |
+| Router    | `provideRouter(routes, withHashLocation())`                  | URLs con `#/…`: GitHub Pages no reescribe rutas. ADR-003.     |
+| Estado    | NgRx Store + Effects + Devtools                              | Un feature (`auth`) con `createFeature`. ADR-002.             |
+| Backend   | Firebase 12 vía `@angular/fire` (Auth, Firestore)            | Solo cliente. Sin backend propio.                             |
+| UI        | Tailwind CSS v4 + primitivas propias (`core/ui`)             | Tema neón en `styles.css`. Iconos `lucide-angular`. ADR-006.  |
+| Efectos   | `canvas-confetti`, fuentes Fontsource, CSS                   | Confeti cargado al vuelo; Orbitron + Inter autoalojadas.      |
+| Juegos    | `tic-tac-toe-minimax`; motores propios de Tetris y Smart toy | IA del tres en línea; Tetris y el adivino sin dependencias.   |
+| Build     | `@angular/build:application` (esbuild)                       | `baseHref: /game-apps/`, salida en `dist/`. ADR-004.          |
+| Tests     | Vitest + jsdom (`@angular/build:unit-test`)                  | Specs standalone junto al código (`*.spec.ts`).               |
+| Calidad   | ESLint (flat, angular-eslint) + Prettier + Husky             | ADR-005.                                                      |
+| Runtime   | Node ≥ 22                                                    | `.nvmrc`.                                                     |
 
 ## Estructura
 

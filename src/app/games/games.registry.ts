@@ -32,7 +32,15 @@ export const GAMES: readonly GameDefinition[] = [
     enabled: true,
     loadComponent: () => import("./tic-tac-toe/tic-tac-toe.component").then((m) => m.TicTacToeComponent)
   },
-  { id: "smart-toy", title: "Smart toy", description: "Un juguete inteligente que aprende de ti.", icon: Bot, accent: "pink", enabled: false },
+  {
+    id: "smart-toy",
+    title: "Smart toy",
+    description: "Un juguete inteligente que aprende de ti.",
+    icon: Bot,
+    accent: "pink",
+    enabled: true,
+    loadComponent: () => import("./smart-toy/smart-toy.component").then((m) => m.SmartToyComponent)
+  },
   { id: "basketball", title: "Basketball", description: "Encesta contra el reloj.", icon: Dribbble, accent: "amber", enabled: false },
   {
     id: "tetris",
