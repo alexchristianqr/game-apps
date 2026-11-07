@@ -14,6 +14,8 @@
 | Tres en línea          | `/games/tic-tac-toe`             | [SPEC-004](features/SPEC-004-tres-en-linea.md) |
 | Audio de los juegos    | —                                | [SPEC-005](features/SPEC-005-audio.md)         |
 | Tetris                 | `/games/tetris`                  | [SPEC-006](features/SPEC-006-tetris.md)        |
+| Smart toy              | `/games/smart-toy`               | [SPEC-007](features/SPEC-007-smart-toy.md)     |
+| Bomberman              | `/games/bomberman`               | [SPEC-008](features/SPEC-008-bomberman.md)     |
 
 ## Juegos previstos
 

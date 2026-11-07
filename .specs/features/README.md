@@ -11,5 +11,6 @@ Una por capacidad. Describen el comportamiento observable; el código debe coinc
 | [SPEC-005](SPEC-005-audio.md)         | Audio de los juegos                           |
 | [SPEC-006](SPEC-006-tetris.md)        | Tetris                                        |
 | [SPEC-007](SPEC-007-smart-toy.md)     | Smart toy (adivino que aprende)               |
+| [SPEC-008](SPEC-008-bomberman.md)     | Bomberman (3D, explosiones en cruz)           |
 
 Plantilla: [`../templates/spec.md`](../templates/spec.md). Un juego nuevo añade su propia `SPEC-NNN`.

@@ -12,7 +12,7 @@ describe("HomeComponent", () => {
     const el: HTMLElement = fixture.nativeElement;
     expect(el.querySelectorAll("#catalogo ~ ul > li").length).toBe(GAMES.length);
     const links = Array.from(el.querySelectorAll<HTMLAnchorElement>("ul a")).map((a) => a.getAttribute("href"));
-    expect(links).toEqual(["/games/tic-tac-toe", "/games/smart-toy", "/games/tetris"]);
+    expect(links).toEqual(["/games/tic-tac-toe", "/games/smart-toy", "/games/tetris", "/games/bomberman"]);
     expect(el.querySelectorAll("[aria-disabled='true']").length).toBe(GAMES.filter((g) => !g.enabled).length);
   });
 });
