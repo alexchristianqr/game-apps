@@ -23,29 +23,15 @@ jobs:
 
     steps:
       - name: "Checkout code"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: "Set up Node.js"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
-      - name: "Debug environment variables"
-        run: |
-          echo "ANGULAR_FIREBASE_API_KEY=${{ secrets.ANGULAR_FIREBASE_API_KEY }}"
-          echo "ANGULAR_FIREBASE_AUTH_DOMAIN=${{ secrets.ANGULAR_FIREBASE_AUTH_DOMAIN }}"
-          echo "ANGULAR_FIREBASE_PROJECT_ID=${{ secrets.ANGULAR_FIREBASE_PROJECT_ID }}"
-          echo "ANGULAR_FIREBASE_STORAGE_BUCKET=${{ secrets.ANGULAR_FIREBASE_STORAGE_BUCKET }}"
-          echo "ANGULAR_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.ANGULAR_FIREBASE_MESSAGING_SENDER_ID }}"
-          echo "ANGULAR_FIREBASE_APP_ID=${{ secrets.ANGULAR_FIREBASE_APP_ID }}"
-          echo "ANGULAR_FIREBASE_MEASUREMENT_ID=${{ secrets.ANGULAR_FIREBASE_MEASUREMENT_ID }}"
-          echo "ANGULAR_FIREBASE_DATABASE_URL=${{ secrets.ANGULAR_FIREBASE_DATABASE_URL }}"
+          node-version: '22'
 
       - name: "Install dependencies"
         run: npm install
-
-      - name: "Install Angular CLI"
-        run: npm install @angular/cli
 
       - name: "Generate environment.production.ts"
         run: |
