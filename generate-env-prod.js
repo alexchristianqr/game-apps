@@ -27,9 +27,17 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
+// Claves sin comillas y 2 espacios: la salida ya cumple Prettier (`format:check` corre sobre este archivo en CI).
+const firebaseLines = Object.entries(firebaseConfig)
+  .filter(([, value]) => value !== undefined)
+  .map(([key, value]) => `    ${key}: ${JSON.stringify(value)}`)
+  .join(",\n");
+
 const content = `export const environment = {
   production: true,
-  firebase: ${JSON.stringify(firebaseConfig, null, 2)}
+  firebase: {
+${firebaseLines}
+  }
 };
 `;
 
