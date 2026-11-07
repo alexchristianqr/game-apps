@@ -25,13 +25,18 @@
             </div>
           </div>
         </div>
-        <mat-error *ngIf="submitted === false">El usuario o la contraseña no es válido</mat-error>
+        @if (submitted === false) {
+        <mat-error>El usuario o la contraseña no es válido</mat-error>
+        }
       </mat-grid-list>
     </form>
   </mat-card-content>
   <mat-card-footer>
-    <button *ngIf="!loading" mat-raised-button color="primary" (click)="onSubmit()">Entrar</button>
-    <button *ngIf="loading" mat-raised-button color="primary" disabled>Entrando...</button>
+    @if (!loading) {
+    <button mat-raised-button color="primary" (click)="onSubmit()">Entrar</button>
+    } @if (loading) {
+    <button mat-raised-button color="primary" disabled>Entrando...</button>
+    }
   </mat-card-footer>
   <mat-card-footer>
     <div>¿No tienes una cuenta? <a mat-button routerLink="/register">registrate</a></div>

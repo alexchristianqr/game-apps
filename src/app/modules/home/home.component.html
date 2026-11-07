@@ -4,7 +4,8 @@
   </mat-card-header>
   <mat-card-content>
     <div class="row">
-      <div class="col col-6" *ngFor="let app of apps">
+      @for (app of apps; track app) {
+      <div class="col col-6">
         <mat-card-content>
           <button mat-icon-button color="primary" [routerLink]="app.path" [disabled]="app.disabled">
             <mat-icon>{{ app.icon }}</mat-icon>
@@ -12,6 +13,7 @@
           <div>{{ app.title }}</div>
         </mat-card-content>
       </div>
+      }
     </div>
   </mat-card-content>
 </mat-card>
