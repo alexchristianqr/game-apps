@@ -1,0 +1,5 @@
+dist
+.angular
+node_modules
+package-lock.json
+src/environments/environment.production.ts

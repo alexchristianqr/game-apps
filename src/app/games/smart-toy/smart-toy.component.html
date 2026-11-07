@@ -1,0 +1,123 @@
+<div class="mx-auto max-w-md">
+  <app-panel>
+    <div class="mb-4 flex items-center gap-3">
+      <a appButton variant="ghost" size="sm" routerLink="/home" aria-label="Volver al inicio">
+        <lucide-icon [img]="icons.ArrowLeft" [size]="18" />
+      </a>
+      <h1 class="text-gradient font-display text-xl font-black">Smart toy</h1>
+    </div>
+
+    <!-- Robot y globo de diálogo -->
+    <div class="flex flex-col items-center">
+      <div
+        class="grid size-20 shrink-0 place-items-center rounded-3xl bg-neon-pink/10 text-neon-pink shadow-glow-pink ring-1 ring-neon-pink/60 sm:size-24"
+        [class.animate-float]="phase() === 'idle' || phase() === 'asking'"
+        [class.animate-bounce-in]="phase() === 'won' || phase() === 'learned'"
+        [class.animate-wiggle]="phase() === 'teach'"
+        aria-hidden="true"
+      >
+        <lucide-icon [img]="icons.Bot" [size]="48" />
+      </div>
+
+      <!-- El globo crece con el texto sin saltos bruscos -->
+      <div class="mt-4 w-full">
+        <p
+          class="relative flex min-h-[4.5rem] items-center justify-center rounded-2xl bg-white/5 px-4 py-3 text-center font-display text-lg leading-snug font-bold text-balance [overflow-wrap:anywhere] ring-1 ring-white/10 sm:text-xl"
+          aria-live="polite"
+          role="status"
+        >
+          {{ speech() }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Hilo de preguntas contestadas -->
+    @if (phase() === "asking" && history().length) {
+      <ol class="mt-3 flex flex-wrap justify-center gap-1.5" aria-label="Preguntas contestadas">
+        @for (step of history(); track $index) {
+          <li class="flex max-w-full items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-xs ring-1 ring-white/10">
+            <span class="truncate text-white/70">{{ step.text }}</span>
+            <strong [class]="step.answer === 'yes' ? 'text-neon-lime' : 'text-rose-400'">{{ step.answer === "yes" ? "Sí" : "No" }}</strong>
+          </li>
+        }
+      </ol>
+    }
+
+    <!-- Respuestas -->
+    @if (phase() === "asking") {
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <button appButton variant="success" size="lg" type="button" (click)="answer('yes')">Sí</button>
+        <button appButton variant="danger" size="lg" type="button" (click)="answer('no')">No</button>
+      </div>
+      <p class="mt-2 hidden text-center text-xs text-white/50 sm:block">Atajos: S = sí, N = no</p>
+    }
+
+    @if (phase() === "idle") {
+      <div class="mt-4 grid">
+        <button appButton type="button" size="lg" (click)="start()">¡Listo!</button>
+      </div>
+    }
+
+    <!-- Enseñar -->
+    @if (phase() === "teach") {
+      <form class="mt-4 animate-fade-up space-y-4" (ngSubmit)="learn()" novalidate>
+        <p class="text-center text-sm text-white/70">
+          Yo pensé en <strong class="text-white">{{ guessed() }}</strong
+          >. ¿En qué animal pensabas?
+        </p>
+        <app-field class="block" label="Tu animal" [error]="animalError()">
+          <input class="app-input" name="animal" autocomplete="off" maxlength="40" placeholder="Ej.: Sapo" [(ngModel)]="animalInput" (ngModelChange)="syncForm()" />
+        </app-field>
+        <app-field class="block" label="Una pregunta que lo distinga" [error]="questionError()">
+          <input class="app-input" name="question" autocomplete="off" maxlength="80" placeholder="Ej.: ¿Tiene verrugas?" [(ngModel)]="questionInput" (ngModelChange)="syncForm()" />
+        </app-field>
+        <div>
+          <span class="mb-1.5 block text-sm font-medium text-white/80"> Para {{ animalInput.trim() || "tu animal" }}, la respuesta es… </span>
+          <app-segmented label="Respuesta para tu animal" [options]="answerOptions" [(ngModel)]="answerForNew" name="answerForNew" />
+        </div>
+        <div class="grid">
+          <button appButton type="submit" size="lg">Enseñar</button>
+        </div>
+      </form>
+    }
+
+    @if (phase() === "won" || phase() === "learned") {
+      <div class="mt-4 grid">
+        <button appButton type="button" size="lg" (click)="start()">Jugar otra vez</button>
+      </div>
+    }
+
+    <!-- Marcador -->
+    <section class="mt-6" aria-label="Marcador">
+      <div class="grid grid-cols-3 gap-2">
+        <app-stat label="Adivinó" [value]="score().robot" accent="lime" />
+        <app-stat label="Aprendió" [value]="score().player" accent="pink" />
+        <app-stat label="Animales" [value]="animals()" accent="cyan" />
+      </div>
+    </section>
+
+    <!-- Ajustes -->
+    <div class="mt-6 border-t border-white/10 pt-4">
+      <button
+        type="button"
+        class="flex w-full items-center justify-between rounded-lg py-2 text-left font-semibold"
+        [attr.aria-expanded]="settingsOpen()"
+        aria-controls="ajustes"
+        (click)="settingsOpen.set(!settingsOpen())"
+      >
+        Ajustes del juego
+        <lucide-icon [img]="icons.ChevronDown" [size]="20" class="transition" [class.rotate-180]="settingsOpen()" />
+      </button>
+
+      @if (settingsOpen()) {
+        <div id="ajustes" class="mt-3 animate-fade-up space-y-5">
+          <app-toggle [(ngModel)]="sfxOn" (ngModelChange)="toggleSfx()">Efectos de sonido</app-toggle>
+          <button appButton variant="ghost" size="sm" type="button" (click)="forget()">
+            <lucide-icon [img]="icons.Trash2" [size]="16" />
+            {{ confirmForget() ? "¿Seguro? Pulsa otra vez para olvidar todo" : "Olvidar lo aprendido" }}
+          </button>
+        </div>
+      }
+    </div>
+  </app-panel>
+</div>

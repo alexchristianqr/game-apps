@@ -1,31 +1,23 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subject } from "rxjs";
-import { AuthService } from "./modules/auth/auth.service";
-import { Store } from "@ngrx/store";
-import * as AuthSelectors from "./modules/auth/store/auth.selectors";
-import { AuthActions } from "./modules/auth/store/auth.actions";
-import { StorageService } from "./core/services/storage/storage.service";
+import { Component, inject } from "@angular/core";
+import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import { Gamepad2, Github, LogIn, LogOut, LucideAngularModule } from "lucide-angular";
+import { AuthService } from "./auth/auth.service";
+import { ButtonDirective } from "./core/ui/button/button.directive";
+import { ToastOutletComponent } from "./core/ui/toast/toast-outlet.component";
 
 @Component({
   selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, LucideAngularModule, ButtonDirective, ToastOutletComponent],
+  templateUrl: "./app.component.html"
 })
-export class AppComponent implements OnDestroy {
-  public title = "GAME APPS";
-  private destroySub = new Subject<void>();
+export class AppComponent {
+  private readonly authService = inject(AuthService);
 
-  constructor(private authService: AuthService) {}
+  public readonly title = "GAME APPS";
+  public readonly isAuthenticated = this.authService.isAuthenticated;
+  public readonly icons = { Gamepad2, Github, LogIn, LogOut };
 
-  public ngOnDestroy(): void {
-    this.destroySub.next();
-  }
-
-  get isAuthenticated(): boolean {
-    return this.authService.isUserAuthenticated;
-  }
-
-  public async logout() {
+  public logout(): Promise<void> {
     return this.authService.signOut();
   }
 }

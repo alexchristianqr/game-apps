@@ -25,7 +25,7 @@ export class StorageService {
       this.storeDataSubjects.set(key, new BehaviorSubject<any>(null));
     }
     let item: any = localStorage.getItem(key);
-    let storeDataKey = this.storeDataSubjects.get(key);
+    const storeDataKey = this.storeDataSubjects.get(key);
     if (item == "undefined") {
       item = undefined;
     } else {
@@ -41,9 +41,9 @@ export class StorageService {
   }
 
   set(key: string, value: any): void {
-    let val = JSON.stringify(value);
+    const val = JSON.stringify(value);
     localStorage.setItem(key, val);
-    let storeDataKey = this.storeDataSubjects.get(key);
+    const storeDataKey = this.storeDataSubjects.get(key);
     if (!this.storeDataSubjects.has(key) || !storeDataKey) {
       this.storeDataSubjects.set(key, new BehaviorSubject<any>(val));
     } else {
@@ -53,13 +53,13 @@ export class StorageService {
   }
 
   get(key: string): any {
-    let valKey: any = localStorage.getItem(key);
+    const valKey: any = localStorage.getItem(key);
     return JSON.parse(valKey);
   }
 
   remove(key: string): void {
     localStorage.removeItem(key);
-    let storeDataKey = this.storeDataSubjects.get(key);
+    const storeDataKey = this.storeDataSubjects.get(key);
     if (!this.storeDataSubjects.has(key) || !storeDataKey) {
       this.storeDataSubjects.set(key, new BehaviorSubject<any>(null));
     } else {

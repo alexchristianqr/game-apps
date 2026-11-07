@@ -1,15 +1,13 @@
 {
   "singleQuote": false,
   "printWidth": 200,
-  "editor.formatOnSave": false,
   "proseWrap": "always",
   "tabWidth": 2,
-  "indent_size": 2,
   "useTabs": false,
   "bracketSpacing": true,
-  "jsxBracketSameLine": false,
   "semi": true,
-  "semicolons": true,
   "endOfLine": "auto",
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/styles.css"
 }

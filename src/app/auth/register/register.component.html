@@ -1,0 +1,48 @@
+<div class="mx-auto max-w-md">
+  <app-panel>
+    <h1 class="mb-6 text-gradient text-center font-display text-2xl font-black">Crear usuario</h1>
+
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="space-y-4">
+      <app-field label="Nombre completo" [error]="submitted && formGroup.controls['displayName'].invalid ? 'Ingrese un nombre válido' : null">
+        <input class="app-input" formControlName="displayName" name="displayname" autocomplete="name" required />
+      </app-field>
+
+      <app-field label="Email" [error]="submitted && formGroup.controls['email'].invalid ? 'Ingrese un email válido' : null">
+        <input type="email" class="app-input" formControlName="email" name="email" autocomplete="email" required />
+      </app-field>
+
+      <app-field label="Contraseña" [error]="submitted && formGroup.controls['password'].invalid ? 'Ingrese una contraseña de al menos 6 caracteres' : null">
+        <span class="relative block">
+          <input [type]="hidePwd ? 'password' : 'text'" class="app-input pr-12" formControlName="password" name="password" autocomplete="new-password" required />
+          <button
+            type="button"
+            class="absolute inset-y-0 right-0 grid w-11 place-items-center text-white/60 hover:text-white"
+            [attr.aria-label]="hidePwd ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            [attr.aria-pressed]="!hidePwd"
+            (click)="hidePwd = !hidePwd"
+          >
+            <lucide-icon [img]="hidePwd ? icons.EyeOff : icons.Eye" [size]="18" />
+          </button>
+        </span>
+      </app-field>
+
+      @if (submitted === false) {
+        <p class="text-sm text-rose-400" role="alert">El usuario no se ha registrado, vuelve a intentarlo</p>
+      }
+
+      <button appButton class="w-full" type="submit" [disabled]="loading">
+        @if (loading) {
+          <lucide-icon [img]="icons.LoaderCircle" [size]="18" class="animate-spin" />
+          Registrando...
+        } @else {
+          Registrar
+        }
+      </button>
+    </form>
+
+    <div class="mt-6 space-y-2 text-center text-sm text-white/70">
+      <p>Ya tengo una cuenta <a routerLink="/login" class="text-neon-cyan hover:underline">Iniciar sesión</a></p>
+      <p><a routerLink="/home" class="text-neon-pink hover:underline">Seguir jugando sin cuenta</a></p>
+    </div>
+  </app-panel>
+</div>
