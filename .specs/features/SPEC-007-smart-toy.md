@@ -31,9 +31,17 @@ Una persona jugando sola.
 - **RF-09** — Accesibilidad: lo que dice el juguete está en una región `aria-live="polite"`; el formulario usa etiquetas y errores con `role="alert"`.
 - **RF-10** — Al salir de la pantalla se detiene todo sonido (P9). Un botón de flecha vuelve a `/home`.
 
+- **RF-11** — Mientras pregunta, el juguete muestra el hilo de preguntas ya contestadas (con su Sí/No) y los botones Sí/No ocupan todo el ancho. El atajo «S/N» solo se anuncia en pantallas anchas. La
+  respuesta del animal nuevo se elige con un control segmentado Sí/No.
+
 ## Reglas de contenido
 
 Textos en español. El motor es puro e inmutable: `teach` devuelve un árbol nuevo.
+
+## Comportamiento visual
+
+Panel de vidrio (máx. 28 rem). El robot flota mientras espera y rebota al acertar o aprender; lo que dice aparece en un globo con altura mínima fija (sin saltos) que parte las palabras largas. Botones
+principales a todo el ancho. Con `prefers-reduced-motion` las animaciones se reducen al mínimo.
 
 ## Criterios de aceptación
 

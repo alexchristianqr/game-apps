@@ -1,36 +1,60 @@
 <div class="mx-auto max-w-md">
   <app-panel>
-    <div class="mb-5 flex items-center justify-between">
+    <div class="mb-4 flex items-center gap-3">
       <a appButton variant="ghost" size="sm" routerLink="/home" aria-label="Volver al inicio">
         <lucide-icon [img]="icons.ArrowLeft" [size]="18" />
       </a>
       <h1 class="text-gradient font-display text-xl font-black">Smart toy</h1>
     </div>
 
-    <!-- Robot y lo que dice -->
-    <div class="text-center">
+    <!-- Robot y globo de diálogo -->
+    <div class="flex flex-col items-center">
       <div
-        class="mx-auto grid size-24 place-items-center rounded-3xl bg-neon-pink/10 text-neon-pink shadow-glow-pink ring-1 ring-neon-pink/60"
+        class="grid size-20 shrink-0 place-items-center rounded-3xl bg-neon-pink/10 text-neon-pink shadow-glow-pink ring-1 ring-neon-pink/60 sm:size-24"
+        [class.animate-float]="phase() === 'idle' || phase() === 'asking'"
         [class.animate-bounce-in]="phase() === 'won' || phase() === 'learned'"
         [class.animate-wiggle]="phase() === 'teach'"
         aria-hidden="true"
       >
-        <lucide-icon [img]="icons.Bot" [size]="56" />
+        <lucide-icon [img]="icons.Bot" [size]="48" />
       </div>
-      <p class="mt-4 min-h-14 font-display text-lg font-bold" aria-live="polite" role="status">{{ speech() }}</p>
+
+      <!-- La punta apunta al robot; el globo crece con el texto sin saltos bruscos -->
+      <div class="relative mt-4 w-full">
+        <span class="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 rounded-sm bg-ink-800 ring-1 ring-white/10" aria-hidden="true"></span>
+        <p
+          class="relative flex min-h-[4.5rem] items-center justify-center rounded-2xl bg-white/5 px-4 py-3 text-center font-display text-lg leading-snug font-bold text-balance [overflow-wrap:anywhere] ring-1 ring-white/10 sm:text-xl"
+          aria-live="polite"
+          role="status"
+        >
+          {{ speech() }}
+        </p>
+      </div>
     </div>
+
+    <!-- Hilo de preguntas contestadas -->
+    @if (phase() === "asking" && history().length) {
+      <ol class="mt-3 flex flex-wrap justify-center gap-1.5" aria-label="Preguntas contestadas">
+        @for (step of history(); track $index) {
+          <li class="max-w-full truncate rounded-full bg-white/5 px-2.5 py-1 text-xs ring-1 ring-white/10">
+            <span class="text-white/70">{{ step.text }}</span>
+            <strong [class]="step.answer === 'yes' ? 'text-neon-lime' : 'text-rose-400'">{{ step.answer === "yes" ? "Sí" : "No" }}</strong>
+          </li>
+        }
+      </ol>
+    }
 
     <!-- Respuestas -->
     @if (phase() === "asking") {
-      <div class="mt-4 flex justify-center gap-3">
+      <div class="mt-4 grid grid-cols-2 gap-3">
         <button appButton variant="success" size="lg" type="button" (click)="answer('yes')">Sí</button>
         <button appButton variant="danger" size="lg" type="button" (click)="answer('no')">No</button>
       </div>
-      <p class="mt-2 text-center text-xs text-white/50">Atajos: S = sí, N = no</p>
+      <p class="mt-2 hidden text-center text-xs text-white/50 sm:block">Atajos: S = sí, N = no</p>
     }
 
     @if (phase() === "idle") {
-      <div class="mt-4 flex justify-center">
+      <div class="mt-4 grid">
         <button appButton type="button" size="lg" (click)="start()">¡Listo!</button>
       </div>
     }
@@ -38,31 +62,28 @@
     <!-- Enseñar -->
     @if (phase() === "teach") {
       <form class="mt-4 animate-fade-up space-y-4" (ngSubmit)="learn()" novalidate>
-        <p class="text-sm text-white/70">
-          Yo pensé en <strong>{{ guessed() }}</strong
+        <p class="text-center text-sm text-white/70">
+          Yo pensé en <strong class="text-white">{{ guessed() }}</strong
           >. ¿En qué animal pensabas?
         </p>
         <app-field label="Tu animal" [error]="animalError()">
-          <input class="app-input" name="animal" autocomplete="off" maxlength="40" [(ngModel)]="animalInput" (ngModelChange)="syncForm()" />
+          <input class="app-input" name="animal" autocomplete="off" maxlength="40" placeholder="Ej.: Sapo" [(ngModel)]="animalInput" (ngModelChange)="syncForm()" />
         </app-field>
-        <app-field [label]="'Una pregunta que distinga a ' + (animalInput.trim() || 'tu animal') + ' de ' + guessed()" [error]="questionError()">
-          <input class="app-input" name="question" autocomplete="off" maxlength="80" placeholder="¿Tiene plumas?" [(ngModel)]="questionInput" (ngModelChange)="syncForm()" />
+        <app-field label="Una pregunta que lo distinga" [error]="questionError()">
+          <input class="app-input" name="question" autocomplete="off" maxlength="80" placeholder="Ej.: ¿Tiene verrugas?" [(ngModel)]="questionInput" (ngModelChange)="syncForm()" />
         </app-field>
-        <fieldset>
-          <legend class="mb-1.5 text-sm font-medium text-white/80">Para tu animal, la respuesta es…</legend>
-          <div class="flex gap-4 text-sm">
-            <label class="flex items-center gap-2"><input type="radio" name="answerForNew" value="yes" [(ngModel)]="answerForNew" /> Sí</label>
-            <label class="flex items-center gap-2"><input type="radio" name="answerForNew" value="no" [(ngModel)]="answerForNew" /> No</label>
-          </div>
-        </fieldset>
-        <div class="flex justify-center gap-3">
+        <div>
+          <span class="mb-1.5 block text-sm font-medium text-white/80"> Para {{ animalInput.trim() || "tu animal" }}, la respuesta es… </span>
+          <app-segmented label="Respuesta para tu animal" [options]="answerOptions" [(ngModel)]="answerForNew" name="answerForNew" />
+        </div>
+        <div class="grid">
           <button appButton type="submit" size="lg">Enseñar</button>
         </div>
       </form>
     }
 
     @if (phase() === "won" || phase() === "learned") {
-      <div class="mt-4 flex justify-center">
+      <div class="mt-4 grid">
         <button appButton type="button" size="lg" (click)="start()">Jugar otra vez</button>
       </div>
     }
