@@ -1,8 +1,26 @@
 name: Deployment
 
 on:
-  workflow_dispatch:  # Permite ejecutar el flujo de trabajo manualmente
+  # Publica al fusionar un PR a `main` (un merge es un push a `main`). `main` está protegida:
+  # solo se escribe en ella con un PR, así que ningún commit suelto ni ninguna otra rama publica.
+  push:
+    branches: [main]
+  # Despliegue manual de la rama que elijas en Actions → Deployment → Run workflow. Ojo: hay un
+  # solo sitio publicado, así que desplegar otra rama sustituye la versión real.
+  workflow_dispatch:
 
+# Dos despliegues a la vez se pisarían al empujar a gh-pages: se encolan en vez de solaparse.
+concurrency:
+  group: deployment
+  cancel-in-progress: false
+
+# El deploy empuja a la rama gh-pages con GITHUB_TOKEN. Esa rama no dispara este workflow
+# (solo `main`), así que no hay bucle.
+permissions:
+  contents: write
+
+# `generate-env-prod.js` escribe environment.production.ts con estas variables y aborta si falta
+# una obligatoria. Son la configuración web de Firebase (pública una vez compilada), pero no se versiona.
 env:
   ANGULAR_FIREBASE_API_KEY: ${{ secrets.ANGULAR_FIREBASE_API_KEY }}
   ANGULAR_FIREBASE_AUTH_DOMAIN: ${{ secrets.ANGULAR_FIREBASE_AUTH_DOMAIN }}
@@ -17,36 +35,41 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - name: "Checkout code"
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-      - name: "Set up Node.js"
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version-file: .nvmrc
+          cache: npm
 
-      - name: "Install dependencies"
-        run: npm install
+      # `--ignore-scripts` evita `husky` (hook de pre-commit) en CI, donde no hace falta.
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
 
-      - name: "Generate environment.production.ts"
-        run: |
-          node generate-env-prod.js
+      # Los specs y el lint compilan con `environment.development.ts`, que no se versiona.
+      - name: Generate environment files
+        run: node generate-env-prod.js
 
-      - name: "Build the project"
+      - name: Lint
+        run: npm run lint:check
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Test
+        run: npm test
+
+      - name: Build
         run: npm run build
 
-      - name: "Deploy to GitHub Pages"
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}  # Token para autenticar el despliegue
-
-      - name: "Notify deployment success"
-        run: echo "Deployment to GitHub Pages successful!"

@@ -1,31 +1,41 @@
 import { writeFileSync } from "fs";
 import dotenv from "dotenv";
 
-// Cargar las variables de entorno desde el archivo .env
+// Carga las variables desde `.env` (en CI vienen del entorno).
 dotenv.config();
 
-// Configuración de Firebase desde las variables de entorno
+const env = process.env;
+
 const firebaseConfig = {
-  apiKey: process.env["ANGULAR_FIREBASE_API_KEY"],
-  authDomain: process.env["ANGULAR_FIREBASE_AUTH_DOMAIN"],
-  projectId: process.env["ANGULAR_FIREBASE_PROJECT_ID"],
-  storageBucket: process.env["ANGULAR_FIREBASE_STORAGE_BUCKET"],
-  messagingSenderId: process.env["ANGULAR_FIREBASE_MESSAGING_SENDER_ID"],
-  appId: process.env["ANGULAR_FIREBASE_APP_ID"],
-  measurementId: process.env["ANGULAR_FIREBASE_MEASUREMENT_ID"],
-  databaseURL: process.env["ANGULAR_FIREBASE_DATABASE_URL"]
+  apiKey: env["ANGULAR_FIREBASE_API_KEY"],
+  authDomain: env["ANGULAR_FIREBASE_AUTH_DOMAIN"],
+  projectId: env["ANGULAR_FIREBASE_PROJECT_ID"],
+  storageBucket: env["ANGULAR_FIREBASE_STORAGE_BUCKET"],
+  messagingSenderId: env["ANGULAR_FIREBASE_MESSAGING_SENDER_ID"],
+  appId: env["ANGULAR_FIREBASE_APP_ID"],
+  measurementId: env["ANGULAR_FIREBASE_MEASUREMENT_ID"],
+  databaseURL: env["ANGULAR_FIREBASE_DATABASE_URL"]
 };
 
-// Generar el contenido para el archivo `environment.production.ts`
-const content = `
-export const environment = {
+// Sin estas no funciona ni Auth ni Firestore: un fallo de configuración no se publica (P9).
+// Las demás son opcionales (analítica, Realtime Database).
+const required = ["ANGULAR_FIREBASE_API_KEY", "ANGULAR_FIREBASE_AUTH_DOMAIN", "ANGULAR_FIREBASE_PROJECT_ID", "ANGULAR_FIREBASE_APP_ID"];
+const missing = required.filter((name) => !env[name]);
+
+if (missing.length > 0) {
+  console.error(`Faltan variables obligatorias: ${missing.join(", ")}`);
+  process.exit(1);
+}
+
+const content = `export const environment = {
   production: true,
   firebase: ${JSON.stringify(firebaseConfig, null, 2)}
 };
 `;
 
-// Escribir el contenido en el archivo `environment.production.ts`
 writeFileSync("src/environments/environment.production.ts", content);
 
-// Mostrar mensaje en consola
-console.log("Environment variables written to environment.production.ts");
+// El entorno de desarrollo es el mismo contrato; en CI lo necesitan los specs y el lint.
+writeFileSync("src/environments/environment.development.ts", content.replace("production: true", "production: false"));
+
+console.log("Escritos environment.production.ts y environment.development.ts (sin imprimir valores)");
