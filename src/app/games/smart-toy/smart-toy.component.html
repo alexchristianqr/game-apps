@@ -19,9 +19,8 @@
         <lucide-icon [img]="icons.Bot" [size]="48" />
       </div>
 
-      <!-- La punta apunta al robot; el globo crece con el texto sin saltos bruscos -->
-      <div class="relative mt-4 w-full">
-        <span class="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 rounded-sm bg-ink-800 ring-1 ring-white/10" aria-hidden="true"></span>
+      <!-- El globo crece con el texto sin saltos bruscos -->
+      <div class="mt-4 w-full">
         <p
           class="relative flex min-h-[4.5rem] items-center justify-center rounded-2xl bg-white/5 px-4 py-3 text-center font-display text-lg leading-snug font-bold text-balance [overflow-wrap:anywhere] ring-1 ring-white/10 sm:text-xl"
           aria-live="polite"
@@ -36,8 +35,8 @@
     @if (phase() === "asking" && history().length) {
       <ol class="mt-3 flex flex-wrap justify-center gap-1.5" aria-label="Preguntas contestadas">
         @for (step of history(); track $index) {
-          <li class="max-w-full truncate rounded-full bg-white/5 px-2.5 py-1 text-xs ring-1 ring-white/10">
-            <span class="text-white/70">{{ step.text }}</span>
+          <li class="flex max-w-full items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-xs ring-1 ring-white/10">
+            <span class="truncate text-white/70">{{ step.text }}</span>
             <strong [class]="step.answer === 'yes' ? 'text-neon-lime' : 'text-rose-400'">{{ step.answer === "yes" ? "Sí" : "No" }}</strong>
           </li>
         }
@@ -66,10 +65,10 @@
           Yo pensé en <strong class="text-white">{{ guessed() }}</strong
           >. ¿En qué animal pensabas?
         </p>
-        <app-field label="Tu animal" [error]="animalError()">
+        <app-field class="block" label="Tu animal" [error]="animalError()">
           <input class="app-input" name="animal" autocomplete="off" maxlength="40" placeholder="Ej.: Sapo" [(ngModel)]="animalInput" (ngModelChange)="syncForm()" />
         </app-field>
-        <app-field label="Una pregunta que lo distinga" [error]="questionError()">
+        <app-field class="block" label="Una pregunta que lo distinga" [error]="questionError()">
           <input class="app-input" name="question" autocomplete="off" maxlength="80" placeholder="Ej.: ¿Tiene verrugas?" [(ngModel)]="questionInput" (ngModelChange)="syncForm()" />
         </app-field>
         <div>

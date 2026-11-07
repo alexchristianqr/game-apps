@@ -22,8 +22,8 @@ interface Settings {
 
 const DEFAULTS: Settings = { sfx: true };
 const ANSWER_OPTIONS: readonly SegmentedOption[] = [
-  { value: "yes", label: "Sí", icon: "✅" },
-  { value: "no", label: "No", icon: "❌" }
+  { value: "yes", label: "Sí" },
+  { value: "no", label: "No" }
 ];
 const TREE_KEY = "smart-toy-tree";
 const SCORE_KEY = "smart-toy-score";

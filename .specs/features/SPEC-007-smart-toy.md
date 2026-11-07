@@ -32,7 +32,7 @@ Una persona jugando sola.
 - **RF-10** — Al salir de la pantalla se detiene todo sonido (P9). Un botón de flecha vuelve a `/home`.
 
 - **RF-11** — Mientras pregunta, el juguete muestra el hilo de preguntas ya contestadas (con su Sí/No) y los botones Sí/No ocupan todo el ancho. El atajo «S/N» solo se anuncia en pantallas anchas. La
-  respuesta del animal nuevo se elige con un control segmentado Sí/No.
+  respuesta del animal nuevo se elige con un control segmentado Sí/No. Los campos del formulario y sus errores se muestran en bloques separados.
 
 ## Reglas de contenido
 
