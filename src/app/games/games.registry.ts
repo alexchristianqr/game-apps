@@ -1,5 +1,5 @@
 import { Type } from "@angular/core";
-import { Blocks, Bot, Dribbble, Grid3x3, type LucideIconData } from "lucide-angular";
+import { Blocks, Bomb, Bot, Dribbble, Grid3x3, type LucideIconData } from "lucide-angular";
 
 export type GameAccent = "cyan" | "pink" | "violet" | "lime" | "amber";
 
@@ -50,5 +50,14 @@ export const GAMES: readonly GameDefinition[] = [
     accent: "violet",
     enabled: true,
     loadComponent: () => import("./tetris/tetris.component").then((m) => m.TetrisComponent)
+  },
+  {
+    id: "bomberman",
+    title: "Bomberman",
+    description: "Vuela bloques y enemigos con explosiones en cruz.",
+    icon: Bomb,
+    accent: "lime",
+    enabled: true,
+    loadComponent: () => import("./bomberman/bomberman.component").then((m) => m.BombermanComponent)
   }
 ];

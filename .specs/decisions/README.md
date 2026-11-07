@@ -11,3 +11,4 @@ Plantilla: [`../templates/adr.md`](../templates/adr.md). Una decisión aceptada 
 | [ADR-005](ADR-005-flujo-como-portfolio.md)            | Mismo flujo de calidad y despliegue que portfolio |
 | [ADR-006](ADR-006-tailwind-sin-material.md)           | Tailwind con primitivas propias, sin Material     |
 | [ADR-007](ADR-007-acceso-abierto.md)                  | Acceso abierto: jugar sin iniciar sesión          |
+| [ADR-008](ADR-008-threejs-para-juegos-3d.md)          | Three.js solo dentro del chunk del juego 3D       |

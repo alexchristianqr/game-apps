@@ -56,6 +56,21 @@ export class SfxService implements OnDestroy {
     this.play([392, 330, 262, 196].map((freq, i) => ({ freq, at: i * 0.14, dur: 0.2, type: "sawtooth" as const, gain: 0.35 })));
   }
 
+  /** Bomba: ráfaga de ruido que se apaga con un filtro paso bajo, más un golpe grave. */
+  public explosion(): void {
+    this.play([
+      { freq: 70, at: 0, dur: 0.28, type: "sawtooth", gain: 0.9 },
+      { freq: 45, at: 0.04, dur: 0.36, type: "square", gain: 0.7 }
+    ]);
+    this.noise(0.45);
+  }
+  public fuse(): void {
+    this.play([{ freq: 880, at: 0, dur: 0.03, type: "square", gain: 0.12 }]);
+  }
+  public powerUp(): void {
+    this.play([660, 880, 1175].map((freq, i) => ({ freq, at: i * 0.06, dur: 0.1, type: "triangle" as const })));
+  }
+
   public ngOnDestroy(): void {
     void this.ctx?.close().catch(() => undefined);
     this.ctx = null;
@@ -82,6 +97,27 @@ export class SfxService implements OnDestroy {
       osc.start(start);
       osc.stop(start + tone.dur + 0.02);
     }
+  }
+
+  private noise(seconds: number): void {
+    if (this.muted || this.volume <= 0) return;
+    const ctx = this.context();
+    if (!ctx) return;
+    const length = Math.floor(ctx.sampleRate * seconds);
+    const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1800, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + seconds);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime((this.volume / 100) * 0.5, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + seconds);
+    src.connect(filter).connect(gain).connect(ctx.destination);
+    src.start();
   }
 
   /** El contexto se crea en el primer sonido (siempre tras un gesto) para respetar la política de autoplay. */
