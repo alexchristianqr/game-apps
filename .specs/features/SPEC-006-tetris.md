@@ -51,9 +51,10 @@ misma semilla, la misma secuencia.
 
 ## Comportamiento visual
 
-Panel de vidrio (máx. 42 rem). En pantallas estrechas el tablero queda entre dos columnas pequeñas (guardada y siguientes) y las estadísticas arriba; en anchas, columnas laterales mayores. Bloques con
-relieve y brillo (`candy-block`). Efectos: destello de las filas limpiadas, texto flotante («¡TETRIS! +800», «Combo ×2», «Nivel 3 🚀»), sacudida al caer rápido, confeti al limpiar 2 o más líneas,
-pantallas de inicio (piezas flotando), pausa y fin con rebote. Con `prefers-reduced-motion` las animaciones se reducen al mínimo.
+Panel de vidrio (máx. 42 rem). En pantallas estrechas el tablero queda entre dos columnas pequeñas (guardada y siguientes) y las estadísticas arriba; en anchas, columnas laterales mayores. Las
+miniaturas de guardada y siguientes van centradas en su recuadro y las cifras de las estadísticas usan la fuente de texto (Orbitron dibuja el cero tachado). Bloques con relieve y brillo
+(`candy-block`). Efectos: destello de las filas limpiadas, texto flotante («¡TETRIS! +800», «Combo ×2», «Nivel 3 🚀»), sacudida al caer rápido, confeti al limpiar 2 o más líneas, pantallas de inicio
+(piezas flotando), pausa y fin con rebote. Con `prefers-reduced-motion` las animaciones se reducen al mínimo.
 
 ## Criterios de aceptación
 

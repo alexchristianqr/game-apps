@@ -417,6 +417,14 @@ export class TetrisComponent implements OnDestroy {
     return grid;
   }
 
+  /** Las piezas de 3 casillas de ancho caen media casilla a la izquierda en la rejilla de 4: se compensa. */
+  public miniShift(id: PieceId | null): string | null {
+    if (!id) return null;
+    const xs = PIECES[id].rotations[0].map(([x]) => x);
+    const width = Math.max(...xs) - Math.min(...xs) + 1;
+    return width === 3 ? "translateX(12.5%)" : null;
+  }
+
   public pieceColor(id: PieceId): string {
     return PIECES[id].color;
   }

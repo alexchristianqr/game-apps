@@ -26,7 +26,7 @@ const RING: Record<StatAccent, string> = {
       <div class="text-[0.65rem] font-semibold tracking-widest text-white/60 uppercase">{{ label() }}</div>
       <!-- track por valor: al cambiar se recrea el nodo y se reproduce la animación -->
       @for (v of [value()]; track v) {
-        <div class="animate-pop font-display text-xl font-black tabular-nums" [class]="textClass()">{{ v }}</div>
+        <div class="animate-pop text-xl font-black tabular-nums" [class]="textClass()">{{ v }}</div>
       }
     </div>
   `
