@@ -1,21 +1,13 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
-import { AuthService } from "../../../modules/auth/auth.service";
+import { inject } from "@angular/core";
+import { CanActivateFn, Router } from "@angular/router";
+import { map, take } from "rxjs";
+import { AuthService } from "../../../auth/auth.service";
 
-@Injectable({
-  providedIn: "root"
-})
-export class AuthenticateGuard implements CanActivate {
-  constructor(
-    public authService: AuthService,
-    public router: Router
-  ) {}
-
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (!this.authService.isLoggedIn) {
-      return this.router.navigate(["login"]);
-    }
-    return true;
-  }
-}
+/** Espera la primera emisión de Firebase para no expulsar a usuarios con sesión persistida. */
+export const authGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  return inject(AuthService).user$.pipe(
+    take(1),
+    map((user) => (user ? true : router.createUrlTree(["/login"])))
+  );
+};

@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-header>
+    <div class="h2 my-3">Mis aplicaciones</div>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row">
+      @for (game of games; track game.id) {
+      <div class="col col-6">
+        <mat-card-content>
+          <button mat-icon-button color="primary" [routerLink]="['/games', game.id]" [disabled]="!game.enabled">
+            <mat-icon>{{ game.icon }}</mat-icon>
+          </button>
+          <div>{{ game.title }}</div>
+        </mat-card-content>
+      </div>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
