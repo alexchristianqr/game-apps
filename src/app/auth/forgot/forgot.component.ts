@@ -1,3 +1,11 @@
+import { RouterLink } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatCardModule } from "@angular/material/card";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -5,23 +13,17 @@ import { AuthService } from "../auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-    selector: "app-forgot",
-    templateUrl: "./forgot.component.html",
-    styleUrls: ["./forgot.component.scss"],
-    standalone: false
+  imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule],
+  selector: "app-forgot",
+  templateUrl: "./forgot.component.html",
+  styleUrls: ["./forgot.component.scss"]
 })
 export class ForgotComponent {
   formGroup: FormGroup;
   submitted: boolean | undefined;
   loading: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService, private snackBar: MatSnackBar) {
     this.formGroup = formBuilder.group({
       email: formBuilder.control(null, [Validators.required, Validators.email])
     });

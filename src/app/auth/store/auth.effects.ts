@@ -4,8 +4,5 @@ import { Store } from "@ngrx/store";
 
 @Injectable()
 export class AuthEffects {
-  constructor(
-    private actions$: Actions,
-    private store$: Store
-  ) {}
+  constructor(private actions$: Actions, private store$: Store) {}
 }

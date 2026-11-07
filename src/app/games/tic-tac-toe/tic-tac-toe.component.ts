@@ -2,7 +2,20 @@
 import Minimax from "tic-tac-toe-minimax";
 
 const { GameStep } = Minimax;
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSliderModule } from "@angular/material/slider";
+import { AudioService } from "../../core/services/audio/audio.service";
 
 interface Level {
   value: string;
@@ -17,12 +30,25 @@ interface Board {
 type Difficulty = "Easy" | "Normal" | "Hard";
 
 @Component({
-    selector: "app-game",
-    templateUrl: "./game.component.html",
-    styleUrls: ["./game.component.scss"],
-    standalone: false
+  selector: "app-tic-tac-toe",
+  imports: [
+    RouterLink,
+    FormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatSliderModule
+  ],
+  templateUrl: "./tic-tac-toe.component.html",
+  styleUrls: ["./tic-tac-toe.component.scss"]
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class TicTacToeComponent implements OnInit, OnDestroy {
   panelOpenState = false;
   public gameBoard: Array<Board> = [
     { value: 0, bgColor: "div0" },
@@ -55,9 +81,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public allowSoundThemeGame = true;
   public volumeSoundThemeGame = 25;
 
-  // Sonidos del juego
-  private themeAudio: HTMLAudioElement | null = null;
-  private endAudio: HTMLAudioElement | null = null;
+  private readonly audio = inject(AudioService);
 
   ngOnInit() {
     this.breakpoint = window.innerWidth <= 319 ? 3 : 1;
@@ -112,12 +136,11 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   public stopSounds(): void {
-    this.stopSoundThemeGame();
-    this.stopSoundEndGame();
+    this.audio.stopAll();
   }
 
   public restartGame(toggle: boolean): void {
-    this.stopSoundThemeGame();
+    this.audio.stopLoop();
     this.clickPlayGame(true, () => {
       if (this.allowSoundThemeGame) this.takeSoundThemeGame();
       if (toggle && this.computerFirst) this.makeComputerMove();
@@ -132,37 +155,12 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   public takeSoundThemeGame(): void {
-    this.themeAudio = new Audio("assets/sounds/theme_game.mp3");
-    this.themeAudio.volume = this.volumeSoundThemeGame / 100;
-    this.themeAudio.loop = true;
-    this.themeAudio.play().catch(console.error);
+    this.audio.playLoop("assets/sounds/theme_game.mp3", this.volumeSoundThemeGame);
   }
 
   public takeSoundEndGame(): void {
-    this.endAudio = new Audio("assets/sounds/end_game.mp3");
-    this.endAudio.volume = this.volumeSoundEndGame / 100;
-    this.endAudio.play().catch(console.error);
-
-    this.stopSoundThemeGame();
-
-    setTimeout(() => {
-      this.stopSoundEndGame();
-    }, 2000);
-  }
-
-  // Detener los sonidos
-  stopSoundThemeGame(): void {
-    if (this.themeAudio) {
-      this.themeAudio.pause();
-      this.themeAudio = null;
-    }
-  }
-
-  stopSoundEndGame(): void {
-    if (this.endAudio) {
-      this.endAudio.pause();
-      this.endAudio = null;
-    }
+    this.audio.stopLoop();
+    this.audio.playEffect("assets/sounds/end_game.mp3", this.volumeSoundEndGame);
   }
 
   /**
@@ -204,42 +202,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.winner = winnerMapping[result.winner];
     this.playing = false;
 
-    if (this.themeAudio) this.stopSoundThemeGame();
+    this.audio.stopLoop();
     if (this.allowSoundEndGame) this.takeSoundEndGame();
-  }
-
-  /**
-   * Verificar jugador ganador
-   * @param board
-   * @private
-   */
-  private checkForWinner(board: Array<any>) {
-    // console.log({ board })
-
-    let tmp: Array<any> = [];
-
-    // Check rows
-    for (let i = 0; i < 3; i++) {
-      if (board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
-        tmp.push(board[i][0]);
-      }
-    }
-
-    // Check columns
-    for (let i = 0; i < 3; i++) {
-      if (board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
-        tmp.push(board[0][i]);
-      }
-    }
-
-    // Check diagonals
-    if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
-      tmp.push(board[0][0]);
-    }
-    if (board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
-      tmp.push(board[0][2]);
-    }
-
-    return null;
   }
 }
